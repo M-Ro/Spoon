@@ -1,0 +1,29 @@
+AUX_OBJ=auxiliary/Time.o
+render_OBJ=render/Model.o render/OBJModel.o render/Texture.o render/Font.o render/Shader.o render/Program.o render/Camera.o render/Renderer.o
+GAME_OBJ=game/base/GameName.o game/base/entity/Player.o game/base/Arena.o
+INPUT_OBJ=input/InputHandler.o
+CLIENT_OBJ=Client.o
+
+CLIENT_TARGET=Client
+LDFLAGS=`sdl2-config --libs` -lpng -lopengl32 -lglew32 -lfreetype -static-libstdc++
+CXX=g++
+LD=g++
+CXXFLAGS=-std=c++0x -Wall -Wno-comment `pkg-config --cflags freetype2` `sdl2-config --cflags`
+
+
+all: $(CLIENT_TARGET)
+
+Client: $(AUX_OBJ) $(render_OBJ) $(INPUT_OBJ) $(GAME_OBJ) $(CLIENT_OBJ)
+	$(LD) $(AUX_OBJ) $(render_OBJ) $(INPUT_OBJ) $(GAME_OBJ) $(CLIENT_OBJ) -o ../$(CLIENT_TARGET) $(LDFLAGS)
+	
+debug: all
+	CFLAGS="$(CFLAGS) -g -DDEBUG -Wall -Werror"
+
+%.o: %.cpp
+	$(CXX) $< -o $@ -c $(CXXFLAGS)
+
+clean:
+	rm -f $(AUX_OBJ) $(render_OBJ) $(CLIENT_OBJ) $(INPUT_OBJ) $(GAME_OBJ) $(CLIENT_TARGET)
+
+dist-clean: clean
+	rm -f *~
