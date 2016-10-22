@@ -183,7 +183,15 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
 		glm::mat4 projection_matrix = active_camera->GetProjectionMatrix();
         glm::mat4 view_matrix = active_camera->GetViewMatrix();
         glm::mat4 model_matrix = glm::translate(glm::mat4(1.0), position);
-        glm::mat4 rotation = glm::eulerAngleXYZ(angles[0],angles[1],angles[2]);
+
+        glm::mat4 rotation1, rotation2, rotation0;
+        rotation0 = glm::eulerAngleX(angles[0]);
+        rotation1 = glm::eulerAngleY(angles[1]);
+        rotation2 = glm::eulerAngleZ(angles[2]);
+
+        //glm::mat4 rotation = glm::eulerAngleXYZ(angles[0],angles[1],angles[2]);
+        glm::mat4 rotation = rotation2*rotation1*rotation0;
+
         glm::mat4 modelviewprojection = projection_matrix * view_matrix * model_matrix * rotation;
 
         glBindVertexArray(vertex_array); // Bind VAO

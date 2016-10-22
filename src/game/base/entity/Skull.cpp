@@ -30,11 +30,20 @@ void Skull::Update(float deltaTime)
 	//velocity = enemy_direction*speed;
 	//position += velocity;
 
+
+
+	//velocity = enemy_direction;
+	
 	float angle = atan(velocity[0]/velocity[2]);
 	if(velocity[2] < 0.0f)
 		angle += 3.14f;
 
 	rotation[1] = angle;
+
+
+
+	angle = asin(velocity[1]/glm::length(velocity));
+	rotation[0] = -angle;
 	return;
 }
 
