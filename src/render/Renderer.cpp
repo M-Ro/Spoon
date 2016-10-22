@@ -60,7 +60,7 @@ Renderer::Renderer()
 
 	/* Create SDL window */
 	std::cout << "Creating SDL window" << std::endl;
-	window = SDL_CreateWindow("Something thing", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Spoon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (!window)
 	{
 		std::cout << "Error: Could not create SDL window: " << SDL_GetError() << std::endl;

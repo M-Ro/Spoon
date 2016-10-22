@@ -1,0 +1,30 @@
+Game
+    - Projectiles (Shootable spoons)
+
+Collision
+    - AABB? Perhaps a format for including more complex collision models
+    - Lazier/easier route: Use libBullet?
+
+Networking (SDL2_net vs Sockets)?
+    - UDP
+    - (De)serialization of arena state, entity objects...
+    - Text chat support?
+
+Sound
+    - OpenAL
+
+Renderer
+    - Renderer does not free vertex buffers on exit.
+    - Bitmap font support?
+    - Fix lightsource so intensity/color is not hardcoded inside fragment shader
+    - Multiple light source support
+    - Particle support
+    - Decal support
+    - Shadows?
+
+Other
+    - Config support so user can change keybinds etc
+    - Filesystem GetUserDir() functions etc to save/load user config
+
+Menu
+    - Basic menu with singleplayer/multiplayer/options/exit
