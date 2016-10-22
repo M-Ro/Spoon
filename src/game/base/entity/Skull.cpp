@@ -3,8 +3,9 @@
 
 extern Player *player;
 
-Skull::Skull() 
+Skull::Skull() : Monster()
 {
+	modelname = "skull";
 	health = 4;
 	position = glm::vec3(0.0f, 20.0f, 00.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);

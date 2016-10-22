@@ -10,17 +10,21 @@ class Arena
 {
 public:
 
-	Arena(std::string &name);
+	Arena(const std::string &name);
 
 	~Arena();
 
-	void Update();
+	void Update(float deltaTime);
 
 	void Draw();
 
 	Entity *FindEntityById(long id);
 
 	std::list<Entity *> *FindEntityByClass(std::string classname);
+
+	bool AddEntity(Entity *entity);
+
+	bool RemoveEntity(const long id);
 
 private:
 

@@ -6,7 +6,7 @@ class Monster : public Entity
 {
 public:
 
-	Monster() {  team = Team::Monster; }
+	Monster() : Entity() {  team = Team::Monster; }
 	virtual ~Monster() {};
 
 protected:

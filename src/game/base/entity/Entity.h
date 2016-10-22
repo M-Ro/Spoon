@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "../GameName.h"
+
 static int last_id = 0;
 
 class Entity
@@ -39,6 +41,11 @@ public:
 	}
 
 	virtual void Update(float deltaTime) = 0;
+
+	virtual void Draw()
+	{
+		game->renderer->DrawModel(modelname, position, rotation);
+	}
 
 	virtual void Hurt(float dmg) = 0;
 

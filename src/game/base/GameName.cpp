@@ -1,14 +1,15 @@
 #include "GameName.h"
 
+#include "Arena.h"
 #include "entity/Player.h"
 #include "entity/Skull.h"
 
+Arena *arena;
 Player *player;
-Skull * skull;
 
 GameName::GameName()
 {
-
+	game = this;
 }
 
 GameName::~GameName()
@@ -20,25 +21,25 @@ void GameName::Load()
 {
 	input->SetRelativeMouseMode(true);
 
+	arena = new Arena("arena");
+
 	player = new Player(input);
-	skull = new Skull();
+
+	arena->AddEntity(player);
+	arena->AddEntity(new Skull());
 }
 
 void GameName::Shutdown()
 {
 	delete player;
-	delete skull;
 }
 
 void GameName::Run(float deltaTime)
 {
 	input->Update();
 
-	glm::vec3 pos(0.0, 0.0, 0.0);
-	renderer->DrawModel("arena", pos, glm::vec3(0.0f,0.0f,0.0f));
-	renderer->DrawModel("skull", skull->position, skull->rotation);
-	skull->Update(deltaTime);
-	player->Update(deltaTime);
+	arena->Update(deltaTime);
+	arena->Draw();
 
 	camera->SetPosition(player->position.x, player->position.y, player->position.z);
 	camera->SetAngle(player->cam_rot.x, player->cam_rot.y);
