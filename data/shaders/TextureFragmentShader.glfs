@@ -19,10 +19,10 @@ void main()
 {
 	// Fixme make these uniforms
 	vec3 LightColor = vec3(1, 0.84, 0.67);
-	float LightPower = 100000.0f;
+	float LightPower = 70000.0f;
 
 	vec3 matDiffuseColor = texture2D( myTextureSampler, UV ).rgb;
-	vec3 matAmbientColor = vec3(0.2,0.168,0.134) * matDiffuseColor;
+	vec3 matAmbientColor = vec3(0.1,0.08,0.067) * matDiffuseColor;
 	vec3 matSpecularColor = vec3(0.15,0.15,0.15);
 	
 	float distance = length(lightPosition_worldspace - position_worldspace);
@@ -38,10 +38,7 @@ void main()
 	float cosAlpha = clamp( dot( eyeVector,reflectDir ), 0,1 );
 	
 	color = 
-		// Ambient : simulates indirect lighting
 		matAmbientColor +
-		// Diffuse : "color" of the object
 		matDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
-		// Specular : reflective highlight, like a mirror
 		matSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);
 }
