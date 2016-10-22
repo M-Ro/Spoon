@@ -7,7 +7,7 @@ class Monster : public Entity
 public:
 
 	Monster() {  team = Team::Monster; }
-	virtual ~Monster() = 0;
+	virtual ~Monster() {};
 
 protected:
 };

@@ -20,7 +20,7 @@ public:
 
 	bool SetVSync(bool state);
 	
-	void DrawModel(std::string const &modelname, glm::vec3 &position);
+	void DrawModel(std::string const &modelname, glm::vec3 &position, glm::vec3 angles);
 
 	void SetActiveCamera(Camera *camera) { this->active_camera = camera; }
 

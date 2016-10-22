@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "Renderer.h"
 #include "Shader.h"
@@ -143,7 +145,7 @@ bool Renderer::InitialiseOpenGL()
 	return true;
 }
 
-void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position)
+void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm::vec3 angles)
 {
 	/* Don't bother if we have no perspective to draw from */
 	if(!active_camera)
@@ -181,7 +183,8 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position)
 		glm::mat4 projection_matrix = active_camera->GetProjectionMatrix();
         glm::mat4 view_matrix = active_camera->GetViewMatrix();
         glm::mat4 model_matrix = glm::translate(glm::mat4(1.0), position);
-        glm::mat4 modelviewprojection = projection_matrix * view_matrix * model_matrix;
+        glm::mat4 rotation = glm::eulerAngleXYZ(angles[0],angles[1],angles[2]);
+        glm::mat4 modelviewprojection = projection_matrix * view_matrix * model_matrix * rotation;
 
         glBindVertexArray(vertex_array); // Bind VAO
 

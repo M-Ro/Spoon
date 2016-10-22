@@ -11,8 +11,22 @@ class Entity
 	friend class GameName;
 public:
 
+	std::string classname;
+
+	unsigned long id;
+
+	float health;
+
+	glm::vec3 position;
+	glm::vec3 rotation;
+	glm::vec3 velocity;
+
+	std::string modelname;
+
 	enum Team { Player, Monster };
 
+	Team team;
+	
 	Entity()
 	{
 		id = ::last_id;
@@ -36,20 +50,5 @@ public:
 
 protected:
 
-	std::string classname;
-
-	unsigned long id;
-
-	float health;
-
-	glm::vec3 position;
-	glm::vec3 rotation;
-	glm::vec3 velocity;
-
-	std::string modelname;
-
 	bool destroy;
-
-	Team team;
-
 };
