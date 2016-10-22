@@ -27,5 +27,3 @@ public:
 	//AudioSystem *audio;
 	InputHandler *input;
 };
-
-extern Game* game;
