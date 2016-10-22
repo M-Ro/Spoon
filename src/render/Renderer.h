@@ -11,6 +11,7 @@
 #include "Texture.h"
 #include "Model.h"
 #include "Camera.h"
+#include "Font.h"
 
 class Renderer
 {
@@ -21,6 +22,8 @@ public:
 	bool SetVSync(bool state);
 	
 	void DrawModel(std::string const &modelname, glm::vec3 &position, glm::vec3 angles);
+
+	void DrawText(std::string const &text, float x, float y) { if(font) font->RenderText(text, x, y); }
 
 	void SetActiveCamera(Camera *camera) { this->active_camera = camera; }
 
@@ -38,6 +41,8 @@ private:
 
 	SDL_Window *window;
 	SDL_Surface *screen;
+
+	Font *font;
 
 	Program *program_model;
 	Shader *vshader;

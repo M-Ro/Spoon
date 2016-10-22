@@ -4,6 +4,7 @@
 #include <GL\glew.h>
 
 #include "auxiliary/Time.h"
+#include "auxiliary/fpscounter.h"
 #include "render/Renderer.h"
 #include "render/Camera.h"
 #include "game/base/GameName.h"
@@ -19,6 +20,7 @@ long lastTime = 0;
 void run()
 {
 	Time::Update();
+	FpsCounter::Tick();
 	long curTime = Time::GetCurrentTimeMillis();
 	long deltaTime = curTime - lastTime;
 	lastTime = curTime;

@@ -84,6 +84,8 @@ Renderer::Renderer()
 	active_camera = 0;
 
 	LoadTexture("textures/null"); // Default missing texture image
+
+	font = new Font("emulogic", 16);
 }
 
 Renderer::~Renderer()
