@@ -24,9 +24,9 @@ void Skull::Update(float deltaTime)
 	velocity = enemy_direction*speed;
 	position += velocity;
 
-	float angle = atan(enemy_direction[0]/enemy_direction[1]);
+	float angle = atan(enemy_direction[0]/enemy_direction[2]);
 	if(enemy_direction[2] < 0.0f)
-		angle = 3.14f - angle;
+		angle = 3.14f + angle;
 
 	rotation[1] = angle;
 	rotation[2] = 0.0f;
