@@ -170,13 +170,17 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
 		GLuint vertex_array  = section->GetVertexArray();
 		GLuint vertex_buffer = section->GetVertexBuffer();
 		GLuint uv_buffer 	 = section->GetUVBuffer();
+		GLuint normal_buffer  = section->GetNormalBuffer();
 
 		if(!textures.count(section->GetMaterial())) // Load texture if required
 			LoadTexture(section->GetMaterial());
 
 		GLuint texture_id = (textures.at(section->GetMaterial()))->GetGLTexture(); // TODO handle this at loadtime
 		GLuint matrix_id = glGetUniformLocation(program_model->GetProgram(), "MVP"); // model view projection handle
+		GLuint ViewMatrixID = glGetUniformLocation(program_model->GetProgram(), "V");
+		GLuint ModelMatrixID = glGetUniformLocation(program_model->GetProgram(), "M");
 		GLuint sampler_tex_id  = glGetUniformLocation(program_model->GetProgram(), "myTextureSampler");
+		GLuint LightID = glGetUniformLocation(program_model->GetProgram(), "lightPosition_worldspace");
 
 		glUseProgram(program_model->GetProgram());
 
@@ -189,6 +193,10 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
         glBindVertexArray(vertex_array); // Bind VAO
 
         glUniformMatrix4fv(matrix_id, 1, GL_FALSE, &modelviewprojection[0][0]); // Bind model view matrix to shader
+        glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &model_matrix[0][0]);
+		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &view_matrix[0][0]);
+
+		glUniform3f(LightID, 0, 500, 0); // position
         /* Bind material texture to unit 0 */
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -205,12 +213,17 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
         glBindBuffer(GL_ARRAY_BUFFER, uv_buffer);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
         // Draw mesh
         glDrawArrays(GL_TRIANGLES, 0, section->GetVertexCount());
 
         /* Unselect VBO's */
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
 
         glBindVertexArray(0); // Unbind VAO
 	}

@@ -51,6 +51,8 @@ public:
 
 	GLuint const &GetUVBuffer() { return uvbuffer; }
 
+	GLuint const &GetNormalBuffer() { return normalbuffer; }
+
 	unsigned int GetVertexCount() { return vertices.size(); }
 
 private:
@@ -64,4 +66,5 @@ private:
 
 	GLuint vertexbuffer;
 	GLuint uvbuffer;
+	GLuint normalbuffer;
 };

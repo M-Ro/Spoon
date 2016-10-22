@@ -56,6 +56,11 @@ void ModelSection::Upload()
     glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	//glEnableVertexAttribArray(1);
 
+	glGenBuffers(1, &normalbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+    glVertexAttribPointer((GLuint)2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
 	//glDisableVertexAttribArray(0);
 	//glDisableVertexAttribArray(1);
 
