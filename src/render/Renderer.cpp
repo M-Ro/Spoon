@@ -95,7 +95,7 @@ Renderer::~Renderer()
 
 bool Renderer::SetVSync(bool state)
 {
-	if (SDL_GL_SetSwapInterval(1) < 0)
+	if (SDL_GL_SetSwapInterval(state ? 1 : 0) < 0)
 	{
 		std::cout << "Warning: Failed to enable VSync: " << SDL_GetError() << std::endl;
 		return false;
