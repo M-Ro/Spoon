@@ -53,7 +53,7 @@ Font::Font(std::string const &name, unsigned int size)
 
 	attribute_coord = program.GetAttribute("coord");
 	uniform_texture = program.GetUniform("tex");
-	uniform_color = program.GetUniform("color");
+	uniform_color = program.GetUniform("textColor");
 
 	/* Generate VAO and VBO */
 	glGenVertexArrays(1, &vao);
