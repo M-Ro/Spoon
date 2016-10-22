@@ -18,6 +18,7 @@ public:
 		id = ::last_id;
 		::last_id++;
 
+		classname = "undefined";
 		position = glm::vec3(0, 0, 0);
 		rotation = glm::vec3(0, 0, 0);
 		velocity = glm::vec3(0, 0, 0);
@@ -29,7 +30,13 @@ public:
 
 	virtual void Die() = 0;
 
+	const long GetId() const { return id; }
+
+	const std::string &GetClassname() const { return classname; }
+
 protected:
+
+	std::string classname;
 
 	unsigned long id;
 

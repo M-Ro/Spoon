@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <list>
 #include <map>
 
 #include "entity/Entity.h"
@@ -16,6 +17,10 @@ public:
 	void Update();
 
 	void Draw();
+
+	Entity *FindEntityById(long id);
+
+	std::list<Entity *> *FindEntityByClass(std::string classname);
 
 private:
 

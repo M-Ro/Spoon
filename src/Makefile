@@ -1,6 +1,6 @@
 AUX_OBJ=auxiliary/Time.o
 render_OBJ=render/Model.o render/OBJModel.o render/Texture.o render/Font.o render/Shader.o render/Program.o render/Camera.o render/Renderer.o
-GAME_OBJ=game/base/GameName.o game/base/entity/Player.o game/base/Arena.o
+GAME_OBJ=game/base/GameName.o game/base/entity/Player.o game/base/entity/Monster.o game/base/Arena.o
 INPUT_OBJ=input/InputHandler.o
 CLIENT_OBJ=Client.o
 

@@ -4,6 +4,7 @@
 
 Player::Player(InputHandler *input) : Entity()
 {
+	classname = "player";
 	this->input = input;
 	team = Team::Player;
 
