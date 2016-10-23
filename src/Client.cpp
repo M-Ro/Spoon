@@ -65,5 +65,7 @@ int main(int argc, char **argv)
 	game->Shutdown();
 	delete game;
 
+	Filesystem::Shutdown();
+
 	return 0;
 }

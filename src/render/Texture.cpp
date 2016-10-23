@@ -11,7 +11,6 @@
  */
 
 #include <iostream>
-#include <fstream>
 
 #include "Texture.h"
 #include <png.h>
@@ -28,7 +27,7 @@ Texture::~Texture()
 
 }
 
-bool Texture::LoadPNG(std::ifstream &stream)
+bool Texture::LoadPNG(std::istream &stream)
 {
 	/* Read PNG signature to ensure file is valid */
 	png_byte pngsig[8];

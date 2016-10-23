@@ -1,9 +1,9 @@
 #include "Shader.h"
 
 #include <iostream>
-#include <fstream>
+#include "../auxiliary/Filehandle.h"
 
-std::string shader_path = "data/shaders/";
+std::string shader_path = "shaders/";
 
 Shader::Shader(ShaderType type)
 {
@@ -30,26 +30,11 @@ void Shader::LoadShader(std::string const &name)
 		ext = ".glvs";
 
 	std::string filepath = shader_path + name + ext;
+	Filehandle file = Filehandle(filepath);
+	char *buffer = (char *)file.ReadFile();
+	file.Close();
 
-	std::ifstream file(filepath);
-	if (!file.is_open())
-	{
-		std::cout << "Warning: Shader::LoadShader: Failed to load shader " << filepath << std::endl;
-		return;
-	}
-
-	std::string buffer = "";
-
-	std::string line;
-	while (getline(file, line))
-		buffer += line + "\n";
-
-	file.close();
-
-	/* Create shader object */
-	const char *shader_src = buffer.c_str();
-
-	glShaderSource(shader, 1, &shader_src, NULL); // Set shader source
+	glShaderSource(shader, 1, &buffer, NULL); // Set shader source
 	glCompileShader(shader);
 
 	/* Check for shader compilation errors */

@@ -11,7 +11,7 @@ public:
 	Texture(std::string const &filename);
 	~Texture();
 
-	bool LoadPNG(std::ifstream &stream);
+	bool LoadPNG(std::istream &stream);
 
 	/* Getters */
 

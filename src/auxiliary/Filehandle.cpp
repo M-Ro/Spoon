@@ -1,9 +1,11 @@
+#include <iostream>
+
 #include "Filehandle.h"
 
 Filehandle::Filehandle(const std::string &path, bool readonly)
 {
 	file = nullptr;
-	open(path, readonly);
+	Open(path, readonly);
 }
 
 Filehandle::~Filehandle()
@@ -11,10 +13,10 @@ Filehandle::~Filehandle()
 
 }
 
-int Filehandle::open(const std::string &path, bool readonly)
+int Filehandle::Open(const std::string &path, bool readonly)
 {
 	if(file != nullptr)
-		close();
+		Close();
 
 	if(!readonly)
 		file = PHYSFS_openWrite(path.c_str());
@@ -27,46 +29,73 @@ int Filehandle::open(const std::string &path, bool readonly)
 	return 1;
 }
 
-int Filehandle::close()
+int Filehandle::Close()
 {
 	return PHYSFS_close(file);
 }
 
-sint64 Filehandle::read(void *buffer, uint32 objsize, uint32 objcount)
+sint64 Filehandle::ReadBytes(void *buffer, uint32 count)
 {
-	return PHYSFS_read(file, buffer, objsize, objcount);
+	if(count >= 4096)
+		std::cout << "Warning: Filehandle::readBytes: count possibly too large " << count << std::endl;
+
+	return PHYSFS_readBytes(file, buffer, count);
 }
 
-sint64 Filehandle::readBytes(void *buffer, uint32 count)
+unsigned char *Filehandle::ReadFile()
 {
-	return PHYSFS_read(file, buffer, 1, count);
+	sint64 file_size = Size();
+	unsigned char *file_buf = new unsigned char[file_size];
+
+	sint64 total_read = 0;
+	while(total_read < file_size)
+	{
+		sint64 bytes_read = ReadBytes(file_buf+total_read, 2048);
+		if(bytes_read == -1)
+		{
+			std::cout << "Failed read: " << PHYSFS_getLastError() << std::endl;
+			return 0;
+		}
+
+		total_read += bytes_read;
+	}
+
+	return file_buf;
 }
 
-sint64 Filehandle::tell()
+std::istream *Filehandle::GetIStream()
+{
+	unsigned char *cbuf = ReadFile(); // FIXME <-- LIKELY LEAKS
+	membuf *sbuf = new membuf((char *)cbuf, (char *)cbuf + Size()); // this too
+	Close();
+	return new std::istream(sbuf);
+}
+
+sint64 Filehandle::Tell()
 {
 	return PHYSFS_tell(file);
 }
 
-int Filehandle::seek(uint64 pos)
+int Filehandle::Seek(uint64 pos)
 {
 	return PHYSFS_seek(file, pos);
 }
 
-int Filehandle::eof()
+int Filehandle::Eof()
 {
 	return PHYSFS_eof(file);
 }
 
-sint64 Filehandle::size()
+sint64 Filehandle::Size()
 {
 	return PHYSFS_fileLength(file);
 }
 
-bool Filehandle::is_open()
+bool Filehandle::IsOpen()
 {
 	if(file == nullptr)
 		return false;
-	if(tell() == -1)
+	if(Tell() == -1)
 		return false;
 
 	return true;

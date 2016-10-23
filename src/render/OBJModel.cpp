@@ -1,9 +1,10 @@
 #include <string>
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <vector>
 #include <algorithm>
+
+#include "../auxiliary/Filehandle.h"
 
 #include "OBJModel.h"
 #include <glm/glm.hpp>
@@ -18,9 +19,11 @@ bool IsComment(std::string const &line);
 
 Model *Load(std::string const &filepath)
 {
-	std::ifstream file(filepath, std::ifstream::in);
-	if(!file.is_open())
+	Filehandle filehandle = Filehandle(filepath, true);
+	if(!filehandle.IsOpen())
 		return 0;
+
+	std::istream *iss = filehandle.GetIStream();
 
 	unsigned int triangle_count = 0; // Informative purposes
 
@@ -35,7 +38,7 @@ Model *Load(std::string const &filepath)
 
 	int line_num = 0;
 	std::string line;
-	while (getline(file, line))
+	while (getline(*iss, line))
 	{
 		line_num++;
 
@@ -155,7 +158,6 @@ Model *Load(std::string const &filepath)
 
 	std::cout << "Loaded: " << filepath << " Vertices: " << obj_vertices.size() << " Triangles: " << triangle_count << std::endl;
 	
-	file.close();
 	return model;
 }
 

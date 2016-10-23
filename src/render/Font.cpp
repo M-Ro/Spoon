@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "Program.h"
 #include "Font.h"
+#include "../auxiliary/Filehandle.h"
 
 #include <GL\glu.h>
 
@@ -27,12 +28,23 @@ Font::Font(std::string const &name, unsigned int size)
 		}
 	}
 
-	std::string font_path = "data/fonts/" + name + ".ttf";
+	std::string font_path = "fonts/" + name + ".ttf";
+
+	Filehandle filehandle = Filehandle(font_path, true);
+	if(!filehandle.IsOpen())
+	{
+		std::cout << "Warning: Failed to open font " << font_path << std::endl;
+		return;
+	}
+
+	sint64 file_size = filehandle.Size();
+	FT_Byte *file_buf = filehandle.ReadFile(); // FIXME delete this
+	filehandle.Close();
 
 	/* Attempt to load font */
-	if(FT_New_Face(ft, font_path.c_str(), 0, &face))
+	if(FT_New_Memory_Face(ft, file_buf, file_size, 0, &face))
 	{
-		std::cout << "Warning: Failed to open font " << name << std::endl;
+		std::cout << "Warning: TTF Failed to parse font " << name << std::endl;
 		return;
 	}
 

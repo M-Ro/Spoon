@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <istream>
+#include <streambuf>
 
 #include <physfs.h>
 
@@ -8,6 +10,13 @@ typedef long long 			sint64;
 typedef int 				sint32;
 typedef unsigned long long 	uint64;
 typedef unsigned int 		uint32;
+
+struct membuf : std::streambuf
+{
+    membuf(char* begin, char* end) {
+        this->setg(begin, begin, end);
+    }
+};
 
 // Behaves like a C FILE, wraps PHYSFS_file functions
 class Filehandle
@@ -17,23 +26,26 @@ public:
 	Filehandle(const std::string &path, bool readonly = true);
 	~Filehandle();
 
-	int open(const std::string &path, bool readonly = true);
+	int Open(const std::string &path, bool readonly = true);
 
-	int close();
+	int Close();
 
-	sint64 read(void *buffer, uint32 objsize, uint32 objcount);
+	sint64 ReadBytes(void *buffer, uint32 count);
 
-	sint64 readBytes(void *buffer, uint32 count);
+	// Attempts to read the entire file and returns the buffer
+	unsigned char *ReadFile();
 
-	sint64 tell();
+	std::istream *GetIStream();
 
-	int seek(uint64 pos);
+	sint64 Tell();
 
-	int eof();
+	int Seek(uint64 pos);
 
-	sint64 size();
+	int Eof();
 
-	bool is_open();
+	sint64 Size();
+
+	bool IsOpen();
 
 private:
 

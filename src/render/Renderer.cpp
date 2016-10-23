@@ -1,11 +1,11 @@
 #include <iostream>
-#include <fstream>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+#include "../auxiliary/Filehandle.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "OBJModel.h"
@@ -252,12 +252,10 @@ void Renderer::LoadTexture(std::string const &filename)
 {
 	Texture *texture = new Texture(filename);
 
-	std::string filepath = "data/" + filename + ".dds";
-	filepath = "data/" + filename + ".png";
-
-	std::ifstream file(filepath, std::ios::in | std::ios::binary);
-
-	if (!file.is_open())
+	std::string filepath = filename + ".dds";
+	filepath = filename + ".png";
+	Filehandle file = Filehandle(filepath, true);
+	if(!file.IsOpen())
 	{
 		std::cout << "Warning: Couldn't find image: " << filepath << std::endl;
 		delete texture;
@@ -266,8 +264,9 @@ void Renderer::LoadTexture(std::string const &filename)
 		return;
 	}
 
-	texture->LoadPNG(file); // Todo - attempt to load other version here if failed
-	file.close();
+	std::istream *stream = file.GetIStream();
+	texture->LoadPNG(*stream);
+	delete stream;
 
 	textures.insert(std::pair<std::string, Texture *>(filename, texture));
 }
@@ -278,7 +277,7 @@ void Renderer::LoadModel(std::string const &filename)
 
 	Model *model = 0;
 
-	filepath = "data/models/" + filename + ".obj";
+	filepath = "models/" + filename + ".obj";
 	model = OBJModel::Load(filepath);
 
 	if(model)
