@@ -5,6 +5,7 @@
 
 #include "auxiliary/Time.h"
 #include "auxiliary/fpscounter.h"
+#include "auxiliary/Filesystem.h"
 #include "render/Renderer.h"
 #include "render/Camera.h"
 #include "game/base/GameName.h"
@@ -34,6 +35,7 @@ void run()
 int main(int argc, char **argv)
 {
 	Time::Initialise();
+	Filesystem::Initialise(argv[0]);
 
 	/* Init SDL */
 	std::cout << "Initialising SDL" << std::endl;

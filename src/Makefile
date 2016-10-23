@@ -1,14 +1,14 @@
-AUX_OBJ=auxiliary/Time.o auxiliary/fpscounter.o
+AUX_OBJ=auxiliary/Time.o auxiliary/Filesystem.o auxiliary/Filehandle.o auxiliary/fpscounter.o
 render_OBJ=render/Model.o render/OBJModel.o render/Texture.o render/Font.o render/Shader.o render/Program.o render/Camera.o render/Renderer.o
 GAME_OBJ=game/base/GameName.o game/base/entity/Player.o game/base/entity/Monster.o game/base/entity/Skull.o game/base/Arena.o
 INPUT_OBJ=input/InputHandler.o
 CLIENT_OBJ=Client.o
 
 CLIENT_TARGET=Client
-LDFLAGS=`sdl2-config --libs` -lpng -lopengl32 -lglew32 -lfreetype -static-libstdc++
+LDFLAGS=`sdl2-config --libs` -lpng -lopengl32 -lglew32 -lfreetype -lphysfs -static-libstdc++
 CXX=g++
 LD=g++
-CXXFLAGS=-std=c++0x -Wall -Wno-comment `pkg-config --cflags freetype2` `sdl2-config --cflags`
+CXXFLAGS=-std=c++11 -Wall -Wno-comment `pkg-config --cflags freetype2 physfs` `sdl2-config --cflags`
 
 
 all: $(CLIENT_TARGET)
