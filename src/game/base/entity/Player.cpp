@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "../../../auxiliary/Network.h"
 #include <iostream>
 
 Player::Player(InputHandler *input) : Entity()
@@ -64,4 +64,10 @@ void Player::HandlePlayerInput(float deltaTime)
 		position += right * deltaTime * MOVEMENT_SPEED;
 	if(input->KeyDown(SDLK_SPACE))
 		position += up * deltaTime * MOVEMENT_SPEED;
+	if(input->KeyDown(SDLK_e))
+		if(clientmodule == NULL)
+			InitialiseClient("127.0.0.1",44,45);
+	if(input->KeyDown(SDLK_q))
+		if(hostmodule == NULL)
+			InitialiseHost(45);
 }

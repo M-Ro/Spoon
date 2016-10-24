@@ -29,6 +29,6 @@ public:
 private:
 
 	std::map<long, Entity *> entities;
-
+	float spawn_timer;
 	std::string modelname;
 };

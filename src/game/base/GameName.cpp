@@ -7,6 +7,7 @@
 #include "entity/Skull.h"
 
 #include "../../auxiliary/fpscounter.h"
+#include "../../auxiliary/Network.h"
 
 Arena *arena;
 Player *player;
@@ -37,9 +38,23 @@ void GameName::Shutdown()
 {
 	delete player;
 }
+float hitimer = 0.0f;
 
 void GameName::Run(float deltaTime)
 {
+	if(hostmodule != NULL){
+		hostmodule->CheckForData();
+		hitimer -= deltaTime;
+		if(hitimer < 0.0f){
+			hitimer += 2.0f;
+			hostmodule->SendAll("Wow");
+		}
+	}
+
+	if(clientmodule != NULL){
+		clientmodule->CheckForData();
+	}
+
 	input->Update();
 
 	arena->Update(deltaTime);

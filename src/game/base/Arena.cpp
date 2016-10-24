@@ -1,12 +1,13 @@
 #include <iostream>
 
 #include "Arena.h"
-
+#include "entity/skull.h"
 #include "../Game.h"
 
 Arena::Arena(const std::string &name)
 {
 	modelname = name;
+	spawn_timer = 0.0f;
 }
 
 Arena::~Arena()
@@ -19,6 +20,13 @@ void Arena::Update(float deltaTime)
 	// Update all entities
 	for (auto& kv : entities)
 		kv.second->Update(deltaTime);
+
+	spawn_timer -= deltaTime;
+	if(spawn_timer < 0.0){
+		Skull * s = new Skull();
+		AddEntity(s);
+		spawn_timer = 10.0f;
+	}
 }
 
 void Arena::Draw()
