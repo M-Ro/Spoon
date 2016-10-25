@@ -5,6 +5,7 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+#include "../auxiliary/Config.h"
 #include "../auxiliary/Filehandle.h"
 #include "Renderer.h"
 #include "Shader.h"
@@ -60,7 +61,7 @@ Renderer::Renderer()
 
 	/* Create SDL window */
 	std::cout << "Creating SDL window" << std::endl;
-	window = SDL_CreateWindow("Spoon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Spoon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Config::GetInt("r_width"), Config::GetInt("r_height"), SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 	if (!window)
 	{
 		std::cout << "Error: Could not create SDL window: " << SDL_GetError() << std::endl;
@@ -79,7 +80,7 @@ Renderer::Renderer()
 	InitialiseGlew();
 	InitialiseOpenGL();
 
-	SetVSync(true);
+	SetVSync(Config::GetInt("r_vsync"));
 
 	active_camera = 0;
 

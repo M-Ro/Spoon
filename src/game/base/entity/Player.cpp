@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
 #include <iostream>
 
@@ -54,15 +55,15 @@ void Player::HandlePlayerInput(float deltaTime)
 	cam_rot.x -= input->GetMouseX() / 100.0;
 	cam_rot.y -= input->GetMouseY() / 100.0;
 
-	if(input->KeyDown(SDLK_w))
+	if(input->KeyDown(Config::GetKey("moveForward")))
 		position += dir * deltaTime * MOVEMENT_SPEED;
-	if(input->KeyDown(SDLK_s))
+	if(input->KeyDown(Config::GetKey("moveBackward")))
 		position -= dir * deltaTime * MOVEMENT_SPEED;
-	if(input->KeyDown(SDLK_a))
+	if(input->KeyDown(Config::GetKey("moveLeft")))
 		position -= right * deltaTime * MOVEMENT_SPEED;
-	if(input->KeyDown(SDLK_d))
+	if(input->KeyDown(Config::GetKey("moveRight")))
 		position += right * deltaTime * MOVEMENT_SPEED;
-	if(input->KeyDown(SDLK_SPACE))
+	if(input->KeyDown(Config::GetKey("jump")))
 		position += up * deltaTime * MOVEMENT_SPEED;
 	if(input->KeyDown(SDLK_e))
 		if(clientmodule == NULL)

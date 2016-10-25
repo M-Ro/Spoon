@@ -43,6 +43,8 @@ int Filesystem::Initialise(char *path)
 	VFSRegisterDirectory(BASE_DATA_LOCATION); // We always register the "base" dir
 	//vfsRegisterDirectory(MOD_DATA_LOCATION); // Base dir for the loaded game module
 
+	FSCreateDirectory(userdir + "/data");
+
 	LoadPackages();
 
 	return 1;

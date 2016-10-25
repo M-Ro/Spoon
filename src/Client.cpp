@@ -4,6 +4,7 @@
 #include <GL\glew.h>
 
 #include "auxiliary/Time.h"
+#include "auxiliary/Config.h"
 #include "auxiliary/fpscounter.h"
 #include "auxiliary/Filesystem.h"
 #include "render/Renderer.h"
@@ -57,14 +58,19 @@ int main(int argc, char **argv)
 	game->input = new InputHandler();
 	game->Load();
 
+
 	while(!quit)
 	{
+		// fixme dirty hack
+		quit = game->input->KeyPressed(SDLK_F12);
+
 		run();
 	}
 
 	game->Shutdown();
 	delete game;
 
+	Config::WriteConfig();
 	Filesystem::Shutdown();
 
 	return 0;
