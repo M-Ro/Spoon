@@ -8,13 +8,17 @@ Player::Player(InputHandler *input) : Entity()
 	classname = "player";
 	this->input = input;
 	team = Team::Player;
+	moveType = MovementType::Walk;
 
 	position.x = 0;
 	position.y = 60;
-	position.z = 250;
+	position.z = 224;
 
 	cam_rot.x = 3.14;
 	cam_rot.y = -0.3;
+
+	bbox = glm::vec3(24, 64, 24);
+	solid = true;
 }
 
 Player::~Player()
@@ -26,6 +30,12 @@ void Player::Update(float deltaTime)
 {
 	ProjectView();
 	HandlePlayerInput(deltaTime);
+}
+
+void Player::Touch(Entity *other)
+{
+	if(other->team == Team::Monster)
+		std::cout << "u dieded" << std::endl;
 }
 
 void Player::Hurt(float dmg)
@@ -56,15 +66,33 @@ void Player::HandlePlayerInput(float deltaTime)
 	cam_rot.y -= input->GetMouseY() / 100.0;
 
 	if(input->KeyDown(Config::GetKey("moveForward")))
-		position += dir * deltaTime * MOVEMENT_SPEED;
+	{
+		if(onFloor)
+			velocity += dir * deltaTime * MOVEMENT_SPEED;
+	}
 	if(input->KeyDown(Config::GetKey("moveBackward")))
-		position -= dir * deltaTime * MOVEMENT_SPEED;
+	{
+		if(onFloor)
+			velocity -= dir * deltaTime * MOVEMENT_SPEED;
+	}
 	if(input->KeyDown(Config::GetKey("moveLeft")))
-		position -= right * deltaTime * MOVEMENT_SPEED;
+	{
+		if(onFloor)
+			velocity -= right * deltaTime * MOVEMENT_SPEED;
+	}
 	if(input->KeyDown(Config::GetKey("moveRight")))
-		position += right * deltaTime * MOVEMENT_SPEED;
+	{
+		if(onFloor)
+			velocity += right * deltaTime * MOVEMENT_SPEED;
+	}
 	if(input->KeyDown(Config::GetKey("jump")))
-		position += up * deltaTime * MOVEMENT_SPEED;
+	{
+		if(onFloor)
+		{
+			velocity.y = 3.5;
+			onFloor = false;
+		}
+	}
 	if(input->KeyDown(SDLK_e))
 		if(clientmodule == NULL)
 			InitialiseClient("127.0.0.1",44,45);

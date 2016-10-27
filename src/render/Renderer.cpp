@@ -240,6 +240,15 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
 	}
 }
 
+void Renderer::DrawBBox(glm::vec3 origin, glm::vec3 size)
+{
+	/* Don't bother if we have no perspective to draw from */
+	if(!active_camera)
+		return;
+
+	GLuint matrix_id = glGetUniformLocation(program_model->GetProgram(), "MVP"); // model view projection handle
+}
+
 void Renderer::Flip()
 {
 	SDL_GL_SwapWindow(window); // Update screen

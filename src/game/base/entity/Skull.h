@@ -8,6 +8,7 @@ public:
 
 	Skull();
 	virtual ~Skull();
+	void Touch(Entity *other);
 	void Update(float deltaTime);
 	void Hurt(float dmg);
 

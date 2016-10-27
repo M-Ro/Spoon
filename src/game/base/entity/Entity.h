@@ -23,12 +23,19 @@ public:
 	glm::vec3 rotation;
 	glm::vec3 velocity;
 
+	glm::vec3 bbox;
+
 	std::string modelname;
 
 	enum Team { Player, Monster };
+	enum MovementType { Static, Walk, Fly }; // Used for physics
 
 	Team team;
-	
+	MovementType moveType;
+	bool solid;
+
+	bool onFloor;
+
 	Entity()
 	{
 		id = ::last_id;
@@ -46,6 +53,8 @@ public:
 	{
 		game->renderer->DrawModel(modelname, position, rotation);
 	}
+
+	virtual void Touch(Entity *other) = 0;
 
 	virtual void Hurt(float dmg) = 0;
 

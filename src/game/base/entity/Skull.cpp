@@ -6,11 +6,14 @@ extern Player *player;
 Skull::Skull() : Monster()
 {
 	modelname = "skull";
+	bbox = glm::vec3(32, 32, 32);
 	health = 4;
 	position = glm::vec3(0.0f, 20.0f, 00.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	turnrate = 0.9f;
 	speed = 80.0f;
+	moveType = MovementType::Fly;
+	solid = true;
 }
 
 void Skull::Update(float deltaTime)
@@ -50,6 +53,11 @@ void Skull::Update(float deltaTime)
 Skull::~Skull()
 {
 
+}
+
+void Skull::Touch(Entity *other)
+{
+	
 }
 
 void Skull::Hurt(float dmg)

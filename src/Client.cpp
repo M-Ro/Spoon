@@ -30,7 +30,9 @@ void run()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.0, 0.0, 0.0, 1.0); // Clear screen black
 
-	game->Run((float)(deltaTime) / 1000.0);
+	float dTimef = (float)deltaTime / 1000.0;
+	if(dTimef > 1) dTimef = 1;
+	game->Run(dTimef);
 }
 
 int main(int argc, char **argv)
@@ -58,6 +60,7 @@ int main(int argc, char **argv)
 	game->input = new InputHandler();
 	game->Load();
 
+	Time::Update(); // First frame
 
 	while(!quit)
 	{

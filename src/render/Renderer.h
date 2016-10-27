@@ -23,6 +23,8 @@ public:
 	
 	void DrawModel(std::string const &modelname, glm::vec3 &position, glm::vec3 angles);
 
+	void DrawBBox(glm::vec3 origin, glm::vec3 size);
+
 	void DrawText(std::string const &text, float x, float y) { if(font) font->RenderText(text, x, y); }
 
 	void SetActiveCamera(Camera *camera) { this->active_camera = camera; }

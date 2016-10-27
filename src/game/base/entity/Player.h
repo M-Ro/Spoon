@@ -4,7 +4,7 @@
 #include "../../../input/InputHandler.h"
 #include <glm/glm.hpp>
 
-const float MOVEMENT_SPEED = 200.0;
+const float MOVEMENT_SPEED = 5.0;
 
 class Player : public Entity
 {
@@ -21,6 +21,8 @@ public:
 	void Hurt(float dmg);
 
 	void Die();
+
+	void Touch(Entity *other);
 
 private:
 

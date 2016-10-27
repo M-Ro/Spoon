@@ -9,5 +9,7 @@ public:
 	Monster() : Entity() {  team = Team::Monster; }
 	virtual ~Monster() {};
 
+	virtual void Touch(Entity *other) = 0;
+
 protected:
 };

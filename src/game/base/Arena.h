@@ -19,14 +19,20 @@ public:
 	void Draw();
 
 	Entity *FindEntityById(long id);
-
 	std::list<Entity *> *FindEntityByClass(std::string classname);
 
 	bool AddEntity(Entity *entity);
-
 	bool RemoveEntity(const long id);
 
+	bool Intersects(Entity *a, Entity *b);
+	bool IntersectsWorld(Entity *a);
+	bool PointIntersectsWorld(const glm::vec3 &a);
+
+	bool OnFloor(Entity *a);
+
 private:
+
+	void RunPhysics(float deltaTime);
 
 	std::map<long, Entity *> entities;
 	float spawn_timer;
