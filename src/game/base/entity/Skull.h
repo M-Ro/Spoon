@@ -10,7 +10,7 @@ public:
 	virtual ~Skull();
 	void Touch(Entity *other);
 	void Update(float deltaTime);
-	void Hurt(float dmg);
+	void Hurt(Entity *attacker, float dmg);
 
 	void Die();
 

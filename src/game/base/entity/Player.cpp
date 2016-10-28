@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "projectiles/Spoon.h"
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
 #include <iostream>
@@ -39,7 +40,7 @@ void Player::Touch(Entity *other)
 		//std::cout << "u dieded" << std::endl;
 }
 
-void Player::Hurt(float dmg)
+void Player::Hurt(Entity *attacker, float dmg)
 {
 
 }
@@ -107,6 +108,16 @@ void Player::HandlePlayerInput(float deltaTime)
 		}
 		else if(moveType == MovementType::Fly)
 			position.y += 150 * deltaTime;
+	}
+	if(input->MousePressed(1)) // FIXME this is ugly and should be written properly
+	{
+		Spoon *spoon = new Spoon(this);
+		spoon->dir = dir;
+		spoon->position = position;
+
+		spoon->rotation = glm::vec3(cam_rot.x, cam_rot.y, 0); // idk
+
+		arena->AddEntity(spoon);
 	}
 
 	// :D

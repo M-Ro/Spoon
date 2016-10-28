@@ -16,7 +16,7 @@ public:
 
 	void Draw() {}
 
-	void Hurt(float dmg);
+	void Hurt(Entity *attacker, float dmg);
 
 	void Die();
 

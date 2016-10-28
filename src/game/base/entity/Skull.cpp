@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Skull.h"
 #include "Player.h"
 
@@ -6,7 +8,8 @@ extern Player *player;
 Skull::Skull() : Monster()
 {
 	modelname = "skull";
-	bbox = glm::vec3(32, 32, 32);
+	classname = "skull";
+	bbox = glm::vec3(16, 16, 16);
 	health = 4;
 	position = glm::vec3(0.0f, 20.0f, 00.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -60,12 +63,14 @@ void Skull::Touch(Entity *other)
 	
 }
 
-void Skull::Hurt(float dmg)
+void Skull::Hurt(Entity *attacker, float dmg)
 {
-
+	if(attacker->team != team)
+		Die();
 }
 
 void Skull::Die()
 {
-
+	std::cout << "Skull just wanted to hug :(" << std::endl;
+	destroy = true;
 }

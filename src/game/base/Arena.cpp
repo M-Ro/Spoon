@@ -19,6 +19,15 @@ void Arena::Update(float deltaTime)
 {
 	RunPhysics(deltaTime);
 
+	// Purge dead entities
+	for (auto it = entities.cbegin(); it != entities.cend();)
+	{
+		if(it->second->destroy)
+			entities.erase(it++);
+		else
+			it++;
+	}
+
 	// Update all entities
 	for (auto& kv : entities)
 		kv.second->Update(deltaTime);
@@ -86,6 +95,7 @@ bool Arena::AddEntity(Entity *entity)
 		return 0;
 	}
 
+	entity->arena = this;
 	entities[id] = entity;
 
 	return 1;
@@ -100,6 +110,7 @@ bool Arena::RemoveEntity(const long id)
 		return 0;
 	}
 
+	entities[id]->arena = 0;
 	entities.erase(id);
 
 	return 1;
@@ -141,7 +152,7 @@ void Arena::RunPhysics(float deltaTime)
 	const float gravity = 80;
 	const float airFriction = 20;
 	const float friction = 500;
-	const float termVel = 30;
+	const float termVel = 110;
 	
 	/* Apply world forces (gravity, friction... ) */
 	for (auto& kv : entities)
@@ -196,6 +207,8 @@ void Arena::RunPhysics(float deltaTime)
 	for (auto it = tmpEnts.cbegin(); it != tmpEnts.cend();)
 	{
 		Entity *a = it->second;
+		tmpEnts.erase(it++);
+
 		if(!a->solid)
 			continue;
 
@@ -211,8 +224,6 @@ void Arena::RunPhysics(float deltaTime)
 				b->Touch(a);
 			}
 		}
-
-		tmpEnts.erase(it++);
 	}
 }
 
