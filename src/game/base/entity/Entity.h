@@ -29,6 +29,7 @@ public:
 
 	enum Team { Player, Monster };
 	enum MovementType { Static, Walk, Fly }; // Used for physics
+	float maxSpeed; // Max movement speed
 
 	Team team;
 	MovementType moveType;

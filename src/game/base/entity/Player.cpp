@@ -19,6 +19,7 @@ Player::Player(InputHandler *input) : Entity()
 
 	bbox = glm::vec3(24, 64, 24);
 	solid = true;
+	maxSpeed = 180;
 }
 
 Player::~Player()
@@ -34,8 +35,8 @@ void Player::Update(float deltaTime)
 
 void Player::Touch(Entity *other)
 {
-	if(other->team == Team::Monster)
-		std::cout << "u dieded" << std::endl;
+	//if(other->team == Team::Monster)
+		//std::cout << "u dieded" << std::endl;
 }
 
 void Player::Hurt(float dmg)
@@ -62,36 +63,60 @@ void Player::ProjectView()
 
 void Player::HandlePlayerInput(float deltaTime)
 {
+	const float MOVEMENT_SPEED = 1000.0;
+
 	cam_rot.x -= input->GetMouseX() / 100.0;
 	cam_rot.y -= input->GetMouseY() / 100.0;
 
+	glm::vec3 oldVel = velocity;
+
 	if(input->KeyDown(Config::GetKey("moveForward")))
 	{
-		if(onFloor)
+		if(onFloor && moveType == MovementType::Walk)
 			velocity += dir * deltaTime * MOVEMENT_SPEED;
+		else if(moveType == MovementType::Fly)
+			position += dir * deltaTime * (MOVEMENT_SPEED/5);
 	}
 	if(input->KeyDown(Config::GetKey("moveBackward")))
 	{
-		if(onFloor)
+		if(onFloor && moveType == MovementType::Walk)
 			velocity -= dir * deltaTime * MOVEMENT_SPEED;
+		else if(moveType == MovementType::Fly)
+			position -= dir * deltaTime * (MOVEMENT_SPEED/5);
 	}
 	if(input->KeyDown(Config::GetKey("moveLeft")))
 	{
-		if(onFloor)
+		if(onFloor && moveType == MovementType::Walk)
 			velocity -= right * deltaTime * MOVEMENT_SPEED;
+		else if(moveType == MovementType::Fly)
+			position -= right * deltaTime * (MOVEMENT_SPEED/5);
 	}
 	if(input->KeyDown(Config::GetKey("moveRight")))
 	{
-		if(onFloor)
+		if(onFloor && moveType == MovementType::Walk)
 			velocity += right * deltaTime * MOVEMENT_SPEED;
+		else if(moveType == MovementType::Fly)
+			position += right * deltaTime * (MOVEMENT_SPEED/5);
 	}
 	if(input->KeyDown(Config::GetKey("jump")))
 	{
-		if(onFloor)
+		if(onFloor && moveType == MovementType::Walk)
 		{
-			velocity.y = 3.5;
+			velocity.y = 40;
 			onFloor = false;
 		}
+		else if(moveType == MovementType::Fly)
+			position.y += 150 * deltaTime;
+	}
+
+	// :D
+	if(input->KeyDown(SDLK_LALT) && input->KeyPressed(SDLK_F4))
+		moveType = (moveType == MovementType::Walk ? MovementType::Fly : MovementType::Walk);
+
+	if(oldVel != velocity)
+	{
+		if(glm::clamp(velocity, -maxSpeed, maxSpeed) != velocity)
+			velocity = oldVel;
 	}
 	if(input->KeyDown(SDLK_e))
 		if(clientmodule == NULL)

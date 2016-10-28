@@ -138,10 +138,10 @@ bool Arena::PointIntersectsWorld(const glm::vec3 &a)
 
 void Arena::RunPhysics(float deltaTime)
 {
-	const float gravity = 20;
-	const float airFriction = 1.5;
-	const float friction = 3;
-	const float termVel = 1.5;
+	const float gravity = 80;
+	const float airFriction = 20;
+	const float friction = 500;
+	const float termVel = 30;
 	
 	/* Apply world forces (gravity, friction... ) */
 	for (auto& kv : entities)
@@ -178,14 +178,20 @@ void Arena::RunPhysics(float deltaTime)
 			}
 
 			/* Apply velocity to position */
-			ent->position += ent->velocity;
+			ent->position += ent->velocity * deltaTime;
+		}
+		else if(ent->moveType == Entity::MovementType::Fly)
+		{
+			if(ent->classname == "player")
+				ent->velocity *= (deltaTime * airFriction * 4);
+
+			ent->position += ent->velocity * deltaTime;
 		}
 	}
 
 	/* This checks for entity:entity collisions
 	 * To avoid processing each collision twice (once for each entity)
 	 * we copy the list and remove the entity after comparing it with all other entities */
-
 	std::map<long, Entity *> tmpEnts(entities);
 	for (auto it = tmpEnts.cbegin(); it != tmpEnts.cend();)
 	{

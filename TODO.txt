@@ -2,8 +2,8 @@ Game
     - Projectiles (Shootable spoons)
 
 Collision
-    - AABB? Perhaps a format for including more complex collision models
-    - Lazier/easier route: Use libBullet?
+    - Renderer support to draw collision models
+    - Collision spheres
 
 Networking (SDL2_net vs Sockets)?
     - UDP
@@ -21,10 +21,6 @@ Renderer
     - Particle support
     - Decal support
     - Shadows?
-
-Other
-    - Config support so user can change keybinds etc
-    - Filesystem GetUserDir() functions etc to save/load user config
 
 Menu
     - Basic menu with singleplayer/multiplayer/options/exit

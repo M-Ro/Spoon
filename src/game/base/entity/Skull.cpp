@@ -28,7 +28,7 @@ void Skull::Update(float deltaTime)
 	if(glm::length(velocity) > speed)
 		velocity = speed * glm::normalize(velocity);
 
-	position += velocity*deltaTime;
+	//position += velocity*deltaTime;
 	
 	//velocity = enemy_direction*speed;
 	//position += velocity;
