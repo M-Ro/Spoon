@@ -17,7 +17,8 @@ public:
 
 	Arena *arena;
 	Entity *owner;
-
+	Entity *enemy;
+	
 	std::string classname;
 
 	unsigned long id;
@@ -68,6 +69,8 @@ public:
 	virtual void Hurt(Entity *attacker, float dmg) = 0;
 
 	virtual void Die() = 0;
+
+	virtual void SendEntity() = 0;
 
 	const long GetId() const { return id; }
 

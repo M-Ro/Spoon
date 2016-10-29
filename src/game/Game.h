@@ -20,6 +20,7 @@ public:
 
 	// Called every frame
 	virtual void Run(float deltaTime) = 0;
+	virtual void HandleNetworkMsg(char * data) = 0;
 
 	Renderer *renderer;
 	Camera *camera;

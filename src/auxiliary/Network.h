@@ -15,7 +15,7 @@ class ClientNetworkModule
 	public:
 		bool Initialise(std::string ip, int localport, int remoteport);
 		bool CheckForData();
-		bool Send(std::string message);
+		bool Send(char * msg);
 		~ClientNetworkModule();
 };
 
@@ -29,7 +29,7 @@ class HostNetworkModule
 	public:
 		bool Initialise(int localport);
 		bool CheckForData();
-		void SendAll(std::string message);
+		void SendAll(char * msg, int len);
 		~HostNetworkModule();
 };
 

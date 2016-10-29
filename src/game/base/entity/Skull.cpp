@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include <glm/gtc/type_ptr.hpp>
+
+#include "../../../auxiliary/Network.h"
 #include "Skull.h"
 #include "Player.h"
 
@@ -17,6 +20,32 @@ Skull::Skull() : Monster()
 	speed = 80.0f;
 	moveType = MovementType::Fly;
 	solid = true;
+	enemy = player;
+}
+
+void Skull::SendEntity(){
+	int name_len = classname.size();
+	int package_size = sizeof(int)*2 + 9*sizeof(float) + name_len;
+
+	char * package = new char[package_size];
+	size_t loc = (size_t)package;
+	loc = 0;
+
+	memcpy(package, &id, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package+loc, &name_len, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package+loc, classname.c_str(), name_len);
+	loc += name_len;
+	memcpy(package+loc, glm::value_ptr(position), sizeof(float)*3);
+	loc += sizeof(float)*3;
+	memcpy(package+loc, glm::value_ptr(velocity), sizeof(float)*3);
+	loc += sizeof(float)*3;
+	memcpy(package+loc, glm::value_ptr(rotation), sizeof(float)*3);
+
+	hostmodule->SendAll(package, package_size);
+	delete [] package;
+	nextupdate = 0.05;
 }
 
 void Skull::Update(float deltaTime)
@@ -46,10 +75,12 @@ void Skull::Update(float deltaTime)
 
 	rotation[1] = angle;
 
-
-
 	angle = asin(velocity[1]/glm::length(velocity));
 	rotation[0] = -angle;
+
+	nextupdate -=deltaTime;
+	if(hostmodule && nextupdate < 0.0f)
+		SendEntity();
 	return;
 }
 

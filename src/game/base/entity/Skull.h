@@ -11,10 +11,12 @@ public:
 	void Touch(Entity *other);
 	void Update(float deltaTime);
 	void Hurt(Entity *attacker, float dmg);
+	void SendEntity();
 
 	void Die();
 
 protected:
 	float turnrate;
 	float speed;
+	float nextupdate = 0.0f;
 };

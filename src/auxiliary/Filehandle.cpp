@@ -50,7 +50,7 @@ unsigned char *Filehandle::ReadFile()
 	sint64 total_read = 0;
 	while(total_read < file_size)
 	{
-		sint64 bytes_read = ReadBytes(file_buf+total_read, 2048);
+		sint64 bytes_read = ReadBytes(file_buf+total_read, 512);
 		if(bytes_read == -1)
 		{
 			std::cout << "Failed read: " << PHYSFS_getLastError() << std::endl;

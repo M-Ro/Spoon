@@ -3,6 +3,7 @@
 #include "Arena.h"
 #include "entity/skull.h"
 #include "../Game.h"
+#include "../../auxiliary/Network.h"
 
 Arena::Arena(const std::string &name)
 {
@@ -33,7 +34,7 @@ void Arena::Update(float deltaTime)
 		kv.second->Update(deltaTime);
 
 	spawn_timer -= deltaTime;
-	if(spawn_timer < 0.0){
+	if(spawn_timer < 0.0 && !clientmodule){
 		Skull * s = new Skull();
 		AddEntity(s);
 		spawn_timer = 10.0f;

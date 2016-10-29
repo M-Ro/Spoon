@@ -1,6 +1,10 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "Network.h"
+#include "../game/base/GameName.h"
+
+extern Game *game;
 
 HostNetworkModule * hostmodule;
 ClientNetworkModule * clientmodule;
@@ -51,9 +55,8 @@ bool HostNetworkModule::CheckForData(){
 	if ( SDLNet_UDP_Recv(socket, packet))
 	{
 		checkForNewConnection(packet->address);
-		char message[packet->len];
-		memcpy(message, packet->data, packet->len);
-		std::cout << "Data received:" << message << std::endl;
+		std::string msg(packet->data,packet->data+packet->len);
+		std::cout << "Data received:" << msg << std::endl;
 		//std::cout << "From:         " << packet->address.host << ":" << packet->address.port << std::endl;
 		return 1;
 	}
@@ -65,12 +68,12 @@ HostNetworkModule::~HostNetworkModule(){
 	SDLNet_Quit();
 }
 
-void HostNetworkModule::SendAll(std::string message){
+void HostNetworkModule::SendAll(char * msg, int len){
+	memcpy(packet->data, msg, len );
+	packet->len = len;
 	for(unsigned int i = 0; i < connections.size(); i++){
-		memcpy(packet->data, message.c_str(), message.length() );
-		packet->len = message.length();
 		packet->address = connections[i];
-
+		//std::cout<<"host:"<<strlen(msg)<<std::endl;
 		if ( SDLNet_UDP_Send(socket, -1, packet) == 0 )
 		{
 			std::cout << "SDLNet_UDP_Send failed:" << SDLNet_GetError() << std::endl;
@@ -94,7 +97,7 @@ bool InitialiseClient(std::string ip, int localport, int remoteport){
 	}
 	return 1;
 }
-
+//////
 bool ClientNetworkModule::Initialise(std::string ip, int localport, int remoteport){
 	if( SDLNet_Init() < 0 ){
 		std::cout << "SDLNET_Init() failed:" << SDLNet_GetError() << std::endl;
@@ -122,27 +125,29 @@ bool ClientNetworkModule::Initialise(std::string ip, int localport, int remotepo
 	packet->address.host = remoteip.host; 
 	packet->address.port = remoteip.port;
 
-	Send("Hi I'm new here");
 	std::cout << "Clientmodule successfully initialised" << std::endl;
+	char hello[] = "hello";
+	Send(hello);
 	return 1;
 }
 
 bool ClientNetworkModule::CheckForData(){
 	if ( SDLNet_UDP_Recv(socket, packet))
 	{
-		char message[packet->len];
-		memcpy(message, packet->data, packet->len);
-		std::cout << "Data received:" << message << std::endl;
+		std::string msg(packet->data,packet->data+packet->len);
+		char *cstr = &msg[0u];
+		//std::cout<<"client:"<<packet->len<<std::endl;
+		game->HandleNetworkMsg(cstr);
+		//std::cout << "Data received:" << msg << std::endl;
 		//std::cout << "From:         " << packet->address.host << ":" << packet->address.port << std::endl;
 		return 1;
 	}
 	return 0;
 }
 
-bool ClientNetworkModule::Send( std::string message ){
-	memcpy(packet->data, message.c_str(), message.length() );
-	packet->len = message.length();
-
+bool ClientNetworkModule::Send( char * msg ){
+	memcpy(packet->data, msg, strlen(msg) );
+	packet->len = strlen(msg);
 	if ( SDLNet_UDP_Send(socket, -1, packet) == 0 )
 	{
 		std::cout << "SDLNet_UDP_Send failed:" << SDLNet_GetError() << std::endl;

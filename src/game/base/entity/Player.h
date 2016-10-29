@@ -16,6 +16,8 @@ public:
 
 	void Draw() {}
 
+	void SendEntity() {}
+	
 	void Hurt(Entity *attacker, float dmg);
 
 	void Die();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Game.h"
+#include <string>
 
 class GameName : public Game
 {
@@ -15,5 +16,7 @@ public:
 	void Shutdown();
 
 	void Run(float deltaTime);
+
+	void HandleNetworkMsg(char * data);
 
 };
