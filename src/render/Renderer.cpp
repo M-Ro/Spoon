@@ -207,7 +207,7 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
         glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &model_matrix[0][0]);
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &view_matrix[0][0]);
 
-		glUniform3f(LightID, 0, 500, 0); // position
+		glUniform3f(LightID, 0, 250, 0); // position
         /* Bind material texture to unit 0 */
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_id);

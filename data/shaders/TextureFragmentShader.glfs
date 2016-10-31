@@ -29,16 +29,20 @@ void main()
 
 	vec3 norm = normalize(normal_cameraspace);
 	vec3 lightdir = normalize(lightDir_cameraspace);
-	float cosTheta = clamp( dot( norm,lightdir ), 0,1 );
+	float cosTheta = 1;//clamp( dot( norm,lightdir ), 0,1 );
 	
 	// Eye vector (towards the camera)
 	vec3 eyeVector = normalize(eyeDir_cameraspace);
 	vec3 reflectDir = reflect(-lightdir,norm); // Direction in which triangle reflects light
 	
+	float a1 = 10;
+	float a2 = 17.9;
+	float a3 = 1.1;
+	float a = 1/(a1 + a2*distance + a3*distance*distance);
 	float cosAlpha = clamp( dot( eyeVector,reflectDir ), 0,1 );
 	
 	color = 
 		matAmbientColor +
-		matDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
-		matSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);
+		matDiffuseColor * LightColor * LightPower * cosTheta * a;
+		//+ matSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);
 }
