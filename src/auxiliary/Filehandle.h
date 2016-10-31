@@ -6,6 +6,8 @@
 
 #include <physfs.h>
 
+const int FILE_MAXREAD = 512;
+
 typedef long long 			sint64;
 typedef int 				sint32;
 typedef unsigned long long 	uint64;

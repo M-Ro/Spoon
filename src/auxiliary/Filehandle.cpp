@@ -36,7 +36,7 @@ int Filehandle::Close()
 
 sint64 Filehandle::ReadBytes(void *buffer, uint32 count)
 {
-	if(count >= 4096)
+	if(count >= 1024)
 		std::cout << "Warning: Filehandle::readBytes: count possibly too large " << count << std::endl;
 
 	return PHYSFS_readBytes(file, buffer, count);

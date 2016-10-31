@@ -9,6 +9,7 @@
 #include "auxiliary/Filesystem.h"
 #include "render/Renderer.h"
 #include "render/Camera.h"
+#include "audio/AudioSystem.h"
 #include "game/base/GameName.h"
 #include "input/InputHandler.h"
 
@@ -53,6 +54,9 @@ int main(int argc, char **argv)
 	Camera camera = Camera();
 	renderer.SetActiveCamera(&camera);
 
+	/* Initialise sound */
+	AudioSystem *audio = new AudioSystem();
+
 	/* Create the base 'game' */
 	game = new GameName();
 	game->renderer = &renderer;
@@ -73,6 +77,7 @@ int main(int argc, char **argv)
 	game->Shutdown();
 	delete game;
 
+	delete audio;
 	Config::WriteConfig();
 	Filesystem::Shutdown();
 
