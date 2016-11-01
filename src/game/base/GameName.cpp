@@ -31,6 +31,10 @@ void GameName::Load()
 {
 	input->SetRelativeMouseMode(true);
 
+	renderer->PrecacheModel("arena");
+	renderer->PrecacheModel("skull");
+	renderer->PrecacheModel("spoon");
+
 	arena = new Arena("arena");
 
 	player = new Player(input);

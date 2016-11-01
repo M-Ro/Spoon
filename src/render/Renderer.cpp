@@ -266,7 +266,7 @@ void Renderer::DrawBBox(glm::vec3 origin, glm::vec3 size)
 	if(!active_camera)
 		return;
 
-	GLuint matrix_id = glGetUniformLocation(program_model->GetProgram(), "MVP"); // model view projection handle
+	//GLuint matrix_id = glGetUniformLocation(program_model->GetProgram(), "MVP"); // model view projection handle
 }
 
 void Renderer::Flip()
@@ -314,4 +314,23 @@ void Renderer::LoadModel(std::string const &filename)
 		model->Upload();
 
 	models.insert(std::pair<std::string, Model *>(filename, model));
+}
+
+void Renderer::PrecacheModel(std::string const &modelname)
+{
+	/* Load the model */
+	if(!models.count(modelname))
+		LoadModel(modelname);
+
+	Model *model = models.at(modelname);
+	if(!model) // Invalid model, don't attempt to draw
+	{
+		std::cout << "Precache: Failed to precache model: " << modelname << std::endl;
+		return;
+	}
+
+	/* Precache material/textures used by model */
+	for(ModelSection *section : model->GetSections())
+		if(!textures.count(section->GetMaterial())) // Load texture if required
+			LoadTexture(section->GetMaterial());
 }

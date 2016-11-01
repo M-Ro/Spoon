@@ -31,6 +31,8 @@ public:
 
 	void Flip();
 
+	void PrecacheModel(std::string const &filename);
+
 private:
 	bool InitialiseGlew();
 	bool InitialiseOpenGL();
@@ -39,7 +41,7 @@ private:
 
 	void LoadTexture(std::string const &filename);
 
-	void LoadModel(std::string const &filename);
+	void LoadModel(std::string const &modelname);
 
 	SDL_Window *window;
 	SDL_Surface *screen;
