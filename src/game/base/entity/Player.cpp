@@ -3,6 +3,7 @@
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
 #include <iostream>
+#include <cmath>
 
 Player::Player(InputHandler *input) : Entity()
 {
@@ -68,20 +69,24 @@ void Player::HandlePlayerInput(float deltaTime)
 
 	cam_rot.x -= input->GetMouseX() / 100.0;
 	cam_rot.y -= input->GetMouseY() / 100.0;
+	cam_rot.y = std::fmax(std::fmin(cam_rot.y, 1.4), -1.4);
 
 	glm::vec3 oldVel = velocity;
+
+	/* Calculate movement vector */
+	glm::vec3 moveDir = glm::vec3(1 * sin(cam_rot.x), 0, 1 * cos(cam_rot.x));
 
 	if(input->KeyDown(Config::GetKey("moveForward")))
 	{
 		if(onFloor && moveType == MovementType::Walk)
-			velocity += dir * deltaTime * MOVEMENT_SPEED;
+			velocity += moveDir * deltaTime * MOVEMENT_SPEED;
 		else if(moveType == MovementType::Fly)
 			position += dir * deltaTime * (MOVEMENT_SPEED/5);
 	}
 	if(input->KeyDown(Config::GetKey("moveBackward")))
 	{
 		if(onFloor && moveType == MovementType::Walk)
-			velocity -= dir * deltaTime * MOVEMENT_SPEED;
+			velocity -= moveDir * deltaTime * MOVEMENT_SPEED;
 		else if(moveType == MovementType::Fly)
 			position -= dir * deltaTime * (MOVEMENT_SPEED/5);
 	}

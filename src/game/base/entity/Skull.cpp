@@ -102,6 +102,5 @@ void Skull::Hurt(Entity *attacker, float dmg)
 
 void Skull::Die()
 {
-	std::cout << "Skull just wanted to hug :(" << std::endl;
 	destroy = true;
 }
