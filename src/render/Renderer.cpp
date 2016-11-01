@@ -61,7 +61,27 @@ Renderer::Renderer()
 
 	/* Create SDL window */
 	std::cout << "Creating SDL window" << std::endl;
-	window = SDL_CreateWindow("Spoon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Config::GetInt("r_width"), Config::GetInt("r_height"), SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+
+	int width = Config::GetInt("r_width");
+	int height = Config::GetInt("r_height");
+
+	Uint32 flags = SDL_WINDOW_OPENGL;
+	if(Config::GetInt("r_borderless") > 0)
+	{
+		flags |= SDL_WINDOW_BORDERLESS | SDL_WINDOW_MAXIMIZED;
+
+		SDL_DisplayMode native;
+		if(SDL_GetCurrentDisplayMode(0, &native) == 0)
+		{
+			width = native.w;
+			height = native.h;
+		}
+
+	}
+	else if(Config::GetInt("r_fullscreen") > 0)
+		flags |= SDL_WINDOW_FULLSCREEN;
+
+	window = SDL_CreateWindow("Spoon", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 	if (!window)
 	{
 		std::cout << "Error: Could not create SDL window: " << SDL_GetError() << std::endl;
@@ -86,7 +106,7 @@ Renderer::Renderer()
 
 	LoadTexture("textures/null"); // Default missing texture image
 
-	font = new Font("emulogic", 16);
+	font = new Font("emulogic", 16, glm::vec2(width, height));
 }
 
 Renderer::~Renderer()

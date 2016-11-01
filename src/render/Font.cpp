@@ -4,15 +4,16 @@
 #include "Program.h"
 #include "Font.h"
 #include "../auxiliary/Filehandle.h"
-#include "../auxiliary/Config.h"
 
 #include <GL\glu.h>
 
 static FT_Library ft; // Freetype library reference
 static FreetypeState state;
 
-Font::Font(std::string const &name, unsigned int size)
+Font::Font(std::string const &name, unsigned int size, glm::vec2 screenSize)
 {
+	screen = screenSize;
+
 	/* Initialise Freetype library */
 	if(state == Uninitialised)
 	{
@@ -128,10 +129,10 @@ void Font::RenderText(std::string const &text, float x, float y)
         /* Upload greyscale glyph to gpu */
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, glyph->bitmap.width, glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
         /* Calculate the vertex and texture coordinates */
-        float x2 = x + glyph->bitmap_left * (2.0/Config::GetFloat("r_width"));
-        float y2 = -y - glyph->bitmap_top * (2.0/Config::GetFloat("r_height"));
-        float w = glyph->bitmap.width * (2.0 / Config::GetFloat("r_width"));
-        float h = glyph->bitmap.rows * (2.0/Config::GetFloat("r_height"));
+        float x2 = x + glyph->bitmap_left * (2.0/screen.x);
+        float y2 = -y - glyph->bitmap_top * (2.0/screen.y);
+        float w = glyph->bitmap.width * (2.0 /screen.x);
+        float h = glyph->bitmap.rows * (2.0/screen.y);
  
         GLfloat box[4][4] = 
         {
@@ -146,8 +147,8 @@ void Font::RenderText(std::string const &text, float x, float y)
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
  
         /* Advance the cursor to the start of the next character */
-        x += (glyph->advance.x >> 6) * (2.0/Config::GetFloat("r_width")); // FIXME Why shift 6?
-        y += (glyph->advance.y >> 6) * (2.0/Config::GetFloat("r_height"));
+        x += (glyph->advance.x >> 6) * (2.0/screen.x); // FIXME Why shift 6?
+        y += (glyph->advance.y >> 6) * (2.0/screen.y);
 	}
 
 	glDisableVertexAttribArray(attribute_coord);
