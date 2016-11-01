@@ -53,12 +53,12 @@ void InputHandler::Update()
 	}
 }
 
-bool InputHandler::KeyDown(Uint8 key) // FIXME map doesnt exidst
+bool InputHandler::KeyDown(int key) // FIXME map doesnt exidst
 {
 	return keyDownMap[key];
 }
 
-bool InputHandler::KeyPressed(Uint8 key)
+bool InputHandler::KeyPressed(int key)
 {
 	bool pressed = keyPressedMap[key];
 	keyPressedMap[key] = false;

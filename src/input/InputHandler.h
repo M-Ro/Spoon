@@ -17,9 +17,9 @@ public:
 	int GetMouseX() { return mx; }
 	int GetMouseY() { return my; }
 
-	bool KeyDown(Uint8 key);
+	bool KeyDown(int key);
 
-	bool KeyPressed(Uint8 key);
+	bool KeyPressed(int key);
 
 	bool MouseDown(Uint8 button);
 
@@ -40,8 +40,8 @@ private:
 
 	std::string textBuffer;
 
-	std::map<Uint8, bool> keyDownMap;
-	std::map<Uint8, bool> keyPressedMap;
+	std::map<int, bool> keyDownMap;
+	std::map<int, bool> keyPressedMap;
 	std::map<Uint8, bool> mouseDownMap;
 	std::map<Uint8, bool> mousePressedMap;
 
