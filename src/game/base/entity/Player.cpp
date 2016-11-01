@@ -67,14 +67,14 @@ void Player::HandlePlayerInput(float deltaTime)
 {
 	const float MOVEMENT_SPEED = 1000.0;
 
-	cam_rot.x -= input->GetMouseX() / 100.0;
-	cam_rot.y -= input->GetMouseY() / 100.0;
+	cam_rot.x -= input->GetMouseX() / 300.0;
+	cam_rot.y -= input->GetMouseY() / 300.0;
 	cam_rot.y = std::fmax(std::fmin(cam_rot.y, 1.4), -1.4);
 
 	glm::vec3 oldVel = velocity;
 
 	/* Calculate movement vector */
-	glm::vec3 moveDir = glm::vec3(1 * sin(cam_rot.x), 0, 1 * cos(cam_rot.x));
+	glm::vec3 moveDir = glm::vec3(sin(cam_rot.x), 0, cos(cam_rot.x));
 
 	if(input->KeyDown(Config::GetKey("moveForward")))
 	{
