@@ -11,46 +11,6 @@
 #include "Shader.h"
 #include "OBJModel.h"
 
-static const GLfloat cube_vertices[] = 
-{
-    -1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f, 
-    1.0f, 1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    -1.0f,-1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    -1.0f,-1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f,-1.0f,
-    1.0f,-1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f,-1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f,-1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f, 1.0f,
-    1.0f,-1.0f, 1.0f
-};
-
 Renderer::Renderer()
 {
 	// Specify OpenGL 3.1
@@ -159,7 +119,20 @@ bool Renderer::InitialiseOpenGL()
 	
 	program_model->Link();
 
-	glClearColor(0.22f, 0.22f, 0.22f, 1.0f); // Set clear color to gray
+
+	program_overlay = new Program();
+
+	Shader *overlay_v = new Shader(Vertex);
+	overlay_v->LoadShader("overlay");
+	program_overlay->AttachShader(overlay_v);
+
+	Shader *overlay_f = new Shader(Fragment);
+	overlay_f->LoadShader("overlay");
+	program_overlay->AttachShader(overlay_f);
+
+	program_overlay->Link();
+
+	glClearColor(0.22f, 0.22f, 0.22f, 1.0f); // Set clear color to gray // FIXME remove?
 
     glEnable(GL_DEPTH_TEST); // Enable Depth Testing
     glDepthFunc(GL_LESS);  // Set depth function -> closer priority
@@ -266,7 +239,50 @@ void Renderer::DrawBBox(glm::vec3 origin, glm::vec3 size)
 	if(!active_camera)
 		return;
 
-	//GLuint matrix_id = glGetUniformLocation(program_model->GetProgram(), "MVP"); // model view projection handle
+	/* Check if the model is loaded, load if required */
+	if(!models.count("cube"))
+		LoadModel("cube");
+
+	Model *model = models.at("cube");
+	if(!model) // Invalid model, don't attempt to draw
+		return;
+
+	ModelSection *section = model->GetSections()[0];
+	if(!section)
+		return;
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	GLuint vertex_array  = section->GetVertexArray();
+	GLuint vertex_buffer = section->GetVertexBuffer();
+
+	GLuint matrix_id = glGetUniformLocation(program_overlay->GetProgram(), "MVP"); // model view projection handle
+
+	glUseProgram(program_overlay->GetProgram());
+
+	glm::mat4 projection_matrix = active_camera->GetProjectionMatrix();
+	glm::mat4 view_matrix = active_camera->GetViewMatrix();
+	glm::mat4 model_matrix = glm::translate(glm::mat4(1.0), origin);
+	glm::mat4 scale_matrix = glm::scale(size);
+	glm::mat4 modelviewprojection = projection_matrix * view_matrix * model_matrix * scale_matrix;
+
+	glBindVertexArray(vertex_array); // Bind VAO
+	glUniformMatrix4fv(matrix_id, 1, GL_FALSE, &modelviewprojection[0][0]); // Bind model view matrix to shader
+
+	/* Load Vertex Buffer Object and UV Buffer Object */
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	// Draw mesh
+	glDrawArrays(GL_TRIANGLES, 0, section->GetVertexCount());
+
+	/* Unselect VBO's */
+	glDisableVertexAttribArray(0);
+	glBindVertexArray(0); // Unbind VAO
+
+	glDisable(GL_BLEND);
 }
 
 void Renderer::Flip()

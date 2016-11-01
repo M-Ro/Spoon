@@ -9,6 +9,7 @@ Arena::Arena(const std::string &name)
 {
 	modelname = name;
 	spawn_timer = 0.0f;
+	drawBBoxes = false;
 }
 
 Arena::~Arena()
@@ -49,7 +50,11 @@ void Arena::Draw()
 
 	// Draw all entities
 	for (auto& kv : entities)
+	{
 		kv.second->Draw();
+		if(drawBBoxes)
+			game->renderer->DrawBBox(kv.second->position, kv.second->bbox);
+	}
 }
 
 Entity *Arena::FindEntityById(long id)

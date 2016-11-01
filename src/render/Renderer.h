@@ -49,8 +49,9 @@ private:
 	Font *font;
 
 	Program *program_model;
-	Shader *vshader;
-	Shader *fshader;
+	Program *program_overlay; // Renders object as a transparent overlay. Useful for bboxes etc
+	Shader *vshader;	// FIXME remove?
+	Shader *fshader;	// ''
 
 	Camera *active_camera;
 

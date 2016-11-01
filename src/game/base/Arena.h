@@ -30,6 +30,8 @@ public:
 
 	bool OnFloor(Entity *a);
 
+	inline void SetDrawBBoxes() { drawBBoxes = !drawBBoxes; }
+
 private:
 
 	void RunPhysics(float deltaTime);
@@ -37,4 +39,6 @@ private:
 	std::map<long, Entity *> entities;
 	float spawn_timer;
 	std::string modelname;
+
+	bool drawBBoxes;
 };

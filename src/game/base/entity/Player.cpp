@@ -140,4 +140,7 @@ void Player::HandlePlayerInput(float deltaTime)
 	if(input->KeyDown(SDLK_q))
 		if(hostmodule == NULL)
 			InitialiseHost(45);
+
+	if(input->KeyPressed(SDLK_b))
+		arena->SetDrawBBoxes();
 }
