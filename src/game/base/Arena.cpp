@@ -170,9 +170,6 @@ void Arena::RunPhysics(float deltaTime)
 		}
 		else if(ent->moveType == Entity::MovementType::Fly)
 		{
-			if(ent->classname == "player")
-				ent->velocity *= (deltaTime * airFriction * 4);
-
 			ent->position += ent->velocity * deltaTime;
 		}
 	}

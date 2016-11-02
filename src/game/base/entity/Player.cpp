@@ -127,7 +127,10 @@ void Player::HandlePlayerInput(float deltaTime)
 
 	// :D
 	if(input->KeyDown(SDLK_LALT) && input->KeyPressed(SDLK_F4))
+	{
 		moveType = (moveType == MovementType::Walk ? MovementType::Fly : MovementType::Walk);
+		velocity = glm::vec3(0, 0, 0);
+	}
 
 	if(oldVel != velocity)
 	{
