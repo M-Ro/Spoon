@@ -45,7 +45,7 @@ sint64 Filehandle::ReadBytes(void *buffer, uint32 count)
 unsigned char *Filehandle::ReadFile()
 {
 	sint64 file_size = Size();
-	unsigned char *file_buf = new unsigned char[file_size];
+	unsigned char *file_buf = new unsigned char[file_size+1];
 
 	sint64 total_read = 0;
 	while(total_read < file_size)
@@ -60,6 +60,7 @@ unsigned char *Filehandle::ReadFile()
 		total_read += bytes_read;
 	}
 
+	file_buf[file_size] = '\0';
 	return file_buf;
 }
 
