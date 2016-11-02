@@ -10,6 +10,8 @@ Arena::Arena(const std::string &name)
 	modelname = name;
 	spawn_timer = 0.0f;
 	drawBBoxes = false;
+
+	arena_cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(448, 8, 448));
 }
 
 Arena::~Arena()
@@ -53,7 +55,7 @@ void Arena::Draw()
 	{
 		kv.second->Draw();
 		if(drawBBoxes)
-			game->renderer->DrawBBox(kv.second->position, kv.second->bbox);
+			game->renderer->DrawCModel((int)kv.second->cmodel.type, kv.second->position, kv.second->cmodel.size, kv.second->cmodel.radius);
 	}
 }
 
@@ -122,37 +124,6 @@ bool Arena::RemoveEntity(const long id)
 	return 1;
 }
 
-/* Returns true if any point of a intersects b */
-bool Arena::Intersects(Entity *a, Entity *b)
-{
-	glm::vec3 a_mins = glm::vec3(a->position.x-a->bbox.x/2, a->position.y-a->bbox.y/2, a->position.z-a->bbox.z/2);
-	glm::vec3 a_maxs = glm::vec3(a->position.x+a->bbox.x/2, a->position.y+a->bbox.y/2, a->position.z+a->bbox.z/2);
-	glm::vec3 b_mins = glm::vec3(b->position.x-b->bbox.x/2, b->position.y-b->bbox.y/2, b->position.z-b->bbox.z/2);
-	glm::vec3 b_maxs = glm::vec3(b->position.x+b->bbox.x/2, b->position.y+b->bbox.y/2, b->position.z+b->bbox.z/2);
-
-	return (a_mins.x <= b_maxs.x && a_maxs.x >= b_mins.x) &&
-		 (a_mins.y <= b_maxs.y && a_maxs.y >= b_mins.y) &&
-		 (a_mins.z <= b_maxs.z && a_maxs.z >= b_mins.z);
-}
-
-bool Arena::IntersectsWorld(Entity *a)
-{
-	//glm::vec3 w_mins = glm::vec3(-224, -32, -224);
-	//glm::vec3 w_maxs = glm::vec3(224, 0, 224);
-
-	return false;
-}
-
-bool Arena::PointIntersectsWorld(const glm::vec3 &a)
-{
-	glm::vec3 w_mins = glm::vec3(-224, -32, -224);
-	glm::vec3 w_maxs = glm::vec3(224, 0, 224);
-
-	return  (a.x >= w_mins.x && a.x <= w_maxs.x) &&
-			(a.y >= w_mins.y && a.y <= w_maxs.y) &&
-			(a.z >= w_mins.z && a.z <= w_maxs.z);
-}
-
 void Arena::RunPhysics(float deltaTime)
 {
 	const float gravity = 80;
@@ -175,7 +146,7 @@ void Arena::RunPhysics(float deltaTime)
 			if(glm::length(xzVel) != 0)
 				xzVelN = glm::normalize(xzVel);
 
-			ent->onFloor = OnFloor(ent);
+			ent->onFloor = ent->cmodel.OnFloor(ent->position, arena_cmodel);
 
 			/* If airbound, apply airFriction and gravity */
 			if(!ent->onFloor)
@@ -224,30 +195,11 @@ void Arena::RunPhysics(float deltaTime)
 			if(!b->solid)
 				continue;
 
-			if(Intersects(a, b))
+			if(a->cmodel.Intersects(a->position, b->position, b->cmodel))
 			{
 				a->Touch(b);
 				b->Touch(a);
 			}
 		}
 	}
-}
-
-bool Arena::OnFloor(Entity *ent)
-{
-	glm::vec3 e_pos = ent->position;
-	glm::vec3 e_bbox = ent->bbox;
-
-	glm::vec3 p[4];
-	p[0] = glm::vec3(e_pos.x+e_bbox.x/2, e_pos.y-e_bbox.y/2, e_pos.z-e_bbox.z/2);
-	p[1] = glm::vec3(e_pos.x+e_bbox.x/2, e_pos.y-e_bbox.y/2, e_pos.z+e_bbox.z/2);
-	p[2] = glm::vec3(e_pos.x-e_bbox.x/2, e_pos.y-e_bbox.y/2, e_pos.z-e_bbox.z/2);
-	p[3] = glm::vec3(e_pos.x-e_bbox.x/2, e_pos.y-e_bbox.y/2, e_pos.z+e_bbox.z/2);
-
-	for(int i=0; i<4; i++)
-		if(PointIntersectsWorld(p[i]))
-			return true;
-
-
-	return false;
 }

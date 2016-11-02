@@ -12,13 +12,13 @@ Skull::Skull() : Monster()
 {
 	modelname = "skull";
 	classname = "skull";
-	bbox = glm::vec3(16, 16, 16);
 	health = 4;
 	position = glm::vec3(0.0f, 20.0f, 00.0f);
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	turnrate = 0.9f;
 	speed = 80.0f;
 	moveType = MovementType::Fly;
+	cmodel = CollisionModel(CollisionModel::ModelType::Sphere, 14);
 	solid = true;
 	enemy = player;
 }

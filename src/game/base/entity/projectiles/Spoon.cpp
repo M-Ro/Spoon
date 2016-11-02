@@ -10,9 +10,9 @@ Spoon::Spoon(Entity *owner) : Projectile(owner)
 {
 	classname = "projectile_spoon";
 	modelname = "spoon";
-	bbox = glm::vec3(6, 6, 6);
 	lifetime = 4000;
 	speed = 500;
+	cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(6, 6, 6));
 	solid = true;
 }
 

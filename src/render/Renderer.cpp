@@ -233,17 +233,23 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
 	}
 }
 
-void Renderer::DrawBBox(glm::vec3 origin, glm::vec3 size)
+void Renderer::DrawCModel(int type, glm::vec3 origin, glm::vec3 size, float r)
 {
 	/* Don't bother if we have no perspective to draw from */
 	if(!active_camera)
 		return;
 
 	/* Check if the model is loaded, load if required */
-	if(!models.count("cube"))
-		LoadModel("cube");
+	std::string modelname;
+	if(type == 0)
+		modelname = "cube";
+	else
+		modelname = "sphere";
 
-	Model *model = models.at("cube");
+	if(!models.count(modelname))
+		LoadModel(modelname);
+
+	Model *model = models.at(modelname);
 	if(!model) // Invalid model, don't attempt to draw
 		return;
 
@@ -264,7 +270,7 @@ void Renderer::DrawBBox(glm::vec3 origin, glm::vec3 size)
 	glm::mat4 projection_matrix = active_camera->GetProjectionMatrix();
 	glm::mat4 view_matrix = active_camera->GetViewMatrix();
 	glm::mat4 model_matrix = glm::translate(glm::mat4(1.0), origin);
-	glm::mat4 scale_matrix = glm::scale(size);
+	glm::mat4 scale_matrix = type == 0 ? glm::scale(size) : glm::scale(glm::vec3(r*2, r*2, r*2));
 	glm::mat4 modelviewprojection = projection_matrix * view_matrix * model_matrix * scale_matrix;
 
 	glBindVertexArray(vertex_array); // Bind VAO

@@ -24,12 +24,6 @@ public:
 	bool AddEntity(Entity *entity);
 	bool RemoveEntity(const long id);
 
-	bool Intersects(Entity *a, Entity *b);
-	bool IntersectsWorld(Entity *a);
-	bool PointIntersectsWorld(const glm::vec3 &a);
-
-	bool OnFloor(Entity *a);
-
 	inline void SetDrawBBoxes() { drawBBoxes = !drawBBoxes; }
 
 private:
@@ -39,6 +33,8 @@ private:
 	std::map<long, Entity *> entities;
 	float spawn_timer;
 	std::string modelname;
+
+	CollisionModel arena_cmodel;
 
 	bool drawBBoxes;
 };

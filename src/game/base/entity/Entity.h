@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include "../GameName.h"
+#include "../CollisionModel.h"
 
 static int last_id = 0;
 
@@ -29,7 +30,9 @@ public:
 	glm::vec3 rotation;
 	glm::vec3 velocity;
 
-	glm::vec3 bbox;
+	CollisionModel cmodel;
+	bool solid;
+	bool onFloor;
 
 	std::string modelname;
 
@@ -39,9 +42,6 @@ public:
 
 	Team team;
 	MovementType moveType;
-	bool solid;
-
-	bool onFloor;
 
 	bool destroy; // marked for deletion
 

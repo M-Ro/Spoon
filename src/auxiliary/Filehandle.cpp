@@ -67,7 +67,7 @@ unsigned char *Filehandle::ReadFile()
 std::istream *Filehandle::GetIStream()
 {
 	unsigned char *cbuf = ReadFile(); // FIXME <-- LIKELY LEAKS
-	membuf *sbuf = new membuf((char *)cbuf, (char *)cbuf + Size()); // this too
+	membuf *sbuf = new membuf((char *)cbuf, (char *)cbuf + Size()-1); // this too
 	Close();
 	return new std::istream(sbuf);
 }

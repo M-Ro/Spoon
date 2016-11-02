@@ -19,7 +19,7 @@ Player::Player(InputHandler *input) : Entity()
 	cam_rot.x = 3.14;
 	cam_rot.y = -0.3;
 
-	bbox = glm::vec3(24, 64, 24);
+	cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(24, 64, 24));
 	solid = true;
 	maxSpeed = 180;
 }
