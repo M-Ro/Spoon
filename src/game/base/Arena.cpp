@@ -11,7 +11,7 @@ Arena::Arena(const std::string &name)
 	spawn_timer = 0.0f;
 	drawBBoxes = false;
 
-	arena_cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(448, 8, 448));
+	arena_cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(1200, 8, 1200));
 }
 
 Arena::~Arena()
@@ -137,7 +137,9 @@ void Arena::RunPhysics(float deltaTime)
 		/* We don't apply gravity or other forces to flying entities, only walkers */
 		Entity *ent = kv.second;
 		if(!ent)
-			return;
+			continue;
+		if(ent->classname == "player")
+			continue;
 
 		if(ent->moveType == Entity::MovementType::Walk)
 		{

@@ -2,6 +2,7 @@
 #include "projectiles/Spoon.h"
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
+#include "../../../auxiliary/Time.h"
 #include <iostream>
 #include <cmath>
 
@@ -21,7 +22,8 @@ Player::Player(InputHandler *input) : Entity()
 
 	cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(24, 64, 24));
 	solid = true;
-	maxSpeed = 180;
+
+	lastJumpTime = 0;
 }
 
 Player::~Player()
@@ -33,6 +35,7 @@ void Player::Update(float deltaTime)
 {
 	ProjectView();
 	HandlePlayerInput(deltaTime);
+	HandlePMove(deltaTime);
 }
 
 void Player::Touch(Entity *other)
@@ -65,55 +68,27 @@ void Player::ProjectView()
 
 void Player::HandlePlayerInput(float deltaTime)
 {
-	const float MOVEMENT_SPEED = 1000.0;
-
 	cam_rot.x -= input->GetMouseX() / 300.0;
 	cam_rot.y -= input->GetMouseY() / 300.0;
 	cam_rot.y = std::fmax(std::fmin(cam_rot.y, 1.4), -1.4);
 
-	glm::vec3 oldVel = velocity;
+	idir = glm::vec3(0, 0, 0);
 
-	/* Calculate movement vector */
 	glm::vec3 moveDir = glm::vec3(sin(cam_rot.x), 0, cos(cam_rot.x));
 
 	if(input->KeyDown(Config::GetKey("moveForward")))
-	{
-		if(onFloor && moveType == MovementType::Walk)
-			velocity += moveDir * deltaTime * MOVEMENT_SPEED;
-		else if(moveType == MovementType::Fly)
-			position += dir * deltaTime * (MOVEMENT_SPEED/5);
-	}
-	if(input->KeyDown(Config::GetKey("moveBackward")))
-	{
-		if(onFloor && moveType == MovementType::Walk)
-			velocity -= moveDir * deltaTime * MOVEMENT_SPEED;
-		else if(moveType == MovementType::Fly)
-			position -= dir * deltaTime * (MOVEMENT_SPEED/5);
-	}
+		idir += moveDir;
+	else if(input->KeyDown(Config::GetKey("moveBackward")))
+		idir -= moveDir;
+
 	if(input->KeyDown(Config::GetKey("moveLeft")))
-	{
-		if(onFloor && moveType == MovementType::Walk)
-			velocity -= right * deltaTime * MOVEMENT_SPEED;
-		else if(moveType == MovementType::Fly)
-			position -= right * deltaTime * (MOVEMENT_SPEED/5);
-	}
-	if(input->KeyDown(Config::GetKey("moveRight")))
-	{
-		if(onFloor && moveType == MovementType::Walk)
-			velocity += right * deltaTime * MOVEMENT_SPEED;
-		else if(moveType == MovementType::Fly)
-			position += right * deltaTime * (MOVEMENT_SPEED/5);
-	}
+		idir -= right;
+	else if(input->KeyDown(Config::GetKey("moveRight")))
+		idir += right;
+
 	if(input->KeyDown(Config::GetKey("jump")))
-	{
-		if(onFloor && moveType == MovementType::Walk)
-		{
-			velocity.y = 40;
-			onFloor = false;
-		}
-		else if(moveType == MovementType::Fly)
-			position.y += 150 * deltaTime;
-	}
+		idir.y = 1;
+
 	if(input->MousePressed(1)) // FIXME this is ugly and should be written properly
 	{
 		Spoon *spoon = new Spoon(this);
@@ -132,11 +107,6 @@ void Player::HandlePlayerInput(float deltaTime)
 		velocity = glm::vec3(0, 0, 0);
 	}
 
-	if(oldVel != velocity)
-	{
-		if(glm::clamp(velocity, -maxSpeed, maxSpeed) != velocity)
-			velocity = oldVel;
-	}
 	if(input->KeyDown(SDLK_e))
 		if(clientmodule == NULL)
 			InitialiseClient("127.0.0.1",44,45);
@@ -146,4 +116,86 @@ void Player::HandlePlayerInput(float deltaTime)
 
 	if(input->KeyPressed(SDLK_b))
 		arena->SetDrawBBoxes();
+}
+
+void Player::HandlePMove(float deltaTime)
+{
+	const float ACCEL_SPEED = 1800;
+	const float AIR_C = 200;
+	const float MAX_SPEED = 250;
+	const float MAX_AIR_SPEED = 300;
+	const float JUMP_HEIGHT = 80;
+	const float gravity = 180;
+	const float airFriction = 50;
+	const float friction = 1000;
+	const float termVel = 210;
+
+	onFloor = cmodel.OnFloor(position, arena->GetCModel());
+
+	/* Calculate intended movement direction */
+	glm::vec3 idirxzn = glm::vec3(0, 0, 0);
+	if(glm::length(glm::vec3(idir.x, 0, idir.z)) > 0)
+		idirxzn = glm::vec3(idir.x, 0, idir.z);
+
+	if(moveType == MovementType::Walk)
+	{
+		glm::vec3 xzVel = glm::vec3(velocity.x, 0, velocity.z);
+		glm::vec3 xzVelN = glm::vec3(0, 0, 0);
+		if(glm::length(xzVel) != 0)
+			xzVelN = glm::normalize(xzVel);
+
+		/* If airbound, apply airFriction and gravity */
+		if(!onFloor)
+		{
+			/* Air friction, gravity */
+			velocity -= (deltaTime * xzVelN * airFriction);
+			velocity.y -= deltaTime * gravity;
+
+			if(velocity.y < -termVel)
+				velocity.y = -termVel;
+
+			/* Air Control */
+			velocity += (idirxzn * AIR_C * deltaTime);
+
+			// Clamp speed
+			if(glm::length(velocity) > MAX_AIR_SPEED)
+				velocity = glm::normalize(velocity) * MAX_AIR_SPEED; // todo don't hardclamp, just add more friction
+
+			/* Terrible hack to 'pop' the player off floor */
+			if(cmodel.OnFloor(position, arena->GetCModel()))
+			{
+				while(cmodel.OnFloor(position, arena->GetCModel()))
+					position.y += 1;
+
+				position.y -= 1;
+				velocity.y = 0;
+			}
+		}
+		else // On Floor
+		{
+			if(velocity.y < 0) // Stop ent going through floor
+				velocity.y = 0;
+
+			if(glm::length(xzVelN) > 0 && glm::dot(idirxzn, xzVelN) < 0)
+				velocity -= deltaTime * xzVelN * (friction*2);
+
+			velocity -= (deltaTime * xzVelN * friction);
+			velocity += (idirxzn * ACCEL_SPEED * deltaTime);
+
+			// Clamp speed
+			if(glm::length(velocity) > MAX_SPEED)
+				velocity = glm::normalize(velocity) * MAX_SPEED;
+
+			// Apply vertical velocity (jumping)
+			if(idir.y > 0 && Time::GetCurrentTimeMillis() > lastJumpTime + 300)
+			{
+				lastJumpTime = Time::GetCurrentTimeMillis();
+				velocity.y = idir.y * JUMP_HEIGHT;
+				onFloor = false;
+			}
+		}
+	}
+
+	/* Apply velocity to position */
+	position += velocity * deltaTime;
 }

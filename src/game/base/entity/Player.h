@@ -14,6 +14,8 @@ public:
 
 	void Update(float deltaTime);
 
+	void HandlePMove(float deltaTime);
+
 	void Draw() {}
 
 	void SendEntity() {}
@@ -38,5 +40,9 @@ private:
 	glm::vec3 up;
 	glm::vec3 right;
 	glm::vec3 dir;
+
+
+	glm::vec3 idir; // Intended direction vector from player input
+	long lastJumpTime; 
 
 };

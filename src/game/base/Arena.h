@@ -26,6 +26,8 @@ public:
 
 	inline void SetDrawBBoxes() { drawBBoxes = !drawBBoxes; }
 
+	inline CollisionModel &GetCModel() { return arena_cmodel; }
+
 private:
 
 	void RunPhysics(float deltaTime);
