@@ -35,10 +35,10 @@ void main()
 	vec3 eyeVector = normalize(eyeDir_cameraspace);
 	vec3 reflectDir = reflect(-lightdir,norm); // Direction in which triangle reflects light
 	
-	float a1 = 10;
-	float a2 = 17.9;
-	float a3 = 1.1;
-	float a = 1/(a1 + a2*distance + a3*distance*distance);
+	float a1 = 1.5/2.0;			//	This means that right next to the light colours get amplified by 33%, set to 1.0, if you don't want that
+	float a2 = distance/300.0;
+	float a3 = distance/250.0;
+	float a = 1/(a1 + a2 + a3*a3)/LightPower;
 	float cosAlpha = clamp( dot( eyeVector,reflectDir ), 0,1 );
 	
 	color = 
