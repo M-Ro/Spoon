@@ -75,6 +75,8 @@ void Player::HandlePlayerInput(float deltaTime)
 	idir = glm::vec3(0, 0, 0);
 
 	glm::vec3 moveDir = glm::vec3(sin(cam_rot.x), 0, cos(cam_rot.x));
+	if(moveType == MovementType::Fly)
+		moveDir = dir;
 
 	if(input->KeyDown(Config::GetKey("moveForward")))
 		idir += moveDir;
@@ -194,6 +196,18 @@ void Player::HandlePMove(float deltaTime)
 				onFloor = false;
 			}
 		}
+	}
+	else if(moveType == MovementType::Fly)
+	{
+		const float flySpeed = 5000;
+		if(glm::length(idir) > 0)
+			velocity += glm::normalize(idir) * flySpeed * deltaTime;
+
+		if(glm::length(velocity) > 0)
+			velocity -= (deltaTime * glm::normalize(velocity) * friction);
+
+		if(glm::length(velocity) > (MAX_AIR_SPEED*2))
+			velocity = glm::normalize(velocity) * (MAX_AIR_SPEED*2);
 	}
 
 	/* Apply velocity to position */
