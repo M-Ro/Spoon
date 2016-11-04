@@ -13,7 +13,8 @@ class ClientNetworkModule
 		UDPsocket socket;
 		UDPpacket * packet;
 	public:
-		bool Initialise(std::string ip, int localport, int remoteport);
+		bool Initialise(int localport);
+		bool Connect(std::string ip, int remoteport);
 		bool CheckForData();
 		bool Send(char * msg);
 		~ClientNetworkModule();

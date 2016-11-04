@@ -1,4 +1,5 @@
 #include <iostream>
+#include <List>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -20,7 +21,8 @@ Skull::Skull() : Monster()
 	moveType = MovementType::Fly;
 	cmodel = CollisionModel(CollisionModel::ModelType::Sphere, 14);
 	solid = true;
-	enemy = player;
+	enemy = NULL;
+	nextupdate = 0.0f;
 }
 
 void Skull::SendEntity(){
@@ -50,9 +52,19 @@ void Skull::SendEntity(){
 
 void Skull::Update(float deltaTime)
 {
+	//	Find new enemy, if we don't have one
+	if(!enemy){
+		std::list<Entity *> * playerlist = arena->FindEntityByClass("player");
+		if(playerlist == 0)
+			return;
+		else
+			enemy = playerlist->front();
+		delete playerlist;
+	}
+
 	if(deltaTime > 1.0)
 		deltaTime = 1.0;
-	glm::vec3 enemy_direction = glm::normalize(player->position - position);
+	glm::vec3 enemy_direction = glm::normalize(enemy->position - position);
 	
 	float temp = turnrate/glm::length(enemy_direction);
 	velocity = 0.999f*velocity + glm::vec3(temp*enemy_direction[0], temp*enemy_direction[1], temp*enemy_direction[2]);
@@ -81,6 +93,7 @@ void Skull::Update(float deltaTime)
 	nextupdate -=deltaTime;
 	if(hostmodule && nextupdate < 0.0f)
 		SendEntity();
+
 	return;
 }
 

@@ -18,5 +18,5 @@ public:
 protected:
 	float turnrate;
 	float speed;
-	float nextupdate = 0.0f;
+	float nextupdate;
 };

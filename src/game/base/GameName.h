@@ -17,6 +17,6 @@ public:
 
 	void Run(float deltaTime);
 
-	void HandleNetworkMsg(char * data);
-
+	void HandleNetworkMsg(char * data){};
+	void AddNewPlayer(IPaddress * address){};
 };

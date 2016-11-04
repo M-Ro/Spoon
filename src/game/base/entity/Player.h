@@ -1,5 +1,5 @@
 #pragma once
-
+#include <SDL2/SDL_net.h>
 #include "Entity.h"
 #include "../../../input/InputHandler.h"
 #include <glm/glm.hpp>
@@ -7,9 +7,10 @@
 class Player : public Entity
 {
 	friend class GameName;
+	friend class GameClient;
 public:
 
-	Player(InputHandler *input);
+	Player();
 	virtual ~Player();
 
 	void Update(float deltaTime);
@@ -26,6 +27,7 @@ public:
 
 	void Touch(Entity *other);
 
+	IPaddress * myAddress;
 private:
 
 	void HandlePlayerInput(float deltaTime);

@@ -6,10 +6,9 @@
 #include <iostream>
 #include <cmath>
 
-Player::Player(InputHandler *input) : Entity()
+Player::Player() : Entity()
 {
 	classname = "player";
-	this->input = input;
 	team = Team::Player;
 	moveType = MovementType::Walk;
 
@@ -33,9 +32,11 @@ Player::~Player()
 
 void Player::Update(float deltaTime)
 {
-	ProjectView();
-	HandlePlayerInput(deltaTime);
-	HandlePMove(deltaTime);
+	if(!hostmodule){
+		ProjectView();
+		HandlePlayerInput(deltaTime);
+		HandlePMove(deltaTime);
+	}
 }
 
 void Player::Touch(Entity *other)
@@ -108,13 +109,6 @@ void Player::HandlePlayerInput(float deltaTime)
 		moveType = (moveType == MovementType::Walk ? MovementType::Fly : MovementType::Walk);
 		velocity = glm::vec3(0, 0, 0);
 	}
-
-	if(input->KeyDown(SDLK_e))
-		if(clientmodule == NULL)
-			InitialiseClient("127.0.0.1",44,45);
-	if(input->KeyDown(SDLK_q))
-		if(hostmodule == NULL)
-			InitialiseHost(45);
 
 	if(input->KeyPressed(SDLK_b))
 		arena->SetDrawBBoxes();

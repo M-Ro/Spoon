@@ -2,7 +2,9 @@
 #include <string>
 #include <sstream>
 #include "Network.h"
-#include "../game/base/GameName.h"
+
+#include "../game/Game.h"
+#include "../game/base/GameServer.h"
 
 extern Game *game;
 
@@ -47,6 +49,7 @@ void HostNetworkModule::checkForNewConnection(IPaddress address){
 		if(connections[i].host == address.host && connections[i].port == address.port)
 			return;
 
+	game->AddNewPlayer(&address);
 	connections.push_back(address);
 	std::cout << "New Connection from:" << address.host << ":" << address.port << std::endl;
 }
@@ -73,10 +76,9 @@ void HostNetworkModule::SendAll(char * msg, int len){
 	packet->len = len;
 	for(unsigned int i = 0; i < connections.size(); i++){
 		packet->address = connections[i];
-		//std::cout<<"host:"<<strlen(msg)<<std::endl;
 		if ( SDLNet_UDP_Send(socket, -1, packet) == 0 )
 		{
-			std::cout << "SDLNet_UDP_Send failed:" << SDLNet_GetError() << std::endl;
+			std::cout << "SDLNet_UDP_Send failed: " << SDLNet_GetError() << std::endl;
 		}
 	}
 }
@@ -86,41 +88,52 @@ void HostNetworkModule::SendAll(char * msg, int len){
 
 bool InitialiseClient(std::string ip, int localport, int remoteport){
 	if( SDLNet_Init() < 0 ){
-		std::cout << "SDLNET_Init() failed:" << SDLNet_GetError() << std::endl;
+		std::cout << "SDLNET_Init() failed: " << SDLNet_GetError() << std::endl;
 		return 0;
 	}
 
 	clientmodule = new ClientNetworkModule();
-	if(!clientmodule->Initialise(ip, localport, remoteport)){
-		delete clientmodule;
-		return 0;
+	if(clientmodule->Initialise(localport)){
+		if(!clientmodule->Connect(ip, remoteport)){
+			delete clientmodule;
+			return 0;
+		}
 	}
+	else
+		return 0;
 	return 1;
 }
 //////
-bool ClientNetworkModule::Initialise(std::string ip, int localport, int remoteport){
+bool ClientNetworkModule::Initialise(int localport){
 	if( SDLNet_Init() < 0 ){
-		std::cout << "SDLNET_Init() failed:" << SDLNet_GetError() << std::endl;
+		std::cout << "SDLNET_Init() failed: " << SDLNet_GetError() << std::endl;
 		return 0;
 	}
+	std::cout<<"SDLNET initialised"<<std::endl;
 
 	if( !( socket = SDLNet_UDP_Open( localport ) ) )
 	{
-		std::cout << "Failed to open socket:" << SDLNet_GetError() << std::endl;
+		std::cout << "Failed to open socket: " << SDLNet_GetError() << std::endl;
 		return 0;
 	}
+	std::cout<<"Socket opened to port "<<localport<<std::endl;
+	return 1;
+}
 
+bool ClientNetworkModule::Connect(std::string ip, int remoteport){
 	if( SDLNet_ResolveHost( &remoteip, ip.c_str(), remoteport ) < 0 )
 	{
-		std::cout << "Failed to resolve host:" << SDLNet_GetError() << std::endl;
+		std::cout << "Failed to resolve host: " << SDLNet_GetError() << std::endl;
 		return 0;
 	}
+	std::cout<<"Host resolved succesfully"<<std::endl;
 
 	if( !( packet = SDLNet_AllocPacket( packet_size ) ) )
 	{
-		std::cout << "SDLNet_AllocPacket() failed:" << SDLNet_GetError() << std::endl;
+		std::cout << "SDLNet_AllocPacket() failed: " << SDLNet_GetError() << std::endl;
 		return 0; 
 	}
+	std::cout<<"Network Packet allocated"<<std::endl;
 
 	packet->address.host = remoteip.host; 
 	packet->address.port = remoteip.port;
