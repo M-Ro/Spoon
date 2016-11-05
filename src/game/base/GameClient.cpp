@@ -68,6 +68,10 @@ void GameClient::Run(float deltaTime)
 	renderer->Flip();
 
 	clientmodule->CheckForData();
+	if(player->net_nextSendEntity < Time::GetCurrentTimeMillis()){
+		SendStatus();
+		player->net_nextSendEntity = Time::GetCurrentTimeMillis() + 50;
+	}
 }
 
 void GameClient::EntityUpdate(char * data){
@@ -144,4 +148,26 @@ void GameClient::HandleNetworkMsg(char * data){
 	if(packet_type == NET_selfInfo)
 		SelfUpdate(data + sizeof(int));
 	
+}
+
+void GameClient::SendStatus(){
+	int package_size = sizeof(int)*2 + 9*sizeof(float);
+
+	char * package = new char[package_size];
+	size_t loc = (size_t)package;
+	loc = 0;
+
+	memcpy(package, &NET_selfInfo, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package+loc, &player->id, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package+loc, glm::value_ptr(player->position), sizeof(float)*3);
+	loc += sizeof(float)*3;
+	memcpy(package+loc, glm::value_ptr(player->velocity), sizeof(float)*3);
+	loc += sizeof(float)*3;
+	memcpy(package+loc, glm::value_ptr(player->rotation), sizeof(float)*3);
+
+	clientmodule->Send(package, package_size);
+
+	delete [] package;
 }

@@ -94,6 +94,8 @@ bool startClient(int argc, char **argv){
 		ip = argv[2];
 	if(argc > 3)
 		remoteport = atoi(argv[3]);
+	if(argc > 4)
+		remoteport = atoi(argv[4]);
 
 	if(!InitialiseClient(ip, localport, remoteport))
 		return 0;

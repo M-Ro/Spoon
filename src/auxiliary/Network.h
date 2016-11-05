@@ -16,7 +16,7 @@ class ClientNetworkModule
 		bool Initialise(int localport);
 		bool Connect(std::string ip, int remoteport);
 		bool CheckForData();
-		bool Send(char * msg);
+		bool Send(char * msg, int len);
 		~ClientNetworkModule();
 };
 

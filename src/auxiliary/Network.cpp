@@ -58,8 +58,9 @@ bool HostNetworkModule::CheckForData(){
 	if ( SDLNet_UDP_Recv(socket, packet))
 	{
 		checkForNewConnection(packet->address);
-		std::string msg(packet->data,packet->data+packet->len);
-		std::cout << "Data received:" << msg << std::endl;
+		game->HandleNetworkMsg((char*)packet->data);
+		//std::string msg(packet->data,packet->data+packet->len);
+		//std::cout << "Data received:" << msg << std::endl;
 		//std::cout << "From:         " << packet->address.host << ":" << packet->address.port << std::endl;
 		return 1;
 	}
@@ -153,7 +154,7 @@ bool ClientNetworkModule::Connect(std::string ip, int remoteport){
 
 	std::cout << "Clientmodule successfully initialised" << std::endl;
 	char hello[] = "hello";
-	Send(hello);
+	Send(hello, 5);
 	return 1;
 }
 
@@ -170,9 +171,9 @@ bool ClientNetworkModule::CheckForData(){
 	return 0;
 }
 
-bool ClientNetworkModule::Send( char * msg ){
-	memcpy(packet->data, msg, strlen(msg) );
-	packet->len = strlen(msg);
+bool ClientNetworkModule::Send( char * msg, int len ){
+	memcpy(packet->data, msg, len );
+	packet->len = len;
 	if ( SDLNet_UDP_Send(socket, -1, packet) == 0 )
 	{
 		std::cout << "SDLNet_UDP_Send failed:" << SDLNet_GetError() << std::endl;

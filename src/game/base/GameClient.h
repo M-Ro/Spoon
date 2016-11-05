@@ -21,4 +21,5 @@ public:
 	void AddNewPlayer(IPaddress * address){};
 	void EntityUpdate(char * data);
 	void SelfUpdate(char * data);
+	void SendStatus();
 };
