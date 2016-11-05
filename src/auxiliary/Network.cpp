@@ -147,10 +147,9 @@ bool ClientNetworkModule::Connect(std::string ip, int remoteport){
 bool ClientNetworkModule::CheckForData(){
 	if ( SDLNet_UDP_Recv(socket, packet))
 	{
-		std::string msg(packet->data,packet->data+packet->len);
-		char *cstr = &msg[0u];
+		//std::string msg(packet->data,packet->data+packet->len);
 		//std::cout<<"client:"<<packet->len<<std::endl;
-		game->HandleNetworkMsg(cstr);
+		game->HandleNetworkMsg((char*)packet->data);
 		//std::cout << "Data received:" << msg << std::endl;
 		//std::cout << "From:         " << packet->address.host << ":" << packet->address.port << std::endl;
 		return 1;

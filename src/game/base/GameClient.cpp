@@ -80,7 +80,6 @@ void GameClient::EntityUpdate(char * data){
 	Entity * e = arena->FindEntityById(id);
 	int offset = sizeof(int)*2 + name_len;
 	if(e != 0){
-		std::cout<<"heree"<<std::endl;
 		e->net_lastUpdate = Time::GetCurrentTimeMillis();
 		for(int i = 0; i < 3; i++){
 			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);

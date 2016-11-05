@@ -41,7 +41,7 @@ void Player::SendEntity(){
 
 	memcpy(package, &NET_entUpdate, sizeof(int));
 	loc += sizeof(int);
-	memcpy(package, &id, sizeof(int));
+	memcpy(package+loc, &id, sizeof(int));
 	loc += sizeof(int);
 	memcpy(package+loc, &name_len, sizeof(int));
 	loc += sizeof(int);

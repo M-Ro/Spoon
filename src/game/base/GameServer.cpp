@@ -9,6 +9,7 @@
 #include "Arena.h"
 #include "entity/Player.h"
 #include "entity/Skull.h"
+#include "entity/Entity.h"
 #include "entity/projectiles/Spoon.h"
 
 #include "../../auxiliary/fpscounter.h"
