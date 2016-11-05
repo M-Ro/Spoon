@@ -3,6 +3,7 @@
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
 #include "../../../auxiliary/Time.h"
+#include "../../definitions.h"
 #include <iostream>
 #include <cmath>
 
@@ -30,13 +31,45 @@ Player::~Player()
 
 }
 
+void Player::SendEntity(){
+	int name_len = classname.size();
+	int package_size = sizeof(int)*3 + 9*sizeof(float) + name_len;
+
+	char * package = new char[package_size];
+	size_t loc = (size_t)package;
+	loc = 0;
+
+	memcpy(package, &NET_entUpdate, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package, &id, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package+loc, &name_len, sizeof(int));
+	loc += sizeof(int);
+	memcpy(package+loc, classname.c_str(), name_len);
+	loc += name_len;
+	memcpy(package+loc, glm::value_ptr(position), sizeof(float)*3);
+	loc += sizeof(float)*3;
+	memcpy(package+loc, glm::value_ptr(velocity), sizeof(float)*3);
+	loc += sizeof(float)*3;
+	memcpy(package+loc, glm::value_ptr(rotation), sizeof(float)*3);
+
+	hostmodule->SendAll(package, package_size);
+	delete [] package;
+}
+
 void Player::Update(float deltaTime)
 {
-	if(!hostmodule){
-		ProjectView();
-		HandlePlayerInput(deltaTime);
-		HandlePMove(deltaTime);
+	if(hostmodule){
+		if(net_nextSendEntity < Time::GetCurrentTimeMillis()){
+			SendEntity();
+			net_nextSendEntity = Time::GetCurrentTimeMillis() + 50;
+		}
+		return;
 	}
+	ProjectView();
+	HandlePlayerInput(deltaTime);
+	HandlePMove(deltaTime);
+
 }
 
 void Player::Touch(Entity *other)

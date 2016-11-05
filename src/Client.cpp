@@ -40,7 +40,7 @@ void run()
 
 	float dTimef = (float)deltaTime / 1000.0;
 	if(dTimef > 0.25) dTimef = 0.25; // Limit  dTime to 0.25s (4fps minimum)
-	game->Run(dTimef);
+		game->Run(dTimef);
 }
 
 bool startServer(){

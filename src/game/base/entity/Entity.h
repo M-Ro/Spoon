@@ -35,6 +35,8 @@ public:
 	bool onFloor;
 
 	std::string modelname;
+	float net_nextSendEntity;
+	float net_lastUpdate;
 
 	enum Team { Player, Monster };
 	enum MovementType { Static, Walk, Fly, Manual }; // Used for physics
@@ -55,6 +57,7 @@ public:
 		position = glm::vec3(0, 0, 0);
 		rotation = glm::vec3(0, 0, 0);
 		velocity = glm::vec3(0, 0, 0);
+		net_nextSendEntity = 0.0f;
 	}
 
 	virtual void Update(float deltaTime) = 0;

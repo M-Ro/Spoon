@@ -5,6 +5,7 @@
 #include "Spoon.h"
 #include "../../../../auxiliary/Network.h"
 #include "../../../../auxiliary/Time.h"
+#include "../../../definitions.h"
 
 Spoon::Spoon(Entity *owner) : Projectile(owner)
 {
@@ -18,12 +19,14 @@ Spoon::Spoon(Entity *owner) : Projectile(owner)
 
 void Spoon::SendEntity(){
 	int name_len = classname.size();
-	int package_size = sizeof(int)*2 + 9*sizeof(float) + name_len;
+	int package_size = sizeof(int)*3 + 9*sizeof(float) + name_len;
 
 	char * package = new char[package_size];
 	size_t loc = (size_t)package;
 	loc = 0;
 
+	memcpy(package, &NET_entUpdate, sizeof(int));
+	loc += sizeof(int);
 	memcpy(package, &id, sizeof(int));
 	loc += sizeof(int);
 	memcpy(package+loc, &name_len, sizeof(int));
@@ -38,7 +41,6 @@ void Spoon::SendEntity(){
 
 	hostmodule->SendAll(package, package_size);
 	delete [] package;
-	nextupdate = 0.05;
 }
 
 void Spoon::Update(float deltaTime)
@@ -50,9 +52,12 @@ void Spoon::Update(float deltaTime)
 
 	position += velocity * deltaTime;
 
-	nextupdate -=deltaTime;
-	if(hostmodule && nextupdate < 0.0f)
-		SendEntity();
+	if(hostmodule){
+		if(net_nextSendEntity < Time::GetCurrentTimeMillis()){
+			SendEntity();
+			net_nextSendEntity = Time::GetCurrentTimeMillis() + 50;
+		}
+	}
 	return;
 }
 

@@ -4,6 +4,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../../../auxiliary/Network.h"
+#include "../../../auxiliary/Time.h"
+#include "../../definitions.h"
 #include "Skull.h"
 #include "Player.h"
 
@@ -22,17 +24,18 @@ Skull::Skull() : Monster()
 	cmodel = CollisionModel(CollisionModel::ModelType::Sphere, 14);
 	solid = true;
 	enemy = NULL;
-	nextupdate = 0.0f;
 }
 
 void Skull::SendEntity(){
 	int name_len = classname.size();
-	int package_size = sizeof(int)*2 + 9*sizeof(float) + name_len;
+	int package_size = sizeof(int)*3 + 9*sizeof(float) + name_len;
 
 	char * package = new char[package_size];
 	size_t loc = (size_t)package;
 	loc = 0;
 
+	memcpy(package, &NET_entUpdate, sizeof(int));
+	loc += sizeof(int);
 	memcpy(package, &id, sizeof(int));
 	loc += sizeof(int);
 	memcpy(package+loc, &name_len, sizeof(int));
@@ -47,7 +50,6 @@ void Skull::SendEntity(){
 
 	hostmodule->SendAll(package, package_size);
 	delete [] package;
-	nextupdate = 0.05;
 }
 
 void Skull::Update(float deltaTime)
@@ -90,9 +92,12 @@ void Skull::Update(float deltaTime)
 	angle = asin(velocity[1]/glm::length(velocity));
 	rotation[0] = -angle;
 
-	nextupdate -=deltaTime;
-	if(hostmodule && nextupdate < 0.0f)
-		SendEntity();
+	if(hostmodule){
+		if(net_nextSendEntity < Time::GetCurrentTimeMillis()){
+			SendEntity();
+			net_nextSendEntity = Time::GetCurrentTimeMillis() + 50;
+		}
+	}
 
 	return;
 }

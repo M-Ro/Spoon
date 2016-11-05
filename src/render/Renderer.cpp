@@ -90,9 +90,9 @@ bool Renderer::InitialiseGlew()
 	std::cout << "Initialising GLEW" << std::endl;
 	glewExperimental = GL_TRUE;
 	GLenum glew_error = glewInit();
-	std::cout << "Renderer::Renderer(): OpenGL Error " << glGetError() << std::endl;
 	if (glew_error != GLEW_OK)
 	{
+		std::cout << "Renderer::Renderer(): OpenGL Error " << glGetError() << std::endl;
 		std::cout << "Error: Failed to initialise GLEW: " << glewGetErrorString(glew_error) << std::endl;
 		return false;
 	}

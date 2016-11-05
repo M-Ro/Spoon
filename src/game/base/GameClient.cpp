@@ -11,8 +11,10 @@
 #include "entity/Skull.h"
 #include "entity/projectiles/Spoon.h"
 
+#include "../../auxiliary/Time.h"
 #include "../../auxiliary/fpscounter.h"
 #include "../../auxiliary/Network.h"
+#include "../definitions.h"
 
 extern Arena *arena;
 extern Player *player;
@@ -69,15 +71,17 @@ void GameClient::Run(float deltaTime)
 	clientmodule->CheckForData();
 }
 
-void GameClient::HandleNetworkMsg(char * data){
+void GameClient::EntityUpdate(char * data){
 	int id, name_len;
 	memcpy(&id, data, sizeof(int));
 	memcpy(&name_len, data + sizeof(int), sizeof(int));
 	std::string classname(data + 2*sizeof(int),data + 2*sizeof(int) + name_len);
-
+	std::cout<<id<<" "<<classname<<std::endl;
 	Entity * e = arena->FindEntityById(id);
 	int offset = sizeof(int)*2 + name_len;
 	if(e != 0){
+		std::cout<<"heree"<<std::endl;
+		e->net_lastUpdate = Time::GetCurrentTimeMillis();
 		for(int i = 0; i < 3; i++){
 			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
 			memcpy(glm::value_ptr(e->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
@@ -106,4 +110,24 @@ void GameClient::HandleNetworkMsg(char * data){
 			memcpy(glm::value_ptr(e->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
 		}
 	}
+	else if(classname == "player"){
+		Spoon * s = new Spoon(player);
+		arena->AddEntity(s);
+		s->id = id;
+		return;	//	FIXME: it will crash without this though
+		for(int i = 0; i < 3; i++){
+			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
+			memcpy(glm::value_ptr(e->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
+			memcpy(glm::value_ptr(e->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
+		}
+	}
+}
+
+
+void GameClient::HandleNetworkMsg(char * data){
+	int packet_type;
+	memcpy(&packet_type, data, sizeof(int));
+	//std::cout<<packet_type<<std::endl;
+	if(packet_type == NET_entUpdate)
+		EntityUpdate(data + sizeof(int));
 }

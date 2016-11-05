@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "../../../input/InputHandler.h"
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class Player : public Entity
 {
@@ -19,7 +20,7 @@ public:
 
 	void Draw() {}
 
-	void SendEntity() {}
+	void SendEntity();
 	
 	void Hurt(Entity *attacker, float dmg);
 
@@ -28,6 +29,8 @@ public:
 	void Touch(Entity *other);
 
 	IPaddress * myAddress;
+	bool s_knowsId = false;
+
 private:
 
 	void HandlePlayerInput(float deltaTime);
