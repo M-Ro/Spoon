@@ -49,8 +49,8 @@ void HostNetworkModule::checkForNewConnection(IPaddress address){
 		if(connections[i].host == address.host && connections[i].port == address.port)
 			return;
 
-	game->AddNewPlayer(&address);
 	connections.push_back(address);
+	game->AddNewPlayer(&connections[connections.size()-1]);
 	std::cout << "New Connection from:" << address.host << ":" << address.port << std::endl;
 }
 
@@ -71,15 +71,28 @@ HostNetworkModule::~HostNetworkModule(){
 	SDLNet_Quit();
 }
 
-void HostNetworkModule::SendAll(char * msg, int len){
+//	address = the player we don't want to send anything
+void HostNetworkModule::SendAll(char * msg, int len, IPaddress * address){
 	memcpy(packet->data, msg, len );
 	packet->len = len;
 	for(unsigned int i = 0; i < connections.size(); i++){
+		if(address  == &connections[i])	
+			continue;
 		packet->address = connections[i];
 		if ( SDLNet_UDP_Send(socket, -1, packet) == 0 )
 		{
 			std::cout << "SDLNet_UDP_Send failed: " << SDLNet_GetError() << std::endl;
 		}
+	}
+}
+
+void HostNetworkModule::Send(char * msg, int len, IPaddress * address){
+	memcpy(packet->data, msg, len );
+	packet->len = len;
+	packet->address = *address;
+	if ( SDLNet_UDP_Send(socket, -1, packet) == 0 )
+	{
+		std::cout << "SDLNet_UDP_Send failed: " << SDLNet_GetError() << std::endl;
 	}
 }
 

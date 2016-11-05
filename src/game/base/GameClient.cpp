@@ -42,7 +42,6 @@ void GameClient::Load()
 
 	player = new Player();
 	player->input = input;
-	arena->AddEntity(player);
 }
 
 void GameClient::Shutdown()
@@ -72,11 +71,15 @@ void GameClient::Run(float deltaTime)
 }
 
 void GameClient::EntityUpdate(char * data){
-	int id, name_len;
+	unsigned int id, name_len;
 	memcpy(&id, data, sizeof(int));
+
+	if(id == player->id)
+		return;
+
 	memcpy(&name_len, data + sizeof(int), sizeof(int));
 	std::string classname(data + 2*sizeof(int),data + 2*sizeof(int) + name_len);
-	std::cout<<id<<" "<<classname<<std::endl;
+	//std::cout<<id<<" "<<classname<<std::endl;
 	Entity * e = arena->FindEntityById(id);
 	int offset = sizeof(int)*2 + name_len;
 	if(e != 0){
@@ -89,8 +92,8 @@ void GameClient::EntityUpdate(char * data){
 	}
 	else if(classname == "skull"){
 		Skull * s = new Skull();
-		arena->AddEntity(s);
 		s->id = id;
+		arena->AddEntity(s);
 		return;	//	FIXME: it will crash without this though
 		for(int i = 0; i < 3; i++){
 			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
@@ -100,8 +103,8 @@ void GameClient::EntityUpdate(char * data){
 	}
 	else if(classname == "projectile_spoon"){
 		Spoon * s = new Spoon(player);
-		arena->AddEntity(s);
 		s->id = id;
+		arena->AddEntity(s);
 		return;	//	FIXME: it will crash without this though
 		for(int i = 0; i < 3; i++){
 			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
@@ -111,8 +114,8 @@ void GameClient::EntityUpdate(char * data){
 	}
 	else if(classname == "player"){
 		Spoon * s = new Spoon(player);
-		arena->AddEntity(s);
 		s->id = id;
+		arena->AddEntity(s);
 		return;	//	FIXME: it will crash without this though
 		for(int i = 0; i < 3; i++){
 			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
@@ -122,6 +125,15 @@ void GameClient::EntityUpdate(char * data){
 	}
 }
 
+void GameClient::SelfUpdate(char * data){
+	int id;
+	memcpy(&id, data, sizeof(int));
+	player->id = id;
+	if(!player->s_knowsId){
+		arena->AddEntity(player);
+		player->s_knowsId = true;
+	}
+}
 
 void GameClient::HandleNetworkMsg(char * data){
 	int packet_type;
@@ -129,4 +141,7 @@ void GameClient::HandleNetworkMsg(char * data){
 	//std::cout<<packet_type<<std::endl;
 	if(packet_type == NET_entUpdate)
 		EntityUpdate(data + sizeof(int));
+	if(packet_type == NET_selfInfo)
+		SelfUpdate(data + sizeof(int));
+	
 }

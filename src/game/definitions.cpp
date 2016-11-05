@@ -2,3 +2,4 @@
 //	Network communication
 const int NET_entUpdate = 1;
 const int NET_entRemove = 2;
+const int NET_selfInfo = 3;

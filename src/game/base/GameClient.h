@@ -20,4 +20,5 @@ public:
 	void HandleNetworkMsg(char * data);
 	void AddNewPlayer(IPaddress * address){};
 	void EntityUpdate(char * data);
+	void SelfUpdate(char * data);
 };

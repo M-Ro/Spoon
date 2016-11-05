@@ -3,3 +3,4 @@
 //	Network communication
 extern const int NET_entUpdate;	//	Updating the status of an entity
 extern const int NET_entRemove;
+extern const int NET_selfInfo;

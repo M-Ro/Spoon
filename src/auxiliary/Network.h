@@ -30,7 +30,8 @@ class HostNetworkModule
 	public:
 		bool Initialise(int localport);
 		bool CheckForData();
-		void SendAll(char * msg, int len);
+		void SendAll(char * msg, int len, IPaddress * address = NULL);
+		void Send(char * msg, int len, IPaddress * address);
 		~HostNetworkModule();
 };
 

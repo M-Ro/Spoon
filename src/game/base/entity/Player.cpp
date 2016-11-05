@@ -53,7 +53,11 @@ void Player::SendEntity(){
 	loc += sizeof(float)*3;
 	memcpy(package+loc, glm::value_ptr(rotation), sizeof(float)*3);
 
-	hostmodule->SendAll(package, package_size);
+	hostmodule->SendAll(package, package_size, myAddress);
+
+	memcpy(package, &NET_selfInfo, sizeof(int));
+	hostmodule->Send(package, sizeof(int)*2, myAddress);
+
 	delete [] package;
 }
 
