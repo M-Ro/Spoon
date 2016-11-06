@@ -9,7 +9,7 @@ CLIENT_TARGET=Client
 LDFLAGS=`sdl2-config --libs` -lSDL2_net -lpng -lopengl32 -lglew32 -lfreetype -lphysfs -lopenal -static-libstdc++
 CXX=g++
 LD=g++
-CXXFLAGS=-std=c++11 -Wall -Wno-comment `pkg-config --cflags freetype2 physfs openal` `sdl2-config --cflags`
+CXXFLAGS=-std=c++11 -Wall -Wno-comment -g `pkg-config --cflags freetype2 physfs openal` `sdl2-config --cflags`
 
 
 all: $(CLIENT_TARGET)
