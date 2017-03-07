@@ -49,7 +49,8 @@ void GameServer::Run(float deltaTime)
 void GameServer::HandleNetworkMsg(char * data){
 	int packet_type;
 	memcpy(&packet_type, data, sizeof(int));
-	//std::cout<<packet_type<<std::endl;
+	//if(packet_type != NET_selfInfo)
+		//std::cout<<packet_type<<" "<< NET_SpoonSpawn<<std::endl;
 	if(packet_type == NET_selfInfo){
 		unsigned int id;
 		memcpy(&id, data+sizeof(int), sizeof(int));
@@ -64,7 +65,28 @@ void GameServer::HandleNetworkMsg(char * data){
 				memcpy(glm::value_ptr(e->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
 			}
 		}
+		return;
 	}
+	else if(packet_type == NET_spoonSpawn){
+		unsigned int id;
+		memcpy(&id, data+sizeof(int), sizeof(int));
+		Entity * e = arena->FindEntityById(id);
+
+		Spoon * spoon = new Spoon(e);
+		int offset = sizeof(int)*2;
+		for(int i = 0; i < 3; i++){
+			memcpy(glm::value_ptr(spoon->position), data + offset, 						sizeof(float)*3);
+			memcpy(glm::value_ptr(spoon->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
+			memcpy(glm::value_ptr(spoon->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
+		}
+		spoon->dir = spoon->velocity/spoon->speed;
+		arena->AddEntity(spoon);
+	}
+	else if(packet_type == NET_skullSpawn){
+		Skull * s = new Skull();
+		arena->AddEntity(s);
+	}
+
 }
 
 void GameServer::AddNewPlayer(IPaddress * address){

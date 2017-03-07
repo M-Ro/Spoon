@@ -35,5 +35,16 @@ class HostNetworkModule
 		~HostNetworkModule();
 };
 
+class NetworkPackage{
+	public:
+		size_t	length = 0;
+		char 	msg[256];
+		void addFloats	(float * to_add,	int how_many)	{memcpy(msg + length, to_add, how_many*sizeof(float));	length += how_many*sizeof(float);	};
+		void addInts	(int * to_add,		int how_many)	{memcpy(msg + length, to_add, how_many*sizeof(int));	length += how_many*sizeof(int);		};
+		void addChars	(char * to_add,		int how_many)	{memcpy(msg + length, to_add, how_many*sizeof(char));	length += how_many*sizeof(char);	};
+		void addDoubles	(double * to_add,	int how_many)	{memcpy(msg + length, to_add, how_many*sizeof(double));	length += how_many*sizeof(double);	};
+		void addString	(std::string * s )					{memcpy(msg + length, s->c_str(), s->size()*sizeof(char));length += s->size()*sizeof(char);	};
+};
+
 extern HostNetworkModule * hostmodule;
 extern ClientNetworkModule * clientmodule;

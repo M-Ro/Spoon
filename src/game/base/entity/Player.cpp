@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Skull.h"
 #include "projectiles/Spoon.h"
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
@@ -32,33 +33,20 @@ Player::~Player()
 }
 
 void Player::SendEntity(){
+	NetworkPackage p;
 	int name_len = classname.size();
-	int package_size = sizeof(int)*3 + 9*sizeof(float) + name_len;
+	p.addInts((int*)&NET_entUpdate, 1);
+	p.addInts((int*)&id, 1);
+	p.addInts((int*)&name_len, 1);
+	p.addString(&classname);
+	p.addFloats(glm::value_ptr(position), 3);
+	p.addFloats(glm::value_ptr(velocity), 3);
+	p.addFloats(glm::value_ptr(rotation), 3);
 
-	char * package = new char[package_size];
-	size_t loc = (size_t)package;
-	loc = 0;
+	hostmodule->SendAll(p.msg, p.length, myAddress);
 
-	memcpy(package, &NET_entUpdate, sizeof(int));
-	loc += sizeof(int);
-	memcpy(package+loc, &id, sizeof(int));
-	loc += sizeof(int);
-	memcpy(package+loc, &name_len, sizeof(int));
-	loc += sizeof(int);
-	memcpy(package+loc, classname.c_str(), name_len);
-	loc += name_len;
-	memcpy(package+loc, glm::value_ptr(position), sizeof(float)*3);
-	loc += sizeof(float)*3;
-	memcpy(package+loc, glm::value_ptr(velocity), sizeof(float)*3);
-	loc += sizeof(float)*3;
-	memcpy(package+loc, glm::value_ptr(rotation), sizeof(float)*3);
-
-	hostmodule->SendAll(package, package_size, myAddress);
-
-	memcpy(package, &NET_selfInfo, sizeof(int));
-	hostmodule->Send(package, sizeof(int)*2, myAddress);
-
-	delete [] package;
+	memcpy(p.msg, &NET_selfInfo, sizeof(int));
+	hostmodule->Send(p.msg, sizeof(int)*2, myAddress);
 }
 
 void Player::Update(float deltaTime)
@@ -131,13 +119,26 @@ void Player::HandlePlayerInput(float deltaTime)
 
 	if(input->MousePressed(1)) // FIXME this is ugly and should be written properly
 	{
-		Spoon *spoon = new Spoon(this);
-		spoon->dir = dir;
-		spoon->position = position;
+		if(clientmodule){	//	FIXME should probably make a new function somwhere
+			NetworkPackage p;
+			glm::vec3 rot = glm::vec3(cam_rot.x, cam_rot.y, 0);
+			glm::vec3 vel = dir * 500.0f;
+			p.addInts((int*)&NET_spoonSpawn, 1);
+			p.addInts((int*)&id, 1);
+			p.addFloats(glm::value_ptr(position), 3);
+			p.addFloats(glm::value_ptr(vel), 3);
+			p.addFloats(glm::value_ptr(rot), 3);
 
-		spoon->rotation = glm::vec3(cam_rot.x, cam_rot.y, 0); // idk
+			clientmodule->Send(p.msg, p.length);
+		}
+		else{
+			Spoon *spoon = new Spoon(this);
+			spoon->dir = dir;
+			spoon->position = position;
 
-		arena->AddEntity(spoon);
+			spoon->rotation = glm::vec3(cam_rot.x, cam_rot.y, 0); // idk
+			arena->AddEntity(spoon);
+		}
 	}
 
 	// :D
@@ -149,6 +150,18 @@ void Player::HandlePlayerInput(float deltaTime)
 
 	if(input->KeyPressed(SDLK_b))
 		arena->SetDrawBBoxes();
+
+	if(input->KeyPressed(SDLK_v)){	//	Skull spawning cheat
+		if(clientmodule){
+			NetworkPackage p;
+			p.addInts((int*)&NET_skullSpawn, 1);
+			clientmodule->Send(p.msg, p.length);
+		}
+		else{
+			Skull * s = new Skull();
+			arena->AddEntity(s);
+		}
+	}
 }
 
 void Player::HandlePMove(float deltaTime)

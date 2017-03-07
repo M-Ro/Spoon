@@ -98,34 +98,42 @@ void GameClient::EntityUpdate(char * data){
 		Skull * s = new Skull();
 		s->id = id;
 		arena->AddEntity(s);
-		return;	//	FIXME: it will crash without this though
 		for(int i = 0; i < 3; i++){
-			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
-			memcpy(glm::value_ptr(e->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
-			memcpy(glm::value_ptr(e->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
+			memcpy(glm::value_ptr(s->position), data + offset, 						sizeof(float)*3);
+			memcpy(glm::value_ptr(s->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
+			memcpy(glm::value_ptr(s->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
 		}
 	}
 	else if(classname == "projectile_spoon"){
 		Spoon * s = new Spoon(player);
 		s->id = id;
 		arena->AddEntity(s);
-		return;	//	FIXME: it will crash without this though
 		for(int i = 0; i < 3; i++){
-			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
-			memcpy(glm::value_ptr(e->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
-			memcpy(glm::value_ptr(e->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
+			memcpy(glm::value_ptr(s->position), data + offset, 						sizeof(float)*3);
+			memcpy(glm::value_ptr(s->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
+			memcpy(glm::value_ptr(s->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
 		}
+		s->dir = s->velocity/s->speed;
 	}
 	else if(classname == "player"){
 		Spoon * s = new Spoon(player);
 		s->id = id;
 		arena->AddEntity(s);
-		return;	//	FIXME: it will crash without this though
 		for(int i = 0; i < 3; i++){
-			memcpy(glm::value_ptr(e->position), data + offset, 						sizeof(float)*3);
-			memcpy(glm::value_ptr(e->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
-			memcpy(glm::value_ptr(e->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
+			memcpy(glm::value_ptr(s->position), data + offset, 						sizeof(float)*3);
+			memcpy(glm::value_ptr(s->velocity), data + offset + sizeof(float)*3,	sizeof(float)*3);
+			memcpy(glm::value_ptr(s->rotation), data + offset + sizeof(float)*6,	sizeof(float)*3);
 		}
+	}
+}
+
+void GameClient::EntityRemove(char * data){
+	int id;
+	memcpy(&id, data, sizeof(int));
+	arena->RemoveEntity(id);
+	Entity * e = arena->FindEntityById(id);
+	if(e != 0){
+		delete e;
 	}
 }
 
@@ -147,6 +155,8 @@ void GameClient::HandleNetworkMsg(char * data){
 		EntityUpdate(data + sizeof(int));
 	if(packet_type == NET_selfInfo)
 		SelfUpdate(data + sizeof(int));
+	if(packet_type == NET_entRemove)
+		EntityRemove(data + sizeof(int));
 	
 }
 
