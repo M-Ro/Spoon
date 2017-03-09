@@ -18,4 +18,7 @@ public:
 protected:
 	float turnrate;
 	float speed;
+	float phase;
+	float swayspeed;
+	float swaystrength;
 };
