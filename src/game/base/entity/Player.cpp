@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Skull.h"
+#include "Spawner.h"
 #include "projectiles/Spoon.h"
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Network.h"
@@ -161,6 +162,10 @@ void Player::HandlePlayerInput(float deltaTime)
 			Skull * s = new Skull();
 			arena->AddEntity(s);
 		}
+	}
+	if(input->KeyPressed(SDLK_c)){	//	Skull spawning cheat
+		Spawner * s = new Spawner();
+		arena->AddEntity(s);
 	}
 }
 

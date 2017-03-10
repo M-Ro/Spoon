@@ -1,7 +1,7 @@
 AUX_OBJ=auxiliary/Time.o auxiliary/Filesystem.o auxiliary/Filehandle.o auxiliary/fpscounter.o auxiliary/Network.o auxiliary/Config.o
 render_OBJ=render/Model.o render/OBJModel.o render/Texture.o render/Font.o render/Shader.o render/Program.o render/Camera.o render/Renderer.o
 AUDIO_OBJ=audio/AudioObject.o audio/AudioSystem.o audio/Buffer.o audio/Effect.o audio/Source.o audio/StreamParser.o audio/StreamParserWav.o
-GAME_OBJ=game/definitions.o game/base/GameName.o game/base/GameServer.o game/base/GameClient.o game/base/entity/Player.o game/base/entity/Monster.o game/base/entity/Skull.o game/base/entity/Projectile.o game/base/entity/projectiles/Spoon.o game/base/Arena.o game/base/CollisionModel.o
+GAME_OBJ=game/definitions.o game/base/GameName.o game/base/GameServer.o game/base/GameClient.o game/base/entity/Player.o game/base/entity/Monster.o game/base/entity/Skull.o game/base/entity/Spawner.o game/base/entity/Projectile.o game/base/entity/projectiles/Spoon.o game/base/Arena.o game/base/CollisionModel.o
 INPUT_OBJ=input/InputHandler.o
 CLIENT_OBJ=Client.o
 
