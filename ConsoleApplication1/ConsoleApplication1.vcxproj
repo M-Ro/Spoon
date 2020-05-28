@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{614d8835-6e1b-441b-91a6-74f823ee9202}</ProjectGuid>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Spoon</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\include;$(SolutionDir)Lib\physfs-3.0.2\include;$(SolutionDir)Lib\glm\include;$(SolutionDir)Lib\SDL2-2.0.12\include;$(SolutionDir)Lib\glew-2.1.0\include;$(SolutionDir)Lib\libpng-1.6.28\include;$(SolutionDir)Lib\freetype-2.10.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\libs\Win64;$(SolutionDir)Lib\physfs-3.0.2\lib;$(SolutionDir)Lib\SDL2-2.0.12\lib\x64;$(SolutionDir)Lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)Lib\libpng-1.6.28\lib\x64\v140\dynamic\Release;$(SolutionDir)Lib\freetype-2.10.2\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;physfs.lib;glew32.lib;libpng16.lib;freetype.lib;opengl32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(SolutionDir)Lib\physfs-3.0.2\bin\physfs.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\openal-soft-1.20.1-bin\bin\Win64\soft_oal.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\glew-2.1.0\bin\Release\x64\glew32.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\SDL2-2.0.12\lib\x64\SDL2.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\freetype-2.10.2\win64\freetype.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\libpng-1.6.28\lib\x64\v140\dynamic\Release\libpng16.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)packages\zlib-msvc-x64.1.2.11.8900\build\native\bin_release\zlib.dll" "$(OutDir)"
+xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Audio\AudioObject.cpp" />
+    <ClCompile Include="Audio\AudioSystem.cpp" />
+    <ClCompile Include="Audio\Buffer.cpp" />
+    <ClCompile Include="Audio\Effect.cpp" />
+    <ClCompile Include="Audio\Source.cpp" />
+    <ClCompile Include="Audio\StreamParser.cpp" />
+    <ClCompile Include="Audio\StreamParserWav.cpp" />
+    <ClCompile Include="Auxiliary\Config.cpp" />
+    <ClCompile Include="Auxiliary\Filehandle.cpp" />
+    <ClCompile Include="Auxiliary\Filesystem.cpp" />
+    <ClCompile Include="Auxiliary\fpscounter.cpp" />
+    <ClCompile Include="Auxiliary\Time.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Game\Base\Arena.cpp" />
+    <ClCompile Include="Game\Base\CollisionModel.cpp" />
+    <ClCompile Include="Game\Base\Entity\Monster.cpp" />
+    <ClCompile Include="Game\Base\Entity\Player.cpp" />
+    <ClCompile Include="Game\Base\Entity\Projectile.cpp" />
+    <ClCompile Include="Game\Base\Entity\Projectiles\Spoon.cpp" />
+    <ClCompile Include="Game\Base\Entity\Skull.cpp" />
+    <ClCompile Include="Game\Base\Entity\Spawner.cpp" />
+    <ClCompile Include="Game\Base\GameName.cpp" />
+    <ClCompile Include="Game\definitions.cpp" />
+    <ClCompile Include="Input\InputHandler.cpp" />
+    <ClCompile Include="Render\Camera.cpp" />
+    <ClCompile Include="Render\Font.cpp" />
+    <ClCompile Include="Render\Model.cpp" />
+    <ClCompile Include="Render\OBJModel.cpp" />
+    <ClCompile Include="Render\Program.cpp" />
+    <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="Render\Shader.cpp" />
+    <ClCompile Include="Render\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Audio\AudioObject.h" />
+    <ClInclude Include="Audio\AudioSystem.h" />
+    <ClInclude Include="Audio\Buffer.h" />
+    <ClInclude Include="Audio\Effect.h" />
+    <ClInclude Include="Audio\Source.h" />
+    <ClInclude Include="Audio\StreamParser.h" />
+    <ClInclude Include="Audio\StreamParserWav.h" />
+    <ClInclude Include="Auxiliary\Config.h" />
+    <ClInclude Include="Auxiliary\Filehandle.h" />
+    <ClInclude Include="Auxiliary\Filesystem.h" />
+    <ClInclude Include="Auxiliary\fpscounter.h" />
+    <ClInclude Include="Auxiliary\Functions.h" />
+    <ClInclude Include="Auxiliary\Time.h" />
+    <ClInclude Include="Game\Base\Arena.h" />
+    <ClInclude Include="Game\Base\CollisionModel.h" />
+    <ClInclude Include="Game\Base\Entity\Entity.h" />
+    <ClInclude Include="Game\Base\Entity\Monster.h" />
+    <ClInclude Include="Game\Base\Entity\Player.h" />
+    <ClInclude Include="Game\Base\Entity\Projectile.h" />
+    <ClInclude Include="Game\Base\Entity\Projectiles\Spoon.h" />
+    <ClInclude Include="Game\Base\Entity\Skull.h" />
+    <ClInclude Include="Game\Base\Entity\Spawner.h" />
+    <ClInclude Include="Game\Base\GameName.h" />
+    <ClInclude Include="Game\definitions.h" />
+    <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Input\InputHandler.h" />
+    <ClInclude Include="Render\Camera.h" />
+    <ClInclude Include="Render\Font.h" />
+    <ClInclude Include="Render\Model.h" />
+    <ClInclude Include="Render\OBJModel.h" />
+    <ClInclude Include="Render\Program.h" />
+    <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="Render\Shader.h" />
+    <ClInclude Include="Render\Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets" Condition="Exists('..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets'))" />
+  </Target>
+</Project>

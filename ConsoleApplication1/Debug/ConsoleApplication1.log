@@ -1,0 +1,74 @@
+﻿  Client.cpp
+  AudioObject.cpp
+D:\Workspace\Spoon\src\audio\StreamParser.h(3,10): fatal error C1083: Cannot open include file: 'AL/al.h': No such file or directory
+  AudioSystem.cpp
+D:\Workspace\Spoon\src\audio\AudioSystem.h(7,10): fatal error C1083: Cannot open include file: 'AL/al.h': No such file or directory
+  Buffer.cpp
+D:\Workspace\Spoon\src\audio\StreamParser.h(3,10): fatal error C1083: Cannot open include file: 'AL/al.h': No such file or directory
+  Effect.cpp
+  Source.cpp
+D:\Workspace\Spoon\src\audio\StreamParser.h(3,10): fatal error C1083: Cannot open include file: 'AL/al.h': No such file or directory
+  StreamParser.cpp
+D:\Workspace\Spoon\src\audio\StreamParser.h(3,10): fatal error C1083: Cannot open include file: 'AL/al.h': No such file or directory
+  StreamParserWav.cpp
+D:\Workspace\Spoon\src\audio\StreamParser.h(3,10): fatal error C1083: Cannot open include file: 'AL/al.h': No such file or directory
+  Config.cpp
+D:\Workspace\Spoon\src\auxiliary\Config.h(6,10): fatal error C1083: Cannot open include file: 'SDL2/SDL.h': No such file or directory
+  Filehandle.cpp
+D:\Workspace\Spoon\src\auxiliary\Filehandle.h(7,10): fatal error C1083: Cannot open include file: 'physfs.h': No such file or directory
+  Filesystem.cpp
+D:\Workspace\Spoon\src\auxiliary\Filesystem.cpp(8,10): fatal error C1083: Cannot open include file: 'physfs.h': No such file or directory
+  fpscounter.cpp
+  Network.cpp
+D:\Workspace\Spoon\src\auxiliary\Network.h(4,10): fatal error C1083: Cannot open include file: 'SDL2/SDL_net.h': No such file or directory
+  Time.cpp
+D:\Workspace\Spoon\src\auxiliary\Time.cpp(14,16): error C2065: 'CLOCK_MONOTONIC': undeclared identifier
+D:\Workspace\Spoon\src\auxiliary\Time.cpp(14,2): error C3861: 'clock_gettime': identifier not found
+D:\Workspace\Spoon\src\auxiliary\Time.cpp(16,34): warning C4244: '=': conversion from 'time_t' to 'long', possible loss of data
+D:\Workspace\Spoon\src\auxiliary\Time.cpp(23,16): error C2065: 'CLOCK_MONOTONIC': undeclared identifier
+D:\Workspace\Spoon\src\auxiliary\Time.cpp(23,2): error C3861: 'clock_gettime': identifier not found
+D:\Workspace\Spoon\src\auxiliary\Time.cpp(24,38): warning C4244: '=': conversion from 'time_t' to 'long', possible loss of data
+  Arena.cpp
+D:\Workspace\Spoon\src\game\base\entity\Entity.h(5,10): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  CollisionModel.cpp
+D:\Workspace\Spoon\src\game\base\CollisionModel.h(3,10): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  Monster.cpp
+D:\Workspace\Spoon\src\game\base\entity\Entity.h(5,10): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  Player.cpp
+D:\Workspace\Spoon\src\game\base\entity\Player.h(2,10): fatal error C1083: Cannot open include file: 'SDL2/SDL_net.h': No such file or directory
+  Projectile.cpp
+D:\Workspace\Spoon\src\game\base\entity\entity.h(5,10): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  Spoon.cpp
+D:\Workspace\Spoon\src\game\base\entity\projectiles\Spoon.cpp(3,10): fatal error C1083: Cannot open include file: 'glm/gtc/type_ptr.hpp': No such file or directory
+  Generating Code...
+  Compiling...
+  Skull.cpp
+D:\Workspace\Spoon\src\game\base\entity\Skull.cpp(4,10): fatal error C1083: Cannot open include file: 'glm/gtc/type_ptr.hpp': No such file or directory
+  Spawner.cpp
+D:\Workspace\Spoon\src\game\base\entity\Spawner.cpp(4,10): fatal error C1083: Cannot open include file: 'glm/gtc/type_ptr.hpp': No such file or directory
+  GameClient.cpp
+D:\Workspace\Spoon\src\game\base\GameClient.cpp(5,10): fatal error C1083: Cannot open include file: 'glm/gtc/type_ptr.hpp': No such file or directory
+  GameName.cpp
+D:\Workspace\Spoon\src\game\base\GameName.cpp(5,10): fatal error C1083: Cannot open include file: 'glm/gtc/type_ptr.hpp': No such file or directory
+  GameServer.cpp
+D:\Workspace\Spoon\src\game\base\GameServer.cpp(5,10): fatal error C1083: Cannot open include file: 'glm/gtc/type_ptr.hpp': No such file or directory
+  definitions.cpp
+  InputHandler.cpp
+D:\Workspace\Spoon\src\input\InputHandler.h(7,10): fatal error C1083: Cannot open include file: 'SDL2/SDL.h': No such file or directory
+  Camera.cpp
+D:\Workspace\Spoon\src\render\Camera.cpp(1,10): fatal error C1083: Cannot open include file: 'glm/gtc/matrix_transform.hpp': No such file or directory
+  Font.cpp
+D:\Workspace\Spoon\src\render\Shader.h(5,10): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+  Model.cpp
+D:\Workspace\Spoon\src\render\Model.cpp(1,10): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+  OBJModel.cpp
+D:\Workspace\Spoon\src\auxiliary\Filehandle.h(7,10): fatal error C1083: Cannot open include file: 'physfs.h': No such file or directory
+  Program.cpp
+D:\Workspace\Spoon\src\render\Shader.h(5,10): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+  Renderer.cpp
+D:\Workspace\Spoon\src\render\Renderer.cpp(3,10): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+  Shader.cpp
+D:\Workspace\Spoon\src\render\Shader.h(5,10): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+  Texture.cpp
+D:\Workspace\Spoon\src\render\Texture.h(5,10): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+  Generating Code...

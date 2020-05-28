@@ -1,1 +1,0 @@
-Dependencies: SDL2, SDL2_net, libpng, opengl, glew, glm, freeglut, freetype2, physfs
