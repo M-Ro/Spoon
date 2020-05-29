@@ -53,7 +53,7 @@ public:
 
 	GLuint const &GetNormalBuffer() { return normalbuffer; }
 
-	unsigned int GetVertexCount() { return vertices.size(); }
+	size_t GetVertexCount() { return vertices.size(); }
 
 private:
 	std::vector<glm::vec3> vertices;

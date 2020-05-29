@@ -7,9 +7,9 @@ public:
 
 	static void Update();
 
-	static long GetStartTimeMillis();
+	static long long GetStartTimeMillis();
 
-	static long GetCurrentTimeMillis();
+	static long long GetCurrentTimeMillis();
 
-	static long GetTimeSinceStartMillis();
+	static long long GetTimeSinceStartMillis();
 };

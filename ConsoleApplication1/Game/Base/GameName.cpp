@@ -63,7 +63,7 @@ void GameName::Run(float deltaTime)
 	std::stringstream ss;
 	ss << "FPS: " << FpsCounter::fps;
 
-	renderer->DrawText(ss.str(), -0.99, 0.95);
+	renderer->DrawText(ss.str(), -0.99f, 0.95f);
 
 	renderer->Flip();
 }

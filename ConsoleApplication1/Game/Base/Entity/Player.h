@@ -46,6 +46,6 @@ private:
 
 
 	glm::vec3 idir; // Intended direction vector from player input
-	long lastJumpTime; 
+	long long lastJumpTime; 
 
 };

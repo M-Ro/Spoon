@@ -118,6 +118,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\include;$(SolutionDir)Lib\physfs-3.0.2\include;$(SolutionDir)Lib\glm\include;$(SolutionDir)Lib\SDL2-2.0.12\include;$(SolutionDir)Lib\glew-2.1.0\include;$(SolutionDir)Lib\libpng-1.6.28\include;$(SolutionDir)Lib\freetype-2.10.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

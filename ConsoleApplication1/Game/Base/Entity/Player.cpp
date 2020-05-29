@@ -75,13 +75,13 @@ void Player::ProjectView()
 
 void Player::HandlePlayerInput(float deltaTime)
 {
-	cam_rot.x -= input->GetMouseX() / 300.0;
-	cam_rot.y -= input->GetMouseY() / 300.0;
-	cam_rot.y = std::fmax(std::fmin(cam_rot.y, 1.4), -1.4);
+	cam_rot.x -= input->GetMouseX() / 300.0f;
+	cam_rot.y -= input->GetMouseY() / 300.0f;
+	cam_rot.y = std::fmax(std::fmin(cam_rot.y, 1.4f), -1.4f);
 
-	idir = glm::vec3(0, 0, 0);
+	idir = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	glm::vec3 moveDir = glm::vec3(sin(cam_rot.x), 0, cos(cam_rot.x));
+	glm::vec3 moveDir = glm::vec3(sin(cam_rot.x), 0.0f, cos(cam_rot.x));
 	if(moveType == MovementType::Fly)
 		moveDir = dir;
 

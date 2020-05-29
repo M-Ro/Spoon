@@ -127,7 +127,7 @@ BufferChunk* StreamParserWav::ReadChunk()
 	long bytesRead = 0;
 	while(bytesRead < bytes)
 	{
-		long dataRead = a_file->ReadBytes(data+bytesRead, FILE_MAXREAD);
+		sint64 dataRead = a_file->ReadBytes(data+bytesRead, FILE_MAXREAD);
 		if(dataRead == -1)
 		{
 			std::cout << "Error: StreamParserWav::ReadChunk(): " << a_filepath << ": Failed to reade data!" << std::endl;

@@ -7,9 +7,9 @@ class FpsCounter
 public:
 	static void Tick();
 	
-	static long fps;
+	static long long fps;
 private:
-	static long frames;
-	static long last_second;
+	static long long frames;
+	static long long last_second;
 
 };

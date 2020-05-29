@@ -1,1 +1,71 @@
-﻿
+﻿  AudioObject.cpp
+  AudioSystem.cpp
+  Buffer.cpp
+  Effect.cpp
+  Source.cpp
+  StreamParser.cpp
+  StreamParserWav.cpp
+  Config.cpp
+  Filehandle.cpp
+  Filesystem.cpp
+  fpscounter.cpp
+  Time.cpp
+  Client.cpp
+  Arena.cpp
+  CollisionModel.cpp
+  Monster.cpp
+  Player.cpp
+  Projectile.cpp
+  Spoon.cpp
+  Skull.cpp
+  Spawner.cpp
+  GameName.cpp
+  definitions.cpp
+  InputHandler.cpp
+  Camera.cpp
+  Font.cpp
+  Model.cpp
+  OBJModel.cpp
+  Program.cpp
+  Renderer.cpp
+  Shader.cpp
+  Texture.cpp
+F:\Projects\Personal\Spoon\ConsoleApplication1\Render\Texture.cpp(127,48): warning C4267: 'initializing': conversion from 'size_t' to 'png_uint_32', possible loss of data
+F:\Projects\Personal\Spoon\ConsoleApplication1\Render\Font.cpp(48,38): warning C4244: 'argument': conversion from 'sint64' to 'FT_Long', possible loss of data
+F:\Projects\Personal\Spoon\ConsoleApplication1\Render\Renderer.cpp(225,64): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+F:\Projects\Personal\Spoon\ConsoleApplication1\Render\Renderer.cpp(285,57): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  ConsoleApplication1.vcxproj -> F:\Projects\Personal\Spoon\x64\Debug\Spoon.exe
+  F:\Projects\Personal\Spoon\Lib\physfs-3.0.2\bin\physfs.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\Lib\openal-soft-1.20.1-bin\bin\Win64\soft_oal.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\Lib\glew-2.1.0\bin\Release\x64\glew32.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\Lib\SDL2-2.0.12\lib\x64\SDL2.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\Lib\freetype-2.10.2\win64\freetype.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\Lib\libpng-1.6.28\lib\x64\v140\dynamic\Release\libpng16.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\packages\zlib-msvc-x64.1.2.11.8900\build\native\bin_release\zlib.dll
+  1 File(s) copied
+  F:\Projects\Personal\Spoon\data\default.cfg
+  F:\Projects\Personal\Spoon\data\fonts\emulogic.ttf
+  F:\Projects\Personal\Spoon\data\fonts\OpenSans-License.txt
+  F:\Projects\Personal\Spoon\data\fonts\OpenSans-Regular.ttf
+  F:\Projects\Personal\Spoon\data\models\arena.obj
+  F:\Projects\Personal\Spoon\data\models\cube.obj
+  F:\Projects\Personal\Spoon\data\models\mbrk2_1.png
+  F:\Projects\Personal\Spoon\data\models\skull.obj
+  F:\Projects\Personal\Spoon\data\models\skulls2.png
+  F:\Projects\Personal\Spoon\data\models\sphere.obj
+  F:\Projects\Personal\Spoon\data\models\spoon.obj
+  F:\Projects\Personal\Spoon\data\models\spoon.png
+  F:\Projects\Personal\Spoon\data\shaders\Glyph.glfs
+  F:\Projects\Personal\Spoon\data\shaders\Glyph.glvs
+  F:\Projects\Personal\Spoon\data\shaders\overlay.glfs
+  F:\Projects\Personal\Spoon\data\shaders\overlay.glvs
+  F:\Projects\Personal\Spoon\data\shaders\TextureFragmentShader.glfs
+  F:\Projects\Personal\Spoon\data\shaders\TransformVertexShader.glvs
+  F:\Projects\Personal\Spoon\data\textures\null.png
+  19 File(s) copied

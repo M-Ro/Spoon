@@ -1,8 +1,8 @@
 #include "fpscounter.h"
 
-long FpsCounter::fps;
-long FpsCounter::frames;
-long FpsCounter::last_second;
+long long FpsCounter::fps;
+long long FpsCounter::frames;
+long long FpsCounter::last_second;
 
 void FpsCounter::Tick()
 {

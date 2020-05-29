@@ -21,5 +21,5 @@ public:
 	virtual void Die();
 
 protected:
-	long spawntime;
+	long long spawntime;
 };

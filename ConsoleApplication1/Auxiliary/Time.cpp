@@ -7,8 +7,8 @@ using namespace std::chrono;
 std::chrono::time_point<std::chrono::steady_clock> start;
 std::chrono::time_point<std::chrono::steady_clock> current;
 
-long time_start_ms;
-long time_current_ms;
+long long time_start_ms;
+long long time_current_ms;
 
 void Time::Initialise()
 {
@@ -29,17 +29,17 @@ void Time::Update()
 	time_current_ms = value.count();
 }
 
-long Time::GetStartTimeMillis()
+long long Time::GetStartTimeMillis()
 {
 	return time_start_ms;
 }
 
-long Time::GetCurrentTimeMillis()
+long long Time::GetCurrentTimeMillis()
 {
 	return time_current_ms;
 }
 
-long Time::GetTimeSinceStartMillis()
+long long Time::GetTimeSinceStartMillis()
 {
 	return time_current_ms - time_start_ms;
 }

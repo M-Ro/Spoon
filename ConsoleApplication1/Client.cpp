@@ -22,14 +22,14 @@ Game* game;
 AudioSystem* audio;
 
 // Called every frame
-long lastTime = 0;
+long long lastTime = 0;
 
 void run()
 {
 	Time::Update();
 	FpsCounter::Tick();
-	long curTime = Time::GetCurrentTimeMillis();
-	long deltaTime = curTime - lastTime;
+	long long curTime = Time::GetCurrentTimeMillis();
+	long long deltaTime = curTime - lastTime;
 	lastTime = curTime;
 
 	if (game->gametype != "server") {
@@ -37,8 +37,8 @@ void run()
 		glClearColor(0.0, 0.0, 0.0, 1.0); // Clear screen black
 	}
 
-	float dTimef = (float)deltaTime / 1000.0;
-	if (dTimef > 0.25) dTimef = 0.25; // Limit  dTime to 0.25s (4fps minimum)
+	float dTimef = (float)deltaTime / 1000.0f;
+	if (dTimef > 0.25f) dTimef = 0.25f; // Limit  dTime to 0.25s (4fps minimum)
 	game->Run(dTimef);
 }
 

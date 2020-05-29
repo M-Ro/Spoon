@@ -23,10 +23,10 @@ Skull::Skull() : Monster()
 	solid = true;
 	enemy = NULL;
 	//	FIXME should sync these once for mp
-	phase = rand();
+	phase = (float)rand();
 	speed = 80.0f + 20.0f*rand()/RAND_MAX;
-	swayspeed = 0.1256 + 0.2*rand()/RAND_MAX;
-	swaystrength = 0.2f + 0.1*rand()/RAND_MAX;
+	swayspeed = 0.1256f + 0.2f*rand()/RAND_MAX;
+	swaystrength = 0.2f + 0.1f*rand()/RAND_MAX;
 }
 
 void Skull::Update(float deltaTime)
@@ -41,8 +41,8 @@ void Skull::Update(float deltaTime)
 		delete playerlist;
 	}
 
-	if(deltaTime > 1.0)
-		deltaTime = 1.0;
+	if(deltaTime > 1.0f)
+		deltaTime = 1.0f;
 	glm::vec3 enemy_direction = glm::normalize(enemy->position - position);
 	
 	float temp = turnrate/glm::length(enemy_direction);
@@ -57,7 +57,7 @@ void Skull::Update(float deltaTime)
 	
 	//	To keep skulls from sinking to the floor
 	if(velocity[1] < 0.0f)
-		velocity[1] = velocity[1] * (1-exp(-fabs(position[1])*0.005));
+		velocity[1] = velocity[1] * (1-exp(-fabs(position[1])*0.005f));
 
 	float angle = atan(velocity[0]/velocity[2]);
 	if(velocity[2] < 0.0f)

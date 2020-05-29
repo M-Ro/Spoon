@@ -22,10 +22,10 @@ Spawner::Spawner() : Monster()
 	moveType = MovementType::Fly;
 	cmodel = CollisionModel(CollisionModel::ModelType::Sphere, 14);
 	solid = true;
-	spawn_timer = Time::GetCurrentTimeMillis() + 10000 + 500*rand()/RAND_MAX;
+	spawn_timer = (float)(Time::GetCurrentTimeMillis() + 10000 + 500*rand()/RAND_MAX);
 
 	float center_distance = 500.0f;
-	float theta = 6.28*rand()/RAND_MAX;
+	float theta = 6.28f*rand()/RAND_MAX;
 	position = glm::vec3(center_distance*cos(theta), 50.0f, center_distance*sin(theta));
 	velocity = normalize(glm::vec3(0,0,0) - position)*speed;
 }
@@ -35,9 +35,9 @@ void Spawner::SpawnSkulls(int amount){
 		Skull * s = new Skull();
 		s->position = position;
 
-		float theta = 6.28*rand()/RAND_MAX;
-		float r = rand()/RAND_MAX;
-		s->velocity = 80.0f * glm::vec3(cos(theta)*r, sin(theta)*r, 0.5+rand()/RAND_MAX);
+		float theta = 6.28f*rand()/RAND_MAX;
+		float r = (float)(rand()/RAND_MAX);
+		s->velocity = 80.0f * glm::vec3(cos(theta)*r, sin(theta)*r, 0.5f+rand()/RAND_MAX);
 		arena->AddEntity(s);
 	}
 };
