@@ -1,6 +1,7 @@
 #include <windows.h> // why do we need this everywhere?
 
 #include <iostream>
+#include <sstream>
 #include <stdio.h>
 #include <string.h>
 #include <map>
@@ -145,6 +146,11 @@ const glm::vec2 map_texture_coords(mapface_t *face, const glm::vec3 &v, size_t t
 
 Mapfile::Mapfile(std::string const& filepath)
 {
+    this->data = nullptr;
+    this->n_entities = 0;
+    this->n_faces = 0;
+    this->n_brushes = 0;
+
 	this->Load(filepath);
 }
 
@@ -165,6 +171,11 @@ void Mapfile::BuildRenderModel()
     for (mapentity_t& ent : this->map_entities) {
         for (mapbrush_t& brush : ent.brushes) {
             for (mapface_t& face : brush.faces) {
+                if (face.texture == "textures/skip" || face.texture == "textures/trigger"
+                    || face.texture == "textures/clip") {
+                    continue;
+                }
+
                 std::string materialname(face.texture);
 
                 if (!sections.count(materialname)) {
@@ -186,7 +197,11 @@ void Mapfile::BuildRenderModel()
                     th = tex->GetHeight();
                 }
 
-                for (size_t i = 1; i < face.vertices_calculated.size() - 1; i++) {
+                if (!face.vertices_calculated.size()) {
+                    continue;
+                }
+
+                for (size_t i = 1; i < (int)(face.vertices_calculated.size()) - 1; i++) {
                     glm::vec3 fn = glm::normalize(glm::cross(face.vertices_calculated[i] - face.vertices_calculated[i-1], face.vertices_calculated[i+1] - face.vertices_calculated[i]));
 
                     glm::vec2 t1 = map_texture_coords(&face, face.vertices_calculated[0], tw, th);
@@ -227,61 +242,13 @@ void Mapfile::Load(std::string const& filepath)
     this->filename.assign(filepath);
 	this->data = reinterpret_cast<const char*>(filehandle.ReadFile());
 
-    std::cout << "Parsing " << this->filename << std::endl;
-
     this->ParseMapFromBuffer();
 
     this->BuildRenderModel();
-}
 
-// Parses map from loaded string buffer 
-void Mapfile::ParseMapFromBuffer()
-{
-	if (!this->data) {
-		return;
-	}
-
-    size_t depth = 0; // Current parser depth level in { }
-    char* ebuffer = (char*)malloc(1024 * 1024 * 2); // 2MB
-    memset(ebuffer, 0, 1024 * 1024 * 2);
-    int ebufferlen = 0;
-
-    char* mapfile = (char *)malloc(strlen(this->data) + 1);
-    memcpy(mapfile, this->data, strlen(this->data) + 1);
-
-    char* rest = NULL;
-    char* line = strtok_r(mapfile, "\n", &rest);
-    while (line != NULL) {
-        if (line[0] == '/') { // Ignore comments
-            line = strtok_r(NULL, "\n", &rest);
-            continue;
-        }
-
-        memcpy(ebuffer + ebufferlen, line, strlen(line));
-        ebufferlen += strlen(line);
-        ebuffer[ebufferlen] = '\n';
-        ebufferlen++;
-
-        if (line[0] == '{') {
-            depth++;
-        }
-        else if (line[0] == '}') {
-            depth--;
-
-            if (depth == 0) {
-                this->map_entities.push_back(this->ParseEntity(ebuffer));
-
-                // Clear buffer for next ent
-                memset(ebuffer, 0, 1024 * 1024 * 2);
-                ebufferlen = 0;
-            }
-        }
-
-        line = strtok_r(NULL, "\n", &rest);
-    }
-
-    free(ebuffer);
-    free(mapfile);
+    std::cout << "Loaded " << this->filename << ": " << 
+        this->n_entities << " ents " << this->n_brushes << " brushes " <<
+        this->n_faces << " faces" << std::endl;
 }
 
 void Mapfile::Deduplicate(mapbrush_t& brush)
@@ -327,7 +294,7 @@ void Mapfile::TrimBrushPlanes(mapbrush_t& brush)
             if (i == j)
                 continue;
 
-            for (int k = 0; k < f->vertices_calculated.size(); k++)     // Trim the face
+            for (size_t k = 0; k < f->vertices_calculated.size(); k++)     // Trim the face
             {
                 glm::vec3 dir = f->vertices_calculated[(k + 1) % f->vertices_calculated.size()] - f->vertices_calculated[k];
 
@@ -345,7 +312,7 @@ void Mapfile::TrimBrushPlanes(mapbrush_t& brush)
                 f->vertices_calculated.insert(f->vertices_calculated.begin() + k + 1, intersectionPoint);
                 k++;
             }
-            for (int k = 0; k < f->vertices_calculated.size(); k++)     //	Trim the face
+            for (size_t k = 0; k < f->vertices_calculated.size(); k++)     //	Trim the face
             {
                 if (glm::dot(p.normal, f->vertices_calculated[k] - p.v1) < -0.01) {
                     f->vertices_calculated.erase(f->vertices_calculated.begin() + (k--));
@@ -355,68 +322,56 @@ void Mapfile::TrimBrushPlanes(mapbrush_t& brush)
     }
 }
 
-size_t Mapfile::EntityBrushCount(char* entity_buffer)
+// Parses map from loaded string buffer 
+void Mapfile::ParseMapFromBuffer()
 {
-    char* tmp = (char *)malloc((strlen(entity_buffer) + 1) * sizeof(char));
-    char* freetmp = tmp; // Unmangled pointer for free() later
-    memcpy(tmp, entity_buffer, strlen(entity_buffer));
+    if (!this->data) {
+        return;
+    }
 
-    int depth = 0;
-    int nbrushes = 0;
+    std::string str_data(this->data);
+    std::istringstream iss(str_data);
 
-    char* rest;
-    char* line = strtok_r(tmp, "\n", &rest);
-    while (line != NULL) {
+    std::string line;
+    std::string entity_buffer;
+    size_t depth = 0; // Current parser depth level in { }
 
-        if (line[0] == '{')
-        {
-            if (depth == 1) {
-                nbrushes++;
-            }
+    while (std::getline(iss, line)) {
+        line = Trim(line);
+
+        if (line.empty()) {
+            continue;
+        }
+
+        if (line[0] == '/') { // Ignore comments
+            continue;
+        }
+
+        entity_buffer.append(line + "\n");
+
+        if (line[0] == '{') {
             depth++;
         }
-        else if (line[0] == '}')
-        {
+        else if (line[0] == '}') {
             depth--;
+
+            if (depth == 0) {
+                this->map_entities.push_back(this->ParseEntity(entity_buffer));
+                this->n_entities++;
+
+                // Clear buffer for next ent
+                entity_buffer.clear();
+            }
         }
-
-        line = strtok_r(NULL, "\n", &rest);
     }
-
-    free(freetmp);
-    return nbrushes;
 }
 
-size_t Mapfile::EntityFieldCount(char* entity_buffer)
-{
-    char* tmp = (char *)malloc((strlen(entity_buffer) + 1) * sizeof(char));
-    char* freetmp = tmp;
-    memcpy(tmp, entity_buffer, strlen(entity_buffer));
-
-    int nfields = 0;
-
-    char* rest = NULL;
-    char* line = strtok_r(tmp, "\n", &rest);
-    while (line != NULL) {
-
-        if (line[0] == '"')
-        {
-            nfields++;
-        }
-
-        line = strtok_r(NULL, "\n", &rest);
-    }
-
-    free(freetmp);
-    return nfields;
-}
-
-std::pair<std::string, std::string> Mapfile::EntityParseField(char* line)
+std::pair<std::string, std::string> Mapfile::EntityParseField(const std::string& line)
 {
     // Find quote positions
     int qpos[4] = { 0, 0, 0, 0 };
     int qc = 0;
-    size_t len = strlen(line);
+    size_t len = line.length();
 
     for (int i = 0; i < len; i++) {
         char c = line[i];
@@ -442,7 +397,7 @@ std::pair<std::string, std::string> Mapfile::EntityParseField(char* line)
     return field;
 }
 
-mapface_t Mapfile::ParseFace(char* line)
+mapface_t Mapfile::ParseFace(const std::string& line)
 {
     mapface_t face;
 
@@ -450,105 +405,75 @@ mapface_t Mapfile::ParseFace(char* line)
     long long cstart = -1; // character index
     for (int i = 0; i < 3; i++)
     {
-        char* pointbuf = (char *)malloc(256 + sizeof(char));
-        char* freepointbuf = pointbuf;
-        int pindex = 0;
-        memset(pointbuf, 0, 256);
+        std::string pointbuf;
 
         cstart++;
         char c = line[cstart];
         while (c != ')') {
-            pointbuf[pindex] = c;
+            pointbuf.push_back(c);
 
             cstart++;
-            pindex++;
             c = line[cstart];
         }
 
-        // Trim
-        for (int p = 0; p < strlen(pointbuf); p++)
-        {
-            if (pointbuf[p] == '(' || pointbuf[p] == ')')
-            {
-                pointbuf[p] = ' ';
-            }
-        }
-        pointbuf = ctrim(pointbuf);
+        // Replace brackets with spaces
+        std::replace(pointbuf.begin(), pointbuf.end(), '(', ' ');
+        std::replace(pointbuf.begin(), pointbuf.end(), ')', ' ');
 
-        char* rest = NULL;
-        char* coord = strtok_r(pointbuf, " ", &rest);
-        int n = 0;
-        while (coord != NULL) {
+        pointbuf = Trim(pointbuf);
+
+        std::istringstream iss(pointbuf);
+        std::string coord;
+        size_t n = 0;
+        while (std::getline(iss, coord, ' ')) {
             switch (n)
             {
-            case 0: face.points[i].x = (float)atof(coord); break;
-            case 1: face.points[i].z = -(float)atof(coord); break;
-            case 2: face.points[i].y = (float)atof(coord); break;
+            case 0: face.points[i].x = std::stof(coord); break;
+            case 1: face.points[i].z = -std::stof(coord); break;
+            case 2: face.points[i].y = std::stof(coord); break;
             }
 
             n++;
-            coord = strtok_r(NULL, " ", &rest);
         }
-
-        free(freepointbuf);
     }
 
-    // Now we parse the texture, offsets, rot and scale from the face line
-    char* facepropbuf = (char *)malloc((strlen(line) + 1) - (cstart + 1));
-    char* freefacepropbuf = facepropbuf;
-    memset(facepropbuf, 0, (strlen(line)+1) - (cstart + 1));
-    memcpy(facepropbuf, line + cstart + 1, strlen(line + cstart + 1));
-    facepropbuf = ctrim(facepropbuf);
+    std::string facepropbuf = line.substr(cstart+1);
+    facepropbuf = Trim(facepropbuf);
 
-    memset(face.texture, 0, 64);
-    memcpy(face.texture, "textures/", 9);
+    std::istringstream iss(facepropbuf);
+    std::string prop;
+    size_t n = 0;
 
-    char* rest = NULL;
-    int n = 0;
-    char* prop = strtok_r(facepropbuf, " ", &rest);
-    while (prop != NULL) {
+    while (std::getline(iss, prop, ' ')) {
         switch (n)
         {
-        case 0: memcpy(face.texture + 9, prop, strlen(prop)); break;
-        case 1: face.xoffset = (float)atof(prop); break;
-        case 2: face.yoffset = (float)atof(prop); break;
-        case 3: face.rotation = (float)atof(prop); break;
-        case 4: face.xscale = (float)atof(prop); break;
-        case 5: face.yscale = (float)atof(prop); break;
+        case 0: face.texture.assign("textures/" + prop); break;
+        case 1: face.xoffset = std::stof(prop); break;
+        case 2: face.yoffset = std::stof(prop); break;
+        case 3: face.rotation = std::stof(prop); break;
+        case 4: face.xscale = std::stof(prop); break;
+        case 5: face.yscale = std::stof(prop); break;
         }
 
         n++;
-        prop = strtok_r(NULL, " ", &rest);
     }
 
-    // Ensure face texture is lowercase always
+    // enforce lowercase texture name
     for (int i = 0; face.texture[i]; i++) {
         face.texture[i] = tolower(face.texture[i]);
     }
 
-    free(freefacepropbuf);
-
     return face;
 }
 
-mapbrush_t Mapfile::ParseBrush(char* brush_buffer)
+mapbrush_t Mapfile::ParseBrush(const std::string& brush_buffer)
 {
     mapbrush_t brush;
 
-    // Get face count
-    brush.nfaces = 0;
-    for (int i = 0; i < strlen(brush_buffer); i++)
-    {
-        if (brush_buffer[i] == '\n')
-        {
-            brush.nfaces++;
-        }
-    }
+    std::string line;
+    std::istringstream iss(brush_buffer);
 
-    // Parse faces
-    char* rest = NULL;
-    char* line = strtok_r(brush_buffer, "\n", &rest);
-    while (line != NULL) {
+    while (std::getline(iss, line)) {
         mapface_t face = this->ParseFace(line);
 
         // Add plane from this brush
@@ -563,12 +488,10 @@ mapbrush_t Mapfile::ParseBrush(char* brush_buffer)
             normal
         };
 
-        //std::cout << "Normal: " << normal.x << std::endl;
-
         brush.planes.push_back(plane);
 
         // Add the face
-        float scale = 4096.0f;
+        float scale = 16384.0f;
         glm::vec3 fv2 = glm::normalize(plane.v3 - plane.v1) * scale;
         glm::vec3 fv1 = glm::normalize(plane.v2 - plane.v1) * scale;
 
@@ -578,9 +501,7 @@ mapbrush_t Mapfile::ParseBrush(char* brush_buffer)
         face.vertices_calculated.push_back(glm::vec3(0, 0, 0) - fv1 + fv2 + plane.v1);
 
         brush.faces.push_back(face);
-
-
-        line = strtok_r(NULL, "\n", &rest);
+        this->n_faces++;
     }
 
     this->TrimBrushPlanes(brush);
@@ -589,36 +510,26 @@ mapbrush_t Mapfile::ParseBrush(char* brush_buffer)
     return brush;
 }
 
-mapentity_t Mapfile::ParseEntity(char* entity_buffer)
+mapentity_t Mapfile::ParseEntity(const std::string& entity_buffer)
 {
     mapentity_t ent;
+    size_t depth = 0;
 
-    char* tmp = (char *)malloc((strlen(entity_buffer) + 1) * sizeof(char));
-    tmp[strlen(entity_buffer)] = '\0';
-    memcpy(tmp, entity_buffer, strlen(entity_buffer));
+    std::string line;
+    std::istringstream iss(entity_buffer);
+    std::string brush_buffer;
 
-    char* freetmp = tmp;
+    while (std::getline(iss, line)) {
+        line = Trim(line);
 
-    int depth = 0;
-    int findex = 0; // field index
+        if (line.empty()) {
+            continue;
+        }
 
-    int bindex = 0; // brush index
-    char* bbuffer = (char*)malloc(1024 * 16);
-    memset(bbuffer, 0, 1024 * 16);
-    size_t bbufferlen = 0;
-
-    char* rest = NULL;
-    char* line = strtok_r(tmp, "\n", &rest);
-
-    while (line != NULL) {
         if (line[0] == '"')
         {
             std::pair<std::string, std::string> prop = this->EntityParseField(line);
             ent.properties.emplace(prop);
-
-            findex++;
-            line = strtok_r(NULL, "\n", &rest);
-            continue;
         }
         else if (line[0] == '{')
         {
@@ -628,30 +539,20 @@ mapentity_t Mapfile::ParseEntity(char* entity_buffer)
         {
             if (depth == 2)
             {
-                mapbrush_t brush = this->ParseBrush(bbuffer);
+                mapbrush_t brush = this->ParseBrush((char *)brush_buffer.c_str());
                 ent.brushes.push_back(brush);
+                this->n_brushes++;
 
-                // Do stuff
-                memset(bbuffer, 0, 1024 * 16);
-                bbufferlen = 0;
-                bindex++;
+                // Reset buffer
+                brush_buffer.clear();
             }
 
             depth--;
         }
         else {
-            memcpy(bbuffer + bbufferlen, line, strlen(line));
-            bbufferlen += strlen(line);
-            bbuffer[bbufferlen] = '\n';
-            bbufferlen++;
+            brush_buffer.append(line + "\n");
         }
-
-        line = strtok_r(NULL, "\n", &rest);
     }
-
-    free(bbuffer);
-    free(freetmp);
 
     return ent;
 }
-

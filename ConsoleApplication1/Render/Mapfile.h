@@ -12,7 +12,7 @@ typedef struct {
 
 typedef struct {
 	glm::vec3 points[3];
-	char texture[64];
+	std::string texture;
 	float xoffset;
 	float yoffset;
 	float rotation;
@@ -26,7 +26,6 @@ typedef struct {
 } mapface_t;
 
 typedef struct {
-	unsigned char nfaces;
 	std::vector<mapface_t> faces;
 	std::vector<plane_t> planes;
 } mapbrush_t;
@@ -50,17 +49,13 @@ protected:
 
 	void ParseMapFromBuffer();
 
-	size_t EntityBrushCount(char* entity_buffer);
+	std::pair<std::string, std::string> EntityParseField(const std::string& line);
 
-	size_t EntityFieldCount(char* entity_buffer);
+	mapface_t ParseFace(const std::string& line);
 
-	std::pair<std::string, std::string> EntityParseField(char* line);
+	mapbrush_t ParseBrush(const std::string& brush_buffer);
 
-	mapface_t ParseFace(char* line);
-
-	mapbrush_t ParseBrush(char* brush_buffer);
-
-	mapentity_t ParseEntity(char* entity_buffer);
+	mapentity_t ParseEntity(const std::string& entity_buffer);
 
 	void TrimBrushPlanes(mapbrush_t& brush);
 
