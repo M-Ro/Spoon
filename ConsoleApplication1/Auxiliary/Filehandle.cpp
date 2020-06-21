@@ -5,12 +5,30 @@
 Filehandle::Filehandle(const std::string &path, bool readonly)
 {
 	file = nullptr;
+	cbuf = nullptr;
+	sbuf = nullptr;
+	stream = nullptr;
+
 	Open(path, readonly);
 }
 
 Filehandle::~Filehandle()
 {
+	if (this->file) {
+		PHYSFS_close(file);
+	}
 
+	if (this->stream) {
+		delete this->stream;
+	}
+
+	if (this->sbuf) {
+		delete this->sbuf;
+	}
+
+	if (this->cbuf) {
+		delete this->cbuf;
+	}
 }
 
 int Filehandle::Open(const std::string &path, bool readonly)
@@ -23,15 +41,20 @@ int Filehandle::Open(const std::string &path, bool readonly)
 	else
 		file = PHYSFS_openRead(path.c_str());
 
-	if(file == nullptr)
+	if (file == nullptr) {
+		std::cout << "Failed to open " << path << ": " << PHYSFS_getLastErrorCode() << std::endl;
 		return 0;
+	}
 
 	return 1;
 }
 
 int Filehandle::Close()
 {
-	return PHYSFS_close(file);
+	int ret = PHYSFS_close(file);
+	this->file = nullptr;
+
+	return ret;
 }
 
 sint64 Filehandle::ReadBytes(void *buffer, uint32 count)
@@ -45,12 +68,17 @@ sint64 Filehandle::ReadBytes(void *buffer, uint32 count)
 unsigned char *Filehandle::ReadFile()
 {
 	sint64 file_size = Size();
-	unsigned char *file_buf = new unsigned char[file_size+1];
+	unsigned char* file_buf = new unsigned char[file_size + 1];
 
 	sint64 total_read = 0;
 	while(total_read < file_size)
 	{
-		sint64 bytes_read = ReadBytes(file_buf+total_read, 512);
+		uint32 readsize = 512;
+		if (file_size - total_read < readsize) {
+			readsize = file_size - total_read;
+		}
+
+		sint64 bytes_read = ReadBytes(file_buf+total_read, readsize);
 		if(bytes_read == -1)
 		{
 			std::cout << "Failed read: " << PHYSFS_getLastError() << std::endl;
@@ -66,10 +94,14 @@ unsigned char *Filehandle::ReadFile()
 
 std::istream *Filehandle::GetIStream()
 {
-	unsigned char *cbuf = ReadFile(); // FIXME <-- LIKELY LEAKS
-	membuf *sbuf = new membuf((char *)cbuf, (char *)cbuf + Size()-1); // this too
-	Close();
-	return new std::istream(sbuf);
+	if (this->stream == nullptr) {
+		this->cbuf = ReadFile();
+		this->sbuf = new membuf((char*)cbuf, (char*)cbuf + Size() - 1);
+		Close();
+		this->stream = new std::istream(sbuf);
+	}
+	
+	return this->stream;
 }
 
 sint64 Filehandle::Tell()

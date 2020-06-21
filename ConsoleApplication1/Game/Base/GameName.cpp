@@ -13,10 +13,12 @@
 
 #include "../../auxiliary/fpscounter.h"
 
+//#include "../../Render/Mapfile.h"
+
 Arena *arena;
 Player *player;
 
-GameName::GameName()
+GameName::GameName() : Game()
 {
 	game = this;
 	gametype = "single";
@@ -24,7 +26,17 @@ GameName::GameName()
 
 GameName::~GameName()
 {
+	if (this->camera) {
+		delete this->camera;
+	}
 
+	if (this->renderer) {
+		delete this->renderer;
+	}
+
+	if (this->input) {
+		delete this->input;
+	}
 }
 
 void GameName::Load()
@@ -42,6 +54,8 @@ void GameName::Load()
 
 	arena->AddEntity(player);
 	arena->AddEntity(new Skull());
+
+	//Mapfile map("e1m1.map");
 }
 
 void GameName::Shutdown()
@@ -64,6 +78,9 @@ void GameName::Run(float deltaTime)
 	ss << "FPS: " << FpsCounter::fps;
 
 	renderer->DrawText(ss.str(), -0.99f, 0.95f);
+
+	glm::vec3 zero(0, 0, 0);
+	//renderer->DrawModel("balls", zero, zero);
 
 	renderer->Flip();
 }

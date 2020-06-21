@@ -107,6 +107,9 @@
     <ClCompile Include="Render\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Render\Mapfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\AudioObject.h" />
@@ -143,6 +146,7 @@
     <ClInclude Include="Render\Renderer.h" />
     <ClInclude Include="Render\Shader.h" />
     <ClInclude Include="Render\Texture.h" />
+    <ClInclude Include="Render\Mapfile.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -312,13 +312,12 @@ void Renderer::LoadTexture(std::string const &filename)
 		std::cout << "Warning: Couldn't find image: " << filepath << std::endl;
 		delete texture;
 
-		textures.insert(std::pair<std::string, Texture *>(filename, textures.at("textures/null")));
+		textures.emplace(filename, textures.at("textures/null"));
 		return;
 	}
 
 	std::istream *stream = file.GetIStream();
 	texture->LoadPNG(*stream);
-	delete stream;
 
 	textures.insert(std::pair<std::string, Texture *>(filename, texture));
 }
@@ -338,6 +337,16 @@ void Renderer::LoadModel(std::string const &filename)
 	models.insert(std::pair<std::string, Model *>(filename, model));
 }
 
+void Renderer::PushModel(std::string name, Model* model)
+{
+	if (this->models.count(name)) {
+		std::cout << "Warning: PushModel overriding " << name << std::endl;
+	}
+
+	this->models.emplace(name, model);
+}
+
+
 void Renderer::PrecacheModel(std::string const &modelname)
 {
 	/* Load the model */
@@ -355,4 +364,13 @@ void Renderer::PrecacheModel(std::string const &modelname)
 	for(ModelSection *section : model->GetSections())
 		if(!textures.count(section->GetMaterial())) // Load texture if required
 			LoadTexture(section->GetMaterial());
+}
+
+Texture* Renderer::GetTexture(std::string const& texname)
+{
+	/* Check if the model is loaded, load if required */
+	if (!textures.count(texname))
+		LoadTexture(texname);
+
+	return textures.at(texname);
 }

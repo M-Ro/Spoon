@@ -180,6 +180,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Input\InputHandler.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Font.cpp" />
+    <ClCompile Include="Render\Mapfile.cpp" />
     <ClCompile Include="Render\Model.cpp" />
     <ClCompile Include="Render\OBJModel.cpp" />
     <ClCompile Include="Render\Program.cpp" />
@@ -216,6 +217,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Font.h" />
+    <ClInclude Include="Render\Mapfile.h" />
     <ClInclude Include="Render\Model.h" />
     <ClInclude Include="Render\OBJModel.h" />
     <ClInclude Include="Render\Program.h" />
