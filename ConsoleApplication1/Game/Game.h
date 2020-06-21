@@ -8,7 +8,11 @@ class Game
 {
 public:
 	// Initialization
-	Game() {}
+	Game() {
+		this->renderer = nullptr;
+		this->camera = nullptr;
+		this->input = nullptr;
+	}
 
 	// Asset loading / game setup
 	virtual void Load() = 0;
