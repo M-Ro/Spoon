@@ -28,26 +28,12 @@ const float MIN_DELTA = 10e-10; // idk
 // from radiant tools/quake3/q3map2/map.c
 glm::vec3 texture_baseaxis[18] = {
     // normal			texture plane
-    /*glm::vec3(0, 0, 1),	 glm::vec3(1, 0, 0), glm::vec3(0, -1, 0),	// floor
-    glm::vec3(0, 0, -1), glm::vec3(1, 0, 0), glm::vec3(0, -1, 0),	// ceiling
-    glm::vec3(1, 0, 0),	 glm::vec3(0, 1, 0), glm::vec3(0, 0, -1),	// west wall
-    glm::vec3(-1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1),	// east wall
-    glm::vec3(0, 1, 0),	 glm::vec3(1, 0, 0), glm::vec3(0, 0, -1),	// south wall
-    glm::vec3(0, -1, 0), glm::vec3(1, 0, 0), glm::vec3(0, 0, -1)	// north wall*/
-
-    /*glm::vec3(0, 1, 0),	 glm::vec3(1, 0, 0), glm::vec3(0, 0, -1),	// floor
-    glm::vec3(0, -1, 0), glm::vec3(1, 0, 0), glm::vec3(0, 0, -1),	// ceiling
-    glm::vec3(1, 0, 0),	 glm::vec3(0, 0, 1), glm::vec3(0, -1, 0),	// west wall
-    glm::vec3(-1, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, -1, 0),	// east wall
-    glm::vec3(0, 0, 1),	 glm::vec3(1, 0, 0), glm::vec3(0, -1, 0),	// south wall
-    glm::vec3(0, 0, -1), glm::vec3(1, 0, 0), glm::vec3(0, -1, 0)	// north wall*/
-
     glm::vec3(0, -1, 0),	 glm::vec3(1, 0, 0), glm::vec3(0, 0, -1),	// floor
-    glm::vec3(0, 1, 0), glm::vec3(1, 0, 0), glm::vec3(0, 0, -1),	// ceiling
-    glm::vec3(1, 0, 0),	 glm::vec3(0, 0, 1), glm::vec3(0, 1, 0),	// west wall
-    glm::vec3(-1, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 1, 0),	// east wall
-    glm::vec3(0, 0, 1),	 glm::vec3(1, 0, 0), glm::vec3(0, 1, 0),	// south wall
-    glm::vec3(0, 0, -1), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0)	// north wall
+    glm::vec3(0, 1, 0),     glm::vec3(1, 0, 0),     glm::vec3(0, 0, -1),	// ceiling
+    glm::vec3(1, 0, 0),	    glm::vec3(0, 0, -1),    glm::vec3(0, 1, 0),	// west wall
+    glm::vec3(-1, 0, 0),    glm::vec3(0, 0, -1),    glm::vec3(0, 1, 0),	// east wall
+    glm::vec3(0, 0, 1),	    glm::vec3(1, 0, 0),    glm::vec3(0, 1, 0),	// south wall
+    glm::vec3(0, 0, -1),    glm::vec3(1, 0, 0),    glm::vec3(0, 1, 0)	// north wall
 };
 
 // from radiant tools/quake3/q3map2/map.c
@@ -61,7 +47,7 @@ void texture_axis_from_plane(const mapface_t& face, glm::vec3 &xv, glm::vec3 &yv
 
     glm::vec3 tv1 = face.points[1] - face.points[0];
     glm::vec3 tv2 = face.points[2] - face.points[1];
-    glm::vec3 n = glm::normalize(glm::cross(tv1, tv2) * -1.0f);
+    glm::vec3 n = glm::normalize(glm::cross(tv1, tv2) /** -1.0f*/);
 
     for (size_t i = 0; i < 6; i++) {
         dot = glm::dot(n, texture_baseaxis[i * 3]);
@@ -102,7 +88,7 @@ void face_texture_verts(mapface_t &face, const glm::vec2 &tex_shift, const float
         cosv = 1.0f;
     }
     else if (tex_rotate == 90.0f) {
-        sinv = 1.0f;
+        sinv = -1.0f;
         cosv = 0.0f;
     }
     else if (tex_rotate == 180.0f) {
@@ -110,11 +96,11 @@ void face_texture_verts(mapface_t &face, const glm::vec2 &tex_shift, const float
         cosv = -1.0f;
     }
     else if (tex_rotate == 270.0f) {
-        sinv = -1.0f;
+        sinv = 1.0f;
         cosv = 0.0f;
     }
     else {
-        ang = tex_rotate / 180.0f * M_PI;
+        ang = tex_rotate / -180.0f * M_PI;
         sinv = sinf(ang);
         cosv = cosf(ang);
     }
@@ -496,7 +482,7 @@ mapface_t Mapfile::ParseFace(char* line)
             switch (n)
             {
             case 0: face.points[i].x = (float)atof(coord); break;
-            case 1: face.points[i].z = (float)atof(coord); break;
+            case 1: face.points[i].z = -(float)atof(coord); break;
             case 2: face.points[i].y = (float)atof(coord); break;
             }
 
@@ -568,7 +554,7 @@ mapbrush_t Mapfile::ParseBrush(char* brush_buffer)
         // Add plane from this brush
         glm::vec3 tv1 = face.points[1] - face.points[0];
         glm::vec3 tv2 = face.points[2] - face.points[1];
-        glm::vec3 normal = -glm::normalize(glm::cross(tv1, tv2));
+        glm::vec3 normal = glm::normalize(glm::cross(tv1, tv2));
 
         plane_t plane{
             face.points[0],
@@ -583,8 +569,8 @@ mapbrush_t Mapfile::ParseBrush(char* brush_buffer)
 
         // Add the face
         float scale = 4096.0f;
-        glm::vec3 fv1 = glm::normalize(plane.v3 - plane.v1) * scale;
-        glm::vec3 fv2 = glm::normalize(plane.v2 - plane.v1) * scale;
+        glm::vec3 fv2 = glm::normalize(plane.v3 - plane.v1) * scale;
+        glm::vec3 fv1 = glm::normalize(plane.v2 - plane.v1) * scale;
 
         face.vertices_calculated.push_back(fv1 + fv2 + plane.v1);
         face.vertices_calculated.push_back(fv1 - fv2 + plane.v1);
