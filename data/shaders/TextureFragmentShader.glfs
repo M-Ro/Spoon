@@ -37,7 +37,6 @@ void main()
 	vec3 calculated_spec = vec3(0.0);
 	
 	for(int i=0; i<int(num_lights); i++) {
-	
 		vec3 lightPos_cameraspace = ( V * vec4(lights.posAtten[i].xyz,1)).xyz;
 		vec3 lightDir_cameraspace = lightPos_cameraspace + eyeDir_cameraspace;
 		
