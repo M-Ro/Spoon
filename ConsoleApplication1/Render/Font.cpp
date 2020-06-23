@@ -46,7 +46,7 @@ Font::Font(std::string const &name, unsigned int size, glm::vec2 screenSize)
 	}
 
 	sint64 file_size = filehandle.Size();
-	FT_Byte *file_buf = filehandle.ReadFile();
+	file_buf = filehandle.ReadFile();
 	filehandle.Close();
 
 	/* Attempt to load font */
