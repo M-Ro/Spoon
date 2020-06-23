@@ -15,6 +15,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Font.h"
+#include "LightManager.h"
 
 class Renderer
 {
@@ -40,6 +41,8 @@ public:
 
 	Texture* GetTexture(std::string const& texname);
 
+	LightManager& GetLightManager() { return this->light_manager;  }
+
 private:
 	bool InitialiseGlew();
 	bool InitialiseOpenGL();
@@ -61,6 +64,7 @@ private:
 	Shader *fshader;	// ''
 
 	Camera *active_camera;
+	LightManager light_manager;
 
 	std::map<std::string, Texture *> textures;
 	std::map<std::string, Model *> models;

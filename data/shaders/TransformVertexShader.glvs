@@ -30,9 +30,6 @@ void main(){
 	vec3 vertexPosition_cameraspace = ( V * M * vec4(vertexPosition_modelspace,1)).xyz;
 	eyeDir_cameraspace = vec3(0,0,0) - vertexPosition_cameraspace;
 	
-	vec3 lightPos_cameraspace = ( V * vec4(lightPosition_worldspace,1)).xyz;
-	lightDir_cameraspace = lightPos_cameraspace + eyeDir_cameraspace;
-	
 	// Normal of the the vertex, in camera space
 	normal_cameraspace = ( V * M * vec4(vertexNormal_modelspace,0)).xyz; // Only correct if ModelMatrix does not scale the model ! Use its inverse transpose if not.
 	

@@ -13,7 +13,9 @@
 
 #include "../../auxiliary/fpscounter.h"
 
-//#include "../../Render/Mapfile.h"
+#include "../../Render/Mapfile.h"
+
+#include "EntityMapper.h"
 
 Arena *arena;
 Player *player;
@@ -55,7 +57,7 @@ void GameName::Load()
 	arena->AddEntity(player);
 	arena->AddEntity(new Skull());
 
-	//Mapfile map("e1m1.map");
+	Mapfile map("textest.map");
 }
 
 void GameName::Shutdown()
@@ -80,7 +82,7 @@ void GameName::Run(float deltaTime)
 	renderer->DrawText(ss.str(), -0.99f, 0.95f);
 
 	glm::vec3 zero(0, 0, 0);
-	//renderer->DrawModel("balls", zero, zero);
+	renderer->DrawModel("balls", zero, zero);
 
 	renderer->Flip();
 }

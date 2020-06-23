@@ -110,6 +110,15 @@
     <ClCompile Include="Render\Mapfile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Base\EntityMapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\LightManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\AudioObject.h" />
@@ -147,6 +156,9 @@
     <ClInclude Include="Render\Shader.h" />
     <ClInclude Include="Render\Texture.h" />
     <ClInclude Include="Render\Mapfile.h" />
+    <ClInclude Include="Game\Base\EntityMapper.h" />
+    <ClInclude Include="Render\Light.h" />
+    <ClInclude Include="Render\LightManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
