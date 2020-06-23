@@ -33,8 +33,10 @@ void Arena::Update(float deltaTime)
 	// Purge dead entities
 	for (auto it = entities.cbegin(); it != entities.cend();)
 	{
-		if(it->second->destroy)
+		if (it->second->destroy) {
+			delete it->second;
 			entities.erase(it++);
+		}
 		else
 			it++;
 	}
