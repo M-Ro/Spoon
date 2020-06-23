@@ -1,7 +1,17 @@
+#ifdef _DEBUG
+#include <stdlib.h>
+#include <crtdbg.h>
+#define _CRTDBG_MAP_ALLOC
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
+
 #include <iostream>
 #include <string>
 
-#include <Windows.h>
+#ifdef _WIN32
+	#include <Windows.h>
+#endif
 
 #include <SDL2/SDL.h>
 #include <GL\glew.h>
@@ -94,6 +104,12 @@ int main(int argc, char** argv)
 	delete audio;
 	Config::WriteConfig();
 	Filesystem::Shutdown();
+
+#ifdef _DEBUG
+#ifdef _WIN32
+	_CrtDumpMemoryLeaks();
+#endif
+#endif
 
 	return 0;
 }

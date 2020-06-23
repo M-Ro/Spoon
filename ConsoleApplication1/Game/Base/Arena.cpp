@@ -47,7 +47,7 @@ void Arena::Draw()
 {
 	// Draw arena
 	glm::vec3 pos(0.0, 0.0, 0.0);
-	game->renderer->DrawModel("arena", pos, pos);
+	//game->renderer->DrawModel("arena", pos, pos);
 
 	// Draw all entities
 	for (auto& kv : entities)

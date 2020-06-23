@@ -1,8 +1,10 @@
 #pragma once
 
 #include <map>
-#include <windows.h> // Needed before including GL.h on WIN32
 
+#ifdef _WIN32
+#include <windows.h> // Needed before including GL.h on WIN32
+#endif
 #include <SDL2/SDL.h>
 #include <GL\glew.h>
 #include <SDL2/SDL_opengl.h>
@@ -13,6 +15,7 @@
 #include "Model.h"
 #include "Camera.h"
 #include "Font.h"
+#include "LightManager.h"
 
 class Renderer
 {
@@ -30,9 +33,15 @@ public:
 
 	void SetActiveCamera(Camera *camera) { this->active_camera = camera; }
 
+	void PushModel(std::string name, Model* model);
+
 	void Flip();
 
 	void PrecacheModel(std::string const &filename);
+
+	Texture* GetTexture(std::string const& texname);
+
+	LightManager& GetLightManager() { return this->light_manager;  }
 
 private:
 	bool InitialiseGlew();
@@ -55,6 +64,7 @@ private:
 	Shader *fshader;	// ''
 
 	Camera *active_camera;
+	LightManager light_manager;
 
 	std::map<std::string, Texture *> textures;
 	std::map<std::string, Model *> models;

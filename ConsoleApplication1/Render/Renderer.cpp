@@ -13,6 +13,15 @@
 
 Renderer::Renderer()
 {
+	this->active_camera = nullptr;
+	this->font = nullptr;
+	this->fshader = nullptr;
+	this->vshader = nullptr;
+	this->program_model = nullptr;
+	this->program_overlay = nullptr;
+	this->screen = nullptr;
+	this->window = nullptr;
+
 	// Specify OpenGL 3.1
 	std::cout << "Specifying OpenGL 3.3 Core" << std::endl;
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -67,6 +76,19 @@ Renderer::Renderer()
 	LoadTexture("textures/null"); // Default missing texture image
 
 	font = new Font("emulogic", 16, glm::vec2(width, height));
+
+	// Throw in some test lights
+	Light *l1 = this->light_manager.NewLight();
+	Light *l2 = this->light_manager.NewLight();
+
+	l1->SetColor(glm::vec3(0.4f, 0.4f, 1.0f));
+	l1->SetPosition(glm::vec3(-200, 50, -150));
+	l1->SetPower(200.0f);
+
+	l2->SetColor(glm::vec3(1.0f, 0.0f, 0.0f));
+	l2->SetPosition(glm::vec3(0, 50, 0));
+
+	this->light_manager.Update(program_model->GetProgram());
 }
 
 Renderer::~Renderer()
@@ -176,7 +198,7 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
 		GLuint ViewMatrixID = glGetUniformLocation(program_model->GetProgram(), "V");
 		GLuint ModelMatrixID = glGetUniformLocation(program_model->GetProgram(), "M");
 		GLuint sampler_tex_id  = glGetUniformLocation(program_model->GetProgram(), "myTextureSampler");
-		GLuint LightID = glGetUniformLocation(program_model->GetProgram(), "lightPosition_worldspace");
+		//GLuint lightUniformIndex = glGetUniformBlockIndex(program_model->GetProgram(), "Lights");
 
 		glUseProgram(program_model->GetProgram());
 
@@ -200,7 +222,6 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
         glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &model_matrix[0][0]);
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &view_matrix[0][0]);
 
-		glUniform3f(LightID, 0, 50, 0); // position
         /* Bind material texture to unit 0 */
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -220,6 +241,8 @@ void Renderer::DrawModel(std::string const &modelname, glm::vec3 &position, glm:
         glEnableVertexAttribArray(2);
         glBindBuffer(GL_ARRAY_BUFFER, normal_buffer);
         glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+		//glBindBufferBase(GL_UNIFORM_BUFFER, lightUniformIndex, light_manager.GetUboHandle());
 
         // Draw mesh
         glDrawArrays(GL_TRIANGLES, 0, section->GetVertexCount());
@@ -298,6 +321,8 @@ void Renderer::Flip()
 	GLuint error = glGetError();
 	if(error != 0)
 		std::cout << "OpenGL Error: " << error << std::endl;
+
+	this->light_manager.Update(program_model->GetProgram());
 }
 
 void Renderer::LoadTexture(std::string const &filename)
@@ -312,13 +337,12 @@ void Renderer::LoadTexture(std::string const &filename)
 		std::cout << "Warning: Couldn't find image: " << filepath << std::endl;
 		delete texture;
 
-		textures.insert(std::pair<std::string, Texture *>(filename, textures.at("textures/null")));
+		textures.emplace(filename, textures.at("textures/null"));
 		return;
 	}
 
 	std::istream *stream = file.GetIStream();
 	texture->LoadPNG(*stream);
-	delete stream;
 
 	textures.insert(std::pair<std::string, Texture *>(filename, texture));
 }
@@ -338,6 +362,16 @@ void Renderer::LoadModel(std::string const &filename)
 	models.insert(std::pair<std::string, Model *>(filename, model));
 }
 
+void Renderer::PushModel(std::string name, Model* model)
+{
+	if (this->models.count(name)) {
+		std::cout << "Warning: PushModel overriding " << name << std::endl;
+	}
+
+	this->models.emplace(name, model);
+}
+
+
 void Renderer::PrecacheModel(std::string const &modelname)
 {
 	/* Load the model */
@@ -355,4 +389,13 @@ void Renderer::PrecacheModel(std::string const &modelname)
 	for(ModelSection *section : model->GetSections())
 		if(!textures.count(section->GetMaterial())) // Load texture if required
 			LoadTexture(section->GetMaterial());
+}
+
+Texture* Renderer::GetTexture(std::string const& texname)
+{
+	/* Check if the model is loaded, load if required */
+	if (!textures.count(texname))
+		LoadTexture(texname);
+
+	return textures.at(texname);
 }

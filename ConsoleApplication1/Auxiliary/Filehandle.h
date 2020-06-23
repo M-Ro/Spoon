@@ -52,4 +52,9 @@ public:
 private:
 
 	PHYSFS_File *file;
+
+	// For streams
+	unsigned char* cbuf;
+	membuf* sbuf;
+	std::istream* stream;
 };

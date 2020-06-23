@@ -169,6 +169,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Game\Base\Arena.cpp" />
     <ClCompile Include="Game\Base\CollisionModel.cpp" />
+    <ClCompile Include="Game\Base\EntityMapper.cpp" />
     <ClCompile Include="Game\Base\Entity\Monster.cpp" />
     <ClCompile Include="Game\Base\Entity\Player.cpp" />
     <ClCompile Include="Game\Base\Entity\Projectile.cpp" />
@@ -182,6 +183,9 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Input\InputHandler.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Font.cpp" />
+    <ClCompile Include="Render\Light.cpp" />
+    <ClCompile Include="Render\LightManager.cpp" />
+    <ClCompile Include="Render\Mapfile.cpp" />
     <ClCompile Include="Render\Model.cpp" />
     <ClCompile Include="Render\OBJModel.cpp" />
     <ClCompile Include="Render\Program.cpp" />
@@ -205,6 +209,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Auxiliary\Time.h" />
     <ClInclude Include="Game\Base\Arena.h" />
     <ClInclude Include="Game\Base\CollisionModel.h" />
+    <ClInclude Include="Game\Base\EntityMapper.h" />
     <ClInclude Include="Game\Base\Entity\Entity.h" />
     <ClInclude Include="Game\Base\Entity\Monster.h" />
     <ClInclude Include="Game\Base\Entity\Player.h" />
@@ -220,6 +225,9 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Font.h" />
+    <ClInclude Include="Render\Light.h" />
+    <ClInclude Include="Render\LightManager.h" />
+    <ClInclude Include="Render\Mapfile.h" />
     <ClInclude Include="Render\Model.h" />
     <ClInclude Include="Render\OBJModel.h" />
     <ClInclude Include="Render\Program.h" />

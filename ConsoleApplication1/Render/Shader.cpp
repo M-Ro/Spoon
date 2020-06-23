@@ -45,6 +45,8 @@ void Shader::LoadShader(std::string const &name)
 		std::cout << "Unable to compile vertex shader: " << shader << std::endl;
 		PrintLog();
 	}
+
+	delete buffer;
 }
 
 void Shader::PrintLog()
