@@ -21,7 +21,17 @@ LightManager::LightManager()
 
 LightManager::~LightManager()
 {
+	if (this->ubo_handle) {
+		glDeleteBuffers(1, &ubo_handle);
+	}
 
+	// This shouldn't be needed, it's only for any straggling lights that
+	// escaped the gamecode somehow
+	for (int i = 0; i < this->lights.size(); i++) {
+		delete this->lights[i];
+	}
+
+	this->lights.clear();
 }
 
 void LightManager::Update(GLuint program_id)

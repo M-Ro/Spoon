@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,8 +16,6 @@ Renderer::Renderer()
 {
 	this->active_camera = nullptr;
 	this->font = nullptr;
-	this->fshader = nullptr;
-	this->vshader = nullptr;
 	this->program_model = nullptr;
 	this->program_overlay = nullptr;
 	this->screen = nullptr;
@@ -59,7 +58,7 @@ Renderer::Renderer()
 	
 	/* Create SDL_GL context */
 	std::cout << "Creating SDL_GL context" << std::endl;
-	SDL_GLContext gl_context = SDL_GL_CreateContext(window);
+	gl_context = SDL_GL_CreateContext(window);
 	if (!gl_context)
 	{
 		std::cout << "Error: Could not create SDL_GL context: " << SDL_GetError() << std::endl;
@@ -92,7 +91,50 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+	delete program_model;
+	delete program_overlay;
 
+	if (this->font) {
+		delete this->font;
+	}
+
+	/* Purge textures */
+
+	// We don't want to delete the same texture twice so store pointers we've deleted
+	std::vector<Texture*> freed_tex;
+
+	for (auto &kv : this->textures) {
+		if (kv.second) {
+			if (!std::count(freed_tex.begin(), freed_tex.end(), kv.second)) {
+				delete kv.second;
+				freed_tex.push_back(kv.second);
+			}
+
+			kv.second = nullptr;
+		}
+	}
+
+	this->textures.clear();
+
+	/* Do the same for models */
+	std::vector<Model*> freed_models;
+
+	for (auto& kv : this->models) {
+		if (kv.second) {
+			if (!std::count(freed_models.begin(), freed_models.end(), kv.second)) {
+				delete kv.second;
+				freed_models.push_back(kv.second);
+			}
+
+			kv.second = nullptr;
+		}
+	}
+
+	this->models.clear();
+
+	// TODO screen/window
+	SDL_GL_DeleteContext(gl_context);
+	SDL_DestroyWindow(window);
 }
 
 bool Renderer::SetVSync(bool state)
@@ -129,28 +171,13 @@ bool Renderer::InitialiseOpenGL()
 	std::cout << "Initialising OpenGL" << std::endl;
 
 	program_model = new Program();
-
-	vshader = new Shader(Vertex);
-	vshader->LoadShader("TransformVertexShader");
-	program_model->AttachShader(vshader);
-
-	fshader = new Shader(Fragment);
-	fshader->LoadShader("TextureFragmentShader");
-	program_model->AttachShader(fshader);
-	
+	program_model->AttachShader(Vertex, "TransformVertexShader");
+	program_model->AttachShader(Fragment, "TextureFragmentShader");
 	program_model->Link();
 
-
 	program_overlay = new Program();
-
-	Shader *overlay_v = new Shader(Vertex);
-	overlay_v->LoadShader("overlay");
-	program_overlay->AttachShader(overlay_v);
-
-	Shader *overlay_f = new Shader(Fragment);
-	overlay_f->LoadShader("overlay");
-	program_overlay->AttachShader(overlay_f);
-
+	program_overlay->AttachShader(Vertex, "overlay");
+	program_overlay->AttachShader(Fragment, "overlay");
 	program_overlay->Link();
 
 	glClearColor(0.22f, 0.22f, 0.22f, 1.0f); // Set clear color to gray // FIXME remove?

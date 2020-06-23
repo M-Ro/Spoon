@@ -47,21 +47,18 @@ private:
 	bool InitialiseGlew();
 	bool InitialiseOpenGL();
 
-	void PrintProgramLog(GLuint program);
-
 	void LoadTexture(std::string const &filename);
 
 	void LoadModel(std::string const &modelname);
 
 	SDL_Window *window;
 	SDL_Surface *screen;
+	SDL_GLContext gl_context;
 
 	Font *font;
 
 	Program *program_model;
 	Program *program_overlay; // Renders object as a transparent overlay. Useful for bboxes etc
-	Shader *vshader;	// FIXME remove?
-	Shader *fshader;	// ''
 
 	Camera *active_camera;
 	LightManager light_manager;

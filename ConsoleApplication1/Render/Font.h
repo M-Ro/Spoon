@@ -23,6 +23,8 @@ public:
 
 private:
 
+	FT_Byte* file_buf; // File buffer, referenced by FT until exit
+
 	FT_Face face; // The font
 
 	GLuint vao; 	// VAO to contain VBO

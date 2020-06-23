@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Shader.h"
 
 class Program
@@ -8,7 +10,7 @@ public:
 	Program();
 	~Program();
 
-	void AttachShader(Shader *shader);
+	void AttachShader(ShaderType const& shader_type, std::string const& shader_name);
 	bool Link();
 
 	void PrintLog();
@@ -23,5 +25,7 @@ public:
 
 private:
 	GLuint program_id;
+
+	std::vector<Shader*> shaders;
 
 };

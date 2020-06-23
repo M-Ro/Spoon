@@ -8,6 +8,7 @@ std::string shader_path = "shaders/";
 Shader::Shader(ShaderType type)
 {
 	this->type = type;
+	this->shader = 0;
 
 	if (type == Fragment)
 		shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -17,7 +18,7 @@ Shader::Shader(ShaderType type)
 
 Shader::~Shader()
 {
-
+	glDeleteShader(shader);
 }
 
 void Shader::LoadShader(std::string const &name)

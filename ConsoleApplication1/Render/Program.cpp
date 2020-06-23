@@ -12,8 +12,13 @@ Program::~Program()
 	glDeleteProgram(program_id);
 }
 
-void Program::AttachShader(Shader *shader)
+void Program::AttachShader(ShaderType const &shader_type, std::string const& shader_name)
 {
+	Shader* shader = new Shader(shader_type);
+	shader->LoadShader(shader_name);
+
+	this->shaders.push_back(shader);
+
 	glAttachShader(program_id, shader->GetShader()); // Attach shader to GL program
 }
 
@@ -30,6 +35,13 @@ bool Program::Link()
 		PrintLog();
 		return false;
 	}
+
+	// We can now delete the unlinked shaders as they are no longer required
+	for (int i = 0; i < this->shaders.size(); i++) {
+		delete this->shaders[i];
+	}
+
+	this->shaders.clear();
 
 	return true;
 }

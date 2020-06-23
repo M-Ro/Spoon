@@ -15,7 +15,12 @@ Arena::Arena(const std::string &name)
 
 Arena::~Arena()
 {
-
+	// Delete all entities
+	for (auto& kv : entities) {
+		if (kv.second) {
+			delete kv.second;
+		}
+	}
 }
 
 void Arena::Update(float deltaTime)

@@ -11,9 +11,14 @@
 static FT_Library ft; // Freetype library reference
 static FreetypeState state;
 
+static size_t font_count = 0;
+
 Font::Font(std::string const &name, unsigned int size, glm::vec2 screenSize)
 {
 	screen = screenSize;
+	this->file_buf = nullptr;
+
+	font_count++;
 
 	/* Initialise Freetype library */
 	if(state == Uninitialised)
@@ -41,7 +46,7 @@ Font::Font(std::string const &name, unsigned int size, glm::vec2 screenSize)
 	}
 
 	sint64 file_size = filehandle.Size();
-	FT_Byte *file_buf = filehandle.ReadFile(); // FIXME delete this
+	FT_Byte *file_buf = filehandle.ReadFile();
 	filehandle.Close();
 
 	/* Attempt to load font */
@@ -56,13 +61,8 @@ Font::Font(std::string const &name, unsigned int size, glm::vec2 screenSize)
 	FT_Set_Pixel_Sizes(face, 0, size); // Set font size
 
 	/* Load the shader program used for rendering */
-	Shader *vshader = new Shader(Vertex);
-	vshader->LoadShader("Glyph");
-	program.AttachShader(vshader);
-
-	Shader *fshader = new Shader(Fragment);
-	fshader->LoadShader("Glyph");
-	program.AttachShader(fshader);
+	program.AttachShader(Vertex, "Glyph");
+	program.AttachShader(Fragment, "Glyph");
 
 	program.Link();
 
@@ -78,7 +78,18 @@ Font::Font(std::string const &name, unsigned int size, glm::vec2 screenSize)
 
 Font::~Font()
 {
-	// Free VBO
+	// TODO Free VBO
+	glDeleteBuffers(1, &vbo);
+	glDeleteVertexArrays(1, &vao);
+
+	FT_Done_Face(face);
+	free(file_buf);
+
+	font_count--;
+
+	if (!font_count) {
+		FT_Done_FreeType(ft);
+	}
 }
 
 void Font::RenderText(std::string const &text, float x, float y)

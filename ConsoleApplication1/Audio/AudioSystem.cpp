@@ -6,6 +6,7 @@ const int MAX_SOURCES = 32;
 
 AudioSystem::AudioSystem()
 {
+	a_context = 0;
 	a_device = alcOpenDevice(0);
 	if(!a_device)
 	{

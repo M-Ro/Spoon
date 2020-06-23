@@ -147,6 +147,7 @@ bool Texture::LoadPNG(std::istream &stream)
 	/* Cleanup */
 	delete[] (png_bytep)row_pointers;
 	png_destroy_read_struct(&png_rstruct, &png_istruct, (png_infopp)0);
+	delete data;
 
 	std::cout << "Loaded: " << name << ".png " << width << "x" << height << "x" << bpp << std::endl;
 

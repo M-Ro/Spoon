@@ -57,7 +57,9 @@ int Filesystem::Initialise(char *path)
 
 void Filesystem::Shutdown()
 {
-	PHYSFS_deinit();
+	if (!PHYSFS_deinit()) {
+		std::cout << "PhysFS_deinit failed: " << PHYSFS_getLastError() << std::endl;
+	}
 }
 
 std::vector<std::string> Filesystem::ListDirectory(const std::string &path, bool filter_archives)
@@ -102,7 +104,7 @@ std::string Filesystem::GetUserDir()
 	std::string path;
 
 #ifdef _WIN32
-	wchar_t* wszPath = new wchar_t[128];;
+	wchar_t* wszPath = new wchar_t[128];
 	SHGetKnownFolderPath(FOLDERID_Documents, KF_FLAG_CREATE, NULL, &wszPath);
 	std::wstring wpath(wszPath);
 

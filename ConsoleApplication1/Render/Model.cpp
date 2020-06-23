@@ -7,7 +7,7 @@
 
 Model::Model()
 {
-
+	this->triangle_count = 0;
 }
 
 Model::~Model()
@@ -28,11 +28,32 @@ void Model::Upload()
 ModelSection::ModelSection(std::string material)
 {
 	this->material = material;
+
+	this->vertexarray = 0;
+	this->vertexbuffer = 0;
+	this->uvbuffer = 0;
+	this->normalbuffer = 0;
 }
 
 ModelSection::~ModelSection()
 {
-	/* Clear the lists */
+	if (this->vertexbuffer) {
+		glDeleteBuffers(1, &vertexbuffer);
+	}
+
+	if (this->uvbuffer) {
+		glDeleteBuffers(1, &uvbuffer);
+	}
+
+	if (this->normalbuffer) {
+		glDeleteBuffers(1, &normalbuffer);
+	}
+
+	if (this->vertexarray) {
+		glDeleteVertexArrays(1, &vertexarray);
+	}
+
+	/* Clear the lists ?? why */
 	vertices.clear();
 	normals.clear();
 	uvs.clear();

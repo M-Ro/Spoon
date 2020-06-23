@@ -18,7 +18,7 @@
 #include "EntityMapper.h"
 
 Arena *arena;
-Player *player;
+Player *player; // Free;d later when arena purges entities
 
 GameName::GameName() : Game()
 {
@@ -62,7 +62,7 @@ void GameName::Load()
 
 void GameName::Shutdown()
 {
-	delete player;
+	delete arena;
 }
 
 void GameName::Run(float deltaTime)

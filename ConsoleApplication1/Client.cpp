@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 	{
 		// fixme dirty hack
 		if (game->gametype != "server")
-			quit = game->input->KeyPressed(SDLK_F12);
+			quit = game->input->KeyPressed(SDLK_F11);
 
 		run();
 	}
@@ -104,6 +104,7 @@ int main(int argc, char** argv)
 	delete audio;
 	Config::WriteConfig();
 	Filesystem::Shutdown();
+	SDL_Quit();
 
 #ifdef _DEBUG
 #ifdef _WIN32
