@@ -15,7 +15,7 @@ extern Player *player;
 
 Spawner::Spawner() : Monster()
 {
-	modelname = "skull";
+	modelname = "spawner";
 	classname = "spawner_1";
 	health = 400;
 	speed = 10.0f;
@@ -26,8 +26,8 @@ Spawner::Spawner() : Monster()
 
 	float center_distance = 500.0f;
 	float theta = 6.28f*rand()/RAND_MAX;
-	position = glm::vec3(center_distance*cos(theta), 50.0f, center_distance*sin(theta));
-	velocity = normalize(glm::vec3(0,0,0) - position)*speed;
+	position = glm::vec3(center_distance*cos(theta), 60.0f, center_distance*sin(theta));
+	velocity = normalize(glm::vec3(0,60.0f,0) - position)*speed;
 }
 
 void Spawner::SpawnSkulls(int amount){
@@ -37,14 +37,17 @@ void Spawner::SpawnSkulls(int amount){
 
 		float theta = 6.28f*rand()/RAND_MAX;
 		float r = (float)(rand()/RAND_MAX);
-		s->velocity = 80.0f * glm::vec3(cos(theta)*r, sin(theta)*r, 0.5f+rand()/RAND_MAX);
+		s->velocity = 80.0f * glm::vec3(cos(theta)*r, 3.5f+rand()/RAND_MAX, sin(theta) * r);
 		arena->AddEntity(s);
 	}
 };
 
 void Spawner::Update(float deltaTime)
 {
-	
+	if (spawn_timer < Time::GetCurrentTimeMillis()) {
+		SpawnSkulls(8);
+		spawn_timer = (float)(Time::GetCurrentTimeMillis() + 10000 + 500 * rand() / RAND_MAX);
+	}
 
 }
 

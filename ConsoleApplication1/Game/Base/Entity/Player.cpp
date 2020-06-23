@@ -15,7 +15,7 @@ Player::Player() : Entity()
 	moveType = MovementType::Walk;
 
 	position.x = 0.0f;
-	position.y = 60.0f;
+	position.y = 90.0f;
 	position.z = 224.0f;
 
 	cam_rot.x = 3.14f;

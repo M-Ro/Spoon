@@ -11,6 +11,9 @@ class Player : public Entity
 	friend class GameClient;
 public:
 	Weapon * weapon;
+	glm::vec3 rotationRecoiled;
+	glm::vec3 positionRecoiled;
+
 	Player();
 	virtual ~Player();
 

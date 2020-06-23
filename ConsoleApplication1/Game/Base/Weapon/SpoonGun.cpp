@@ -59,30 +59,38 @@ void SpoonGun::SecondaryFire()
 	owner->attack_finished = Time::GetCurrentTimeMillis() + secondary_firerate;
 }
 
-glm::vec3 SpoonGun::GetRecoil()
+void SpoonGun::GetRecoilPos(glm::vec3* result)
 {
 	float state = (Time::GetCurrentTimeMillis() - lastShot) / recoilSpeed;
-	if (state > recoilLength-1 || lastShotType == 2)
-		return glm::vec3(0,0,0);
-	/*
-	int idx_lower = floor(state);
-	int idx_higher = ceil(state);
-	float weight_higher = state - (float)idx_lower;
-	float weight_lower = (float)idx_higher - state;
-	glm::vec3 v = owner->rotation * (weight_lower * posOffsets[idx_lower] + weight_higher * posOffsets[idx_higher]);
-	*/
-	glm::vec3 v = owner->rotation * (state * -7.5873f + state * state * 2.59524f - state * state * state * 0.22222f);
-	return v;
+	if (state > recoilLength - 1 || lastShotType == 2)
+	{
+		result->x = owner->position.x;
+		result->y = owner->position.y;
+		result->z = owner->position.z;
+		return;
+	}
+	float impulse = (state * -7.5873f + state * state * 2.59524f - state * state * state * 0.22222f);	//	 A simple function that happens to give a roughly nice behaviour for recoil when we go from 0 to 6 (recoilLength)
+	result->x = owner->position.x + owner->rotation.x * impulse;
+	result->y = owner->position.y + owner->rotation.y * impulse;
+	result->z = owner->position.z + owner->rotation.z * impulse;
+	//glm::vec3 v = owner->position + owner->rotation * (state * -7.5873f + state * state * 2.59524f - state * state * state * 0.22222f);
+	//return v;
 }
 
-glm::vec3 SpoonGun::GetRecoilAngle(glm::vec2 *rotation)
+void SpoonGun::GetRecoilAngle(glm::vec2 *rotation, glm::vec3* result)
 {
 	float state = (Time::GetCurrentTimeMillis() - lastShot)/500.0f;
-	if (state > 2.0 || lastShotType == 1)
-		return glm::vec3(rotation->x, rotation->y, 0);
+	if (state > 2.0 || lastShotType == 1) {
+		result->x = rotation->x;
+		result->y = rotation->y;
+		return;
+	}
+		
 
 	float impulse = 0.5*state*pow(2.71, (1.0f-5.0f*state));
-	return glm::vec3(rotation->x, rotation->y + impulse, 0);
+	result->x = rotation->x;
+	result->y = rotation->y+ impulse;
+	return;
 }
 
 SpoonGun::~SpoonGun()

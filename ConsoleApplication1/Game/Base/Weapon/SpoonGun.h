@@ -14,8 +14,8 @@ public:
 
 	void PrimaryFire();
 	void SecondaryFire();
-	glm::vec3 GetRecoil();
-	glm::vec3 GetRecoilAngle(glm::vec2 *rotation);
+	void GetRecoilPos(glm::vec3* result);
+	void GetRecoilAngle(glm::vec2 *rotation, glm::vec3* result);
 protected:
 	long long spawntime;
 };
