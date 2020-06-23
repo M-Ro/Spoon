@@ -119,6 +119,12 @@
     <ClCompile Include="Render\LightManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Base\Weapon\SpoonGun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Base\Weapon\Weapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\AudioObject.h" />
@@ -159,6 +165,8 @@
     <ClInclude Include="Game\Base\EntityMapper.h" />
     <ClInclude Include="Render\Light.h" />
     <ClInclude Include="Render\LightManager.h" />
+    <ClInclude Include="Game\Base\Weapon\SpoonGun.h" />
+    <ClInclude Include="Game\Base\Weapon\Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Skull.h"
 #include "Spawner.h"
-#include "projectiles/Spoon.h"
+#include "../Weapon/SpoonGun.h"
 #include "../../../auxiliary/Config.h"
 #include "../../../auxiliary/Time.h"
 #include "../../definitions.h"
@@ -15,7 +15,7 @@ Player::Player() : Entity()
 	moveType = MovementType::Walk;
 
 	position.x = 0.0f;
-	position.y = 60.0f;
+	position.y = 90.0f;
 	position.z = 224.0f;
 
 	cam_rot.x = 3.14f;
@@ -25,11 +25,13 @@ Player::Player() : Entity()
 	solid = true;
 
 	lastJumpTime = 0;
+	attack_finished = Time::GetCurrentTimeMillis();
+	weapon = new SpoonGun(this);
 }
 
 Player::~Player()
 {
-
+	delete weapon;
 }
 
 void Player::SendEntity()
@@ -67,7 +69,7 @@ void Player::ProjectView()
         sin(cam_rot.y),
         cos(cam_rot.y) * cos(cam_rot.x)
     );
-
+	rotation = dir;
     right = glm::vec3(sin(cam_rot.x - 3.14f/2.0f), 0, cos(cam_rot.x - 3.14f/2.0f));
 
     up = glm::cross(right, dir);
@@ -98,16 +100,14 @@ void Player::HandlePlayerInput(float deltaTime)
 	if(input->KeyDown(Config::GetKey("jump")))
 		idir.y = 1;
 
-	if(input->MousePressed(1)) // FIXME this is ugly and should be written properly
+	if(input->MouseDown(1)) // FIXME this is ugly and should be written properly
 	{
-		Spoon *spoon = new Spoon(this);
-		spoon->dir = dir;
-		spoon->position = position;
-
-		spoon->rotation = glm::vec3(cam_rot.x, cam_rot.y, 0); // idk
-		arena->AddEntity(spoon);
+		weapon->PrimaryFire();
 	}
-
+	if (input->MouseDown(3)) // FIXME this is ugly and should be written properly
+	{
+		weapon->SecondaryFire();
+	}
 	// :D
 	if(input->KeyDown(SDLK_LALT) && input->KeyPressed(SDLK_F4))
 	{

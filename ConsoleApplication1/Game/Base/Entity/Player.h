@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "../Weapon/Weapon.h"
 #include "../../../input/InputHandler.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -9,6 +10,9 @@ class Player : public Entity
 	friend class GameName;
 	friend class GameClient;
 public:
+	Weapon * weapon;
+	glm::vec3 rotationRecoiled;
+	glm::vec3 positionRecoiled;
 
 	Player();
 	virtual ~Player();

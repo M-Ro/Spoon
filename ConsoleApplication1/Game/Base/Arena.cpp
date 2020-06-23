@@ -3,6 +3,7 @@
 #include "Arena.h"
 #include "entity/skull.h"
 #include "../Game.h"
+#include "entity/Spawner.h"
 
 Arena::Arena(const std::string &name)
 {
@@ -11,6 +12,8 @@ Arena::Arena(const std::string &name)
 	drawBBoxes = false;
 
 	arena_cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(1200, 8, 1200));
+	Spawner* s = new Spawner();
+	AddEntity(s);
 }
 
 Arena::~Arena()
@@ -39,13 +42,6 @@ void Arena::Update(float deltaTime)
 	// Update all entities
 	for (auto& kv : entities)
 		kv.second->Update(deltaTime);
-
-	spawn_timer -= deltaTime;
-	if(spawn_timer < 0.0){
-		Skull * s = new Skull();
-		AddEntity(s);
-		spawn_timer = 10.0f;
-	}
 }
 
 void Arena::Draw()

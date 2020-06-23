@@ -176,6 +176,8 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Game\Base\Entity\Projectiles\Spoon.cpp" />
     <ClCompile Include="Game\Base\Entity\Skull.cpp" />
     <ClCompile Include="Game\Base\Entity\Spawner.cpp" />
+    <ClCompile Include="Game\Base\Weapon\Weapon.cpp" />
+    <ClCompile Include="Game\Base\Weapon\SpoonGun.cpp" />
     <ClCompile Include="Game\Base\GameName.cpp" />
     <ClCompile Include="Game\definitions.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
@@ -215,6 +217,8 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Game\Base\Entity\Projectiles\Spoon.h" />
     <ClInclude Include="Game\Base\Entity\Skull.h" />
     <ClInclude Include="Game\Base\Entity\Spawner.h" />
+    <ClInclude Include="Game\Base\Weapon\Weapon.h" />
+    <ClInclude Include="Game\Base\Weapon\SpoonGun.h" />
     <ClInclude Include="Game\Base\GameName.h" />
     <ClInclude Include="Game\definitions.h" />
     <ClInclude Include="Game\Game.h" />

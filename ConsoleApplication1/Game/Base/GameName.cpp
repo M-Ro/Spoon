@@ -72,8 +72,11 @@ void GameName::Run(float deltaTime)
 	arena->Update(deltaTime);
 	arena->Draw();
 
-	camera->SetPosition(player->position.x, player->position.y, player->position.z);
-	camera->SetAngle(player->cam_rot.x, player->cam_rot.y);
+	player->weapon->GetRecoilPos(&player->positionRecoiled);
+	camera->SetPosition(player->positionRecoiled.x, player->positionRecoiled.y, player->positionRecoiled.z);
+
+	player->weapon->GetRecoilAngle(&player->cam_rot, &player->rotationRecoiled);
+	camera->SetAngle(player->rotationRecoiled.x, player->rotationRecoiled.y);
 	camera->Update();
 
 	std::stringstream ss;
