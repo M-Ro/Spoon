@@ -36,9 +36,14 @@ void main()
 	vec3 calculated_diffuse = vec3(0.0);
 	vec3 calculated_spec = vec3(0.0);
 	
-	for(int i=0; i<int(num_lights); i++) {
+	for(int i=0; i<int(num_lights); i++) {		
 		vec3 lightPos_cameraspace = ( V * vec4(lights.posAtten[i].xyz,1)).xyz;
 		vec3 lightDir_cameraspace = lightPos_cameraspace + eyeDir_cameraspace;
+		
+		// Dont light fragment if face normal is facing away from light
+		if(dot(lightDir_cameraspace, normal_cameraspace) < 0) {
+			continue;
+		}
 		
 		vec3 light_color = lights.rgbPower[i].xyz;
 		float light_power = lights.rgbPower[i].w * 100.0f;
