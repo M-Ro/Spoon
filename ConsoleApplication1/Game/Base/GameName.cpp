@@ -56,8 +56,11 @@ void GameName::Run(float deltaTime)
 	arena->Update(deltaTime);
 	arena->Draw();
 
-	camera->SetPosition(player->position.x, player->position.y, player->position.z);
-	camera->SetAngle(player->cam_rot.x, player->cam_rot.y);
+	glm::vec3 recoil = player->weapon->GetRecoil();
+	camera->SetPosition(player->position.x + recoil.x, player->position.y + recoil.y, player->position.z + +recoil.z);
+
+	glm::vec3 angle = player->weapon->GetRecoilAngle(&player->cam_rot);
+	camera->SetAngle(angle.x, angle.y);
 	camera->Update();
 
 	std::stringstream ss;

@@ -25,6 +25,7 @@ public:
 	unsigned long id;
 
 	float health;
+	long long attack_finished;
 
 	glm::vec3 position;
 	glm::vec3 rotation;
