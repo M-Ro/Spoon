@@ -8,7 +8,8 @@ SpoonGun::SpoonGun(Entity* owner) : Weapon(owner)
 
 	recoilLength = 6;
 	recoilSpeed = 50;
-	lastShot = Time::GetCurrentTimeMillis() + recoilLength * recoilSpeed;
+	lastShot = Time::GetCurrentTimeMillis() + (long long)recoilLength * recoilSpeed;
+
 }
 
 void SpoonGun::PrimaryFire() 
@@ -44,8 +45,8 @@ void SpoonGun::SecondaryFire()
 	glm::normalize(right);
 	glm::vec3 up = -1.0f * glm::cross(front, right);
 	int pellets = 10;
-	float spread_x = 0.10;
-	float spread_y = 0.10;
+	float spread_x = 0.10f;
+	float spread_y = 0.10f;
 	while (pellets-- > 0) {
 		float spread_hor = spread_x * rand() / RAND_MAX - spread_x * 0.5f;
 		float spread_ver = spread_y * rand() / RAND_MAX - spread_y * 0.5f;
@@ -61,7 +62,7 @@ void SpoonGun::SecondaryFire()
 
 void SpoonGun::GetRecoilPos(glm::vec3* result)
 {
-	float state = (Time::GetCurrentTimeMillis() - lastShot) / recoilSpeed;
+	float state = (float)(Time::GetCurrentTimeMillis() - lastShot) / recoilSpeed;
 	if (state > recoilLength - 1 || lastShotType == 2)
 	{
 		result->x = owner->position.x;
@@ -87,7 +88,7 @@ void SpoonGun::GetRecoilAngle(glm::vec2 *rotation, glm::vec3* result)
 	}
 		
 
-	float impulse = 0.5*state*pow(2.71, (1.0f-5.0f*state));
+	float impulse = 0.5f*state*pow(2.71f, (1.0f-5.0f*state));
 	result->x = rotation->x;
 	result->y = rotation->y+ impulse;
 	return;
