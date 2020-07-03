@@ -126,7 +126,7 @@ BufferChunk* StreamParserWav::ReadChunk()
 
 	char *data = new char[bytes];
 
-	long bytesRead = 0;
+	sint64 bytesRead = 0;
 	while(bytesRead < bytes)
 	{
 		sint64 dataRead = a_file->ReadBytes(data+bytesRead, dataLen);
@@ -142,7 +142,7 @@ BufferChunk* StreamParserWav::ReadChunk()
 
 	BufferChunk *chunk = new BufferChunk();
 	chunk->data = data;
-	chunk->length = bytesRead;
+	chunk->length = (unsigned long)bytesRead;
 	chunk->fmt = a_file_format;
 
 	return chunk;

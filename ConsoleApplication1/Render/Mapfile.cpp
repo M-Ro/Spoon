@@ -24,7 +24,7 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-const float MIN_DELTA = 10e-10; // idk
+const float MIN_DELTA = 10e-10f; // idk
 
 // from radiant tools/quake3/q3map2/map.c
 glm::vec3 texture_baseaxis[18] = {
@@ -101,7 +101,7 @@ void face_texture_verts(mapface_t &face, const glm::vec2 &tex_shift, const float
         cosv = 0.0f;
     }
     else {
-        ang = tex_rotate / -180.0f * M_PI;
+        ang = tex_rotate / -180.0f * (float)M_PI;
         sinv = sinf(ang);
         cosv = cosf(ang);
     }
@@ -219,7 +219,7 @@ void Mapfile::BuildRenderModel()
     }
 
     Model* model = new Model();
-    model->SetTriangleCount(triangle_count);
+    model->SetTriangleCount((unsigned int)triangle_count);
 
     for (const auto& kv : sections) {
         model->AddSection(kv.second);
