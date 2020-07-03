@@ -42,7 +42,7 @@ int Filehandle::Open(const std::string &path, bool readonly)
 		file = PHYSFS_openRead(path.c_str());
 
 	if (file == nullptr) {
-		std::cout << "Failed to open " << path << ": " << PHYSFS_getLastErrorCode() << std::endl;
+		std::cout << "Failed to open " << path << ": " << PHYSFS_getLastError() << std::endl;
 		return 0;
 	}
 
