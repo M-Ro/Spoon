@@ -125,6 +125,15 @@
     <ClCompile Include="Game\Base\Weapon\Weapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Game\AudioInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Base\Entity\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\AudioObject.h" />
@@ -167,6 +176,8 @@
     <ClInclude Include="Render\LightManager.h" />
     <ClInclude Include="Game\Base\Weapon\SpoonGun.h" />
     <ClInclude Include="Game\Base\Weapon\Weapon.h" />
+    <ClInclude Include="Game\AudioInterface.h" />
+    <ClInclude Include="Audio\AudioInstance.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

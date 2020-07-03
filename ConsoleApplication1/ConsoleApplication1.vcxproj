@@ -154,6 +154,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\AudioInstance.cpp" />
     <ClCompile Include="Audio\AudioObject.cpp" />
     <ClCompile Include="Audio\AudioSystem.cpp" />
     <ClCompile Include="Audio\Buffer.cpp" />
@@ -167,9 +168,11 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Auxiliary\fpscounter.cpp" />
     <ClCompile Include="Auxiliary\Time.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Game\AudioInterface.cpp" />
     <ClCompile Include="Game\Base\Arena.cpp" />
     <ClCompile Include="Game\Base\CollisionModel.cpp" />
     <ClCompile Include="Game\Base\EntityMapper.cpp" />
+    <ClCompile Include="Game\Base\Entity\Entity.cpp" />
     <ClCompile Include="Game\Base\Entity\Monster.cpp" />
     <ClCompile Include="Game\Base\Entity\Player.cpp" />
     <ClCompile Include="Game\Base\Entity\Projectile.cpp" />
@@ -194,6 +197,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Render\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\AudioInstance.h" />
     <ClInclude Include="Audio\AudioObject.h" />
     <ClInclude Include="Audio\AudioSystem.h" />
     <ClInclude Include="Audio\Buffer.h" />
@@ -207,6 +211,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Auxiliary\fpscounter.h" />
     <ClInclude Include="Auxiliary\Functions.h" />
     <ClInclude Include="Auxiliary\Time.h" />
+    <ClInclude Include="Game\AudioInterface.h" />
     <ClInclude Include="Game\Base\Arena.h" />
     <ClInclude Include="Game\Base\CollisionModel.h" />
     <ClInclude Include="Game\Base\EntityMapper.h" />

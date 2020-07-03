@@ -4,7 +4,6 @@
 
 #include <glm/glm.hpp>
 
-#include "../GameName.h"
 #include "../CollisionModel.h"
 
 static int last_id = 0;
@@ -63,10 +62,7 @@ public:
 
 	virtual void Update(float deltaTime) = 0;
 
-	virtual void Draw()
-	{
-		game->renderer->DrawModel(modelname, position, rotation);
-	}
+	virtual void Draw();
 
 	virtual void Touch(Entity *other) = 0;
 

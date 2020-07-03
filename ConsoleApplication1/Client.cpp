@@ -29,7 +29,6 @@
 bool quit = false;
 
 Game* game;
-AudioSystem* audio;
 
 // Called every frame
 long long lastTime = 0;
@@ -67,9 +66,6 @@ bool startSingle() {
 	Camera* camera = new Camera();
 	renderer->SetActiveCamera(camera);
 
-	/* Initialise sound */
-	audio = new AudioSystem();
-
 	/* Create the base 'game' */
 	game = new GameName();
 	game->renderer = renderer;
@@ -101,7 +97,6 @@ int main(int argc, char** argv)
 	game->Shutdown();
 	delete game;
 
-	delete audio;
 	Config::WriteConfig();
 	Filesystem::Shutdown();
 	SDL_Quit();

@@ -17,13 +17,15 @@ struct BufferChunk
 	unsigned long length;
 };
 
-const static int CHUNKSIZE = -1; // Chunk size to read (bytes), -1 = all data
+const static int CHUNKSIZE = 1024 * 1024 * 16; // 16MB Chunk size to read (bytes), -1 = all data
 
 class StreamParser
 {
 public:
 
-	enum State { Valid, Error };
+	StreamParser* GetFileParser(std::string const& name);
+
+	enum State { Valid, Error, Finalized };
 
 	StreamParser(const std::string &filepath);
 	virtual ~StreamParser() {};

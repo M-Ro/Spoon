@@ -107,6 +107,8 @@ int StreamParserWav::Prepare()
 			a_file_format.format = AL_FORMAT_STEREO8;
 	}
 
+	std::cout << "Prepared: " << a_filepath << " for reading" << std::endl;
+
 	state = State::Valid;
 	return 1;
 }
@@ -117,9 +119,9 @@ BufferChunk* StreamParserWav::ReadChunk()
 		return nullptr;
 
 	long bytes;
-	if(CHUNKSIZE > 0)
+	/*if(CHUNKSIZE > 0)
 		bytes = CHUNKSIZE;
-	else
+	else*/
 		bytes = dataLen;
 
 	char *data = new char[bytes];
@@ -127,13 +129,15 @@ BufferChunk* StreamParserWav::ReadChunk()
 	long bytesRead = 0;
 	while(bytesRead < bytes)
 	{
-		sint64 dataRead = a_file->ReadBytes(data+bytesRead, FILE_MAXREAD);
+		sint64 dataRead = a_file->ReadBytes(data+bytesRead, dataLen);
 		if(dataRead == -1)
 		{
 			std::cout << "Error: StreamParserWav::ReadChunk(): " << a_filepath << ": Failed to reade data!" << std::endl;
 			Destroy();
 			return nullptr;
 		}
+
+		bytesRead += dataRead;
 	}
 
 	BufferChunk *chunk = new BufferChunk();

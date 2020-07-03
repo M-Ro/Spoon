@@ -2,6 +2,8 @@
 #include "../Entity/Projectiles/Spoon.h"
 #include "../../../auxiliary/Time.h"
 
+#include "../GameName.h"
+
 SpoonGun::SpoonGun(Entity* owner) : Weapon(owner)
 {
 	this->owner = owner;
@@ -37,6 +39,7 @@ void SpoonGun::SecondaryFire()
 {
 	if (owner->attack_finished > Time::GetCurrentTimeMillis())
 		return;
+
 	lastShotType = 2;
 	lastShot = Time::GetCurrentTimeMillis();
 	glm::vec3 front = owner->rotation;
@@ -56,6 +59,9 @@ void SpoonGun::SecondaryFire()
 		spoon->rotation = glm::vec3(owner->rotation.x, owner->rotation.y, 0);
 		owner->arena->AddEntity(spoon);
 	}
+
+	game->audio->Play(owner, "weapons/fire_secondary", 1.0f, false);
+
 	owner->attack_finished = Time::GetCurrentTimeMillis() + secondary_firerate;
 }
 

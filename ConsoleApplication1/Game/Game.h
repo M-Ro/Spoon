@@ -3,6 +3,9 @@
 
 #include "../render/Renderer.h"
 #include "../input/InputHandler.h"
+#include "AudioInterface.h"
+
+#include "Base/Entity/Entity.h"
 
 class Game
 {
@@ -12,6 +15,7 @@ public:
 		this->renderer = nullptr;
 		this->camera = nullptr;
 		this->input = nullptr;
+		this->audio = nullptr;
 	}
 
 	// Asset loading / game setup
@@ -29,7 +33,7 @@ public:
 	Renderer *renderer;
 	Camera *camera;
 	//Config *config;
-	//AudioSystem *audio;
+	AudioInterface *audio;
 	InputHandler *input;
 	std::string gametype;
 };

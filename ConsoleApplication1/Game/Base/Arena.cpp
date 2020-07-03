@@ -14,6 +14,8 @@ Arena::Arena(const std::string &name)
 	arena_cmodel = CollisionModel(CollisionModel::ModelType::Box, glm::vec3(1200, 8, 1200));
 	Spawner* s = new Spawner();
 	AddEntity(s);
+
+	game->audio->PlayAt(glm::vec3(0, 0, 0), "ambience/loop0", 1.0, true);
 }
 
 Arena::~Arena()

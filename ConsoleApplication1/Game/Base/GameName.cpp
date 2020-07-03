@@ -24,6 +24,8 @@ GameName::GameName() : Game()
 {
 	game = this;
 	gametype = "single";
+
+	audio = new AudioInterface();
 }
 
 GameName::~GameName()
@@ -38,6 +40,10 @@ GameName::~GameName()
 
 	if (this->input) {
 		delete this->input;
+	}
+
+	if (this->audio) {
+		delete this->audio;
 	}
 }
 
@@ -68,6 +74,7 @@ void GameName::Shutdown()
 void GameName::Run(float deltaTime)
 {
 	input->Update();
+	audio->Update();
 
 	arena->Update(deltaTime);
 	arena->Draw();
