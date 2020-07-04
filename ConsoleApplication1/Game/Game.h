@@ -3,6 +3,7 @@
 
 #include "../render/Renderer.h"
 #include "../input/InputHandler.h"
+#include "../Physics/Physics.h"
 #include "AudioInterface.h"
 
 #include "Base/Entity/Entity.h"
@@ -16,13 +17,17 @@ public:
 		this->camera = nullptr;
 		this->input = nullptr;
 		this->audio = nullptr;
+
+		Physics::Initialise();
 	}
 
 	// Asset loading / game setup
 	virtual void Load() = 0;
 
 	// Final cleanup
-	virtual ~Game() {};
+	virtual ~Game() {
+		Physics::Shutdown();
+	};
 
 	// Cleanup, called before destructor
 	virtual void Shutdown() = 0;

@@ -134,6 +134,9 @@
     <ClCompile Include="Game\Base\Entity\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Physics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\AudioObject.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Game\Base\Weapon\Weapon.h" />
     <ClInclude Include="Game\AudioInterface.h" />
     <ClInclude Include="Audio\AudioInstance.h" />
+    <ClInclude Include="Physics\Physics.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

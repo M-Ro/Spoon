@@ -117,14 +117,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\include;$(SolutionDir)Lib\physfs-3.0.2\include;$(SolutionDir)Lib\glm\include;$(SolutionDir)Lib\SDL2-2.0.12\include;$(SolutionDir)Lib\glew-2.1.0\include;$(SolutionDir)Lib\libpng-1.6.28\include;$(SolutionDir)Lib\freetype-2.10.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\include;$(SolutionDir)Lib\physfs-3.0.2\include;$(SolutionDir)Lib\glm\include;$(SolutionDir)Lib\SDL2-2.0.12\include;$(SolutionDir)Lib\glew-2.1.0\include;$(SolutionDir)Lib\libpng-1.6.28\include;$(SolutionDir)Lib\freetype-2.10.2\include;$(SolutionDir)Lib\PhysX-4.1\physx\include;$(SolutionDir)Lib\PhysX-4.1\pxshared\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\libs\Win64;$(SolutionDir)Lib\physfs-3.0.2\lib;$(SolutionDir)Lib\SDL2-2.0.12\lib\x64;$(SolutionDir)Lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)Lib\libpng-1.6.28\lib\x64\v140\dynamic\Release;$(SolutionDir)Lib\freetype-2.10.2\win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenAL32.lib;physfs.lib;glew32.lib;libpng16.lib;freetype.lib;opengl32.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Lib\openal-soft-1.20.1-bin\libs\Win64;$(SolutionDir)Lib\physfs-3.0.2\lib;$(SolutionDir)Lib\SDL2-2.0.12\lib\x64;$(SolutionDir)Lib\glew-2.1.0\lib\Release\x64;$(SolutionDir)Lib\libpng-1.6.28\lib\x64\v140\dynamic\Release;$(SolutionDir)Lib\freetype-2.10.2\win64;$(SolutionDir)Lib\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenAL32.lib;physfs.lib;glew32.lib;libpng16.lib;freetype.lib;opengl32.lib;SDL2.lib;SDL2main.lib;PhysXCommon_64.lib;PhysX_64.lib;PhysXFoundation_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y "$(SolutionDir)Lib\physfs-3.0.2\bin\physfs.dll" "$(OutDir)"
@@ -133,6 +134,10 @@ xcopy /y "$(SolutionDir)Lib\glew-2.1.0\bin\Release\x64\glew32.dll" "$(OutDir)"
 xcopy /y "$(SolutionDir)Lib\SDL2-2.0.12\lib\x64\SDL2.dll" "$(OutDir)"
 xcopy /y "$(SolutionDir)Lib\freetype-2.10.2\win64\freetype.dll" "$(OutDir)"
 xcopy /y "$(SolutionDir)Lib\libpng-1.6.28\lib\x64\v140\dynamic\Release\libpng16.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\debug\PhysXCommon_64.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\debug\PhysX_64.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\debug\PhysXFoundation_64.dll" "$(OutDir)"
+xcopy /y "$(SolutionDir)Lib\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\debug\PhysXCooking_64.dll" "$(OutDir)"
 xcopy /y "$(SolutionDir)packages\zlib-msvc-x64.1.2.11.8900\build\native\bin_release\zlib.dll" "$(OutDir)"
 xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     </PostBuildEvent>
@@ -184,6 +189,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Game\Base\GameName.cpp" />
     <ClCompile Include="Game\definitions.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
+    <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Font.cpp" />
     <ClCompile Include="Render\Light.cpp" />
@@ -228,6 +234,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Game\definitions.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Input\InputHandler.h" />
+    <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Font.h" />
     <ClInclude Include="Render\Light.h" />
