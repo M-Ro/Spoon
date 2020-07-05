@@ -17,6 +17,8 @@
 
 #include "EntityMapper.h"
 
+#include "../../Physics/MapTriMeshCooker.h"
+
 Arena *arena;
 Player *player; // Free;d later when arena purges entities
 
@@ -64,6 +66,7 @@ void GameName::Load()
 	arena->AddEntity(new Skull());
 
 	Mapfile map("textest.map");
+	MapTriMeshCooker::BuildMapPhysicsMesh(map);
 }
 
 void GameName::Shutdown()
@@ -73,6 +76,7 @@ void GameName::Shutdown()
 
 void GameName::Run(float deltaTime)
 {
+	Physics::RunStep(deltaTime);
 	input->Update();
 	audio->Update();
 

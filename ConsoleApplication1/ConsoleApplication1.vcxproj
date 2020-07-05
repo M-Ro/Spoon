@@ -189,6 +189,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClCompile Include="Game\Base\GameName.cpp" />
     <ClCompile Include="Game\definitions.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
+    <ClCompile Include="Physics\MapTriMeshCooker.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Font.cpp" />
@@ -234,6 +235,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Game\definitions.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Input\InputHandler.h" />
+    <ClInclude Include="Physics\MapTriMeshCooker.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Font.h" />

@@ -45,6 +45,8 @@ public:
 
 	void Load(std::string const& filepath);
 
+	inline std::vector<mapentity_t> const& GetEntities() { return map_entities; }
+
 protected:
 
 	void ParseMapFromBuffer();

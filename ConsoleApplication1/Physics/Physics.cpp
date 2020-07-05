@@ -15,12 +15,19 @@ physx::PxPvd* Physics::mPvd;
 physx::PxPhysics* Physics::mPhysics;
 physx::PxCooking* Physics::mCooking;
 
+physx::PxMaterial* Physics::mMaterial; // Default material
+physx::PxDefaultCpuDispatcher* Physics::mDispatcher;
+physx::PxScene* Physics::mScene;
+
 void Physics::Initialise()
 {
 	mFoundation = nullptr;
 	mPvd = nullptr;
 	mPhysics = nullptr;
 	mCooking = nullptr;
+	mMaterial = nullptr;
+	mDispatcher = nullptr;
+	mScene = nullptr;
 
 	mFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 
@@ -55,6 +62,26 @@ void Physics::Initialise()
 		std::cout << "Physx: PxInitExtensions failed!" << std::endl;
 		return;
 	}
+
+	// Initialise the scene
+	physx::PxSceneDesc sceneDesc(mPhysics->getTolerancesScale());
+	sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
+	mDispatcher = physx::PxDefaultCpuDispatcherCreate(2); // 2 thread cpu dispatcher
+
+	sceneDesc.cpuDispatcher = mDispatcher;
+	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+	mScene = mPhysics->createScene(sceneDesc);
+
+	physx::PxPvdSceneClient* pvdClient = mScene->getScenePvdClient();
+	if (pvdClient)
+	{
+		pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONSTRAINTS, true);
+		pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
+		pvdClient->setScenePvdFlag(physx::PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
+	}
+
+	// Create default material
+	mMaterial = mPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 }
 
 void Physics::Shutdown()
@@ -76,4 +103,14 @@ void Physics::Shutdown()
 	if (mFoundation) {
 		mFoundation->release();
 	}
+}
+
+void Physics::RunStep(float deltaTime)
+{
+	if (!mScene) {
+		return;
+	}
+
+	mScene->simulate(deltaTime);
+	mScene->fetchResults(true);
 }
