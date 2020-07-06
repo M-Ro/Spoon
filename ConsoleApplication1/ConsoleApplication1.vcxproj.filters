@@ -186,6 +186,7 @@
     <ClInclude Include="Audio\AudioInstance.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\MapTriMeshCooker.h" />
+    <ClInclude Include="Game\Globals.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

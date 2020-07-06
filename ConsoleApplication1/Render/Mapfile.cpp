@@ -9,7 +9,7 @@
 #define _USE_MATH_DEFINES // for M_PI
 #include <math.h>
 
-#include "../Game/Game.h"
+#include "../Game/Globals.h"
 
 #include "../auxiliary/Filehandle.h"
 #include "../Auxiliary/Functions.h"
@@ -191,7 +191,7 @@ void Mapfile::BuildRenderModel()
                 int tw = 64;
                 int th = 64;
 
-                Texture* tex = game->renderer->GetTexture(face.texture);
+                Texture* tex = renderer->GetTexture(face.texture);
                 if (tex) {
                     tw = tex->GetWidth();
                     th = tex->GetHeight();
@@ -225,7 +225,7 @@ void Mapfile::BuildRenderModel()
         model->AddSection(kv.second);
     }
 
-    game->renderer->PushModel("balls", model);
+    renderer->PushModel("balls", model);
     model->Upload();
 }
 

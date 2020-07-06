@@ -1,8 +1,8 @@
 #include "Entity.h"
 
-#include "../GameName.h"
+#include "../../Globals.h"
 
 void Entity::Draw()
 {
-	game->renderer->DrawModel(modelname, position, rotation);
+	renderer->DrawModel(modelname, position, rotation);
 }

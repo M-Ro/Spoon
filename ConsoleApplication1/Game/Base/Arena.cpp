@@ -2,7 +2,7 @@
 
 #include "Arena.h"
 #include "entity/skull.h"
-#include "../Game.h"
+#include "../Globals.h"
 #include "entity/Spawner.h"
 
 Arena::Arena(const std::string &name)
@@ -15,7 +15,7 @@ Arena::Arena(const std::string &name)
 	Spawner* s = new Spawner();
 	AddEntity(s);
 
-	game->audio->PlayAt(glm::vec3(0, 0, 0), "ambience/loop0", 1.0, true);
+	audio->PlayAt(glm::vec3(0, 0, 0), "ambience/loop0", 1.0, true);
 }
 
 Arena::~Arena()
@@ -59,7 +59,7 @@ void Arena::Draw()
 	{
 		kv.second->Draw();
 		if(drawBBoxes)
-			game->renderer->DrawCModel((int)kv.second->cmodel.type, kv.second->position, kv.second->cmodel.size, kv.second->cmodel.radius);
+			renderer->DrawCModel((int)kv.second->cmodel.type, kv.second->position, kv.second->cmodel.size, kv.second->cmodel.radius);
 	}
 }
 

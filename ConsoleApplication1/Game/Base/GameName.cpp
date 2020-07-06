@@ -19,6 +19,12 @@
 
 #include "../../Physics/MapTriMeshCooker.h"
 
+Renderer* renderer;
+Camera* camera;
+//Config *config;
+AudioInterface* audio;
+InputHandler* input;
+
 Arena *arena;
 Player *player; // Free;d later when arena purges entities
 
@@ -32,20 +38,20 @@ GameName::GameName() : Game()
 
 GameName::~GameName()
 {
-	if (this->camera) {
-		delete this->camera;
+	if (camera) {
+		delete camera;
 	}
 
-	if (this->renderer) {
-		delete this->renderer;
+	if (renderer) {
+		delete renderer;
 	}
 
-	if (this->input) {
-		delete this->input;
+	if (input) {
+		delete input;
 	}
 
-	if (this->audio) {
-		delete this->audio;
+	if (audio) {
+		delete audio;
 	}
 }
 

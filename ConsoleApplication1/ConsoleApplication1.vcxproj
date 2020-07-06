@@ -234,6 +234,7 @@ xcopy /y /E /i "$(SolutionDir)data" "$(OutDir)data"</Command>
     <ClInclude Include="Game\Base\GameName.h" />
     <ClInclude Include="Game\definitions.h" />
     <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Game\Globals.h" />
     <ClInclude Include="Input\InputHandler.h" />
     <ClInclude Include="Physics\MapTriMeshCooker.h" />
     <ClInclude Include="Physics\Physics.h" />

@@ -1,22 +1,18 @@
 #pragma once
 #include <string>
 
-#include "../render/Renderer.h"
-#include "../input/InputHandler.h"
+#include "Globals.h"
 #include "../Physics/Physics.h"
-#include "AudioInterface.h"
-
-#include "Base/Entity/Entity.h"
 
 class Game
 {
 public:
 	// Initialization
 	Game() {
-		this->renderer = nullptr;
-		this->camera = nullptr;
-		this->input = nullptr;
-		this->audio = nullptr;
+		renderer = nullptr;
+		camera = nullptr;
+		input = nullptr;
+		audio = nullptr;
 
 		Physics::Initialise();
 	}
@@ -35,11 +31,6 @@ public:
 	// Called every frame
 	virtual void Run(float deltaTime) = 0;
 
-	Renderer *renderer;
-	Camera *camera;
-	//Config *config;
-	AudioInterface *audio;
-	InputHandler *input;
 	std::string gametype;
 };
 

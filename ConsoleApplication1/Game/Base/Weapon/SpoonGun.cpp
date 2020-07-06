@@ -2,7 +2,7 @@
 #include "../Entity/Projectiles/Spoon.h"
 #include "../../../auxiliary/Time.h"
 
-#include "../GameName.h"
+#include "../../Globals.h"
 
 SpoonGun::SpoonGun(Entity* owner) : Weapon(owner)
 {
@@ -61,7 +61,7 @@ void SpoonGun::SecondaryFire()
 		owner->arena->AddEntity(spoon);
 	}
 
-	game->audio->Play(owner, "weapons/fire_secondary", 1.0f, false);
+	audio->Play(owner, "weapons/fire_secondary", 1.0f, false);
 
 	owner->attack_finished = Time::GetCurrentTimeMillis() + secondary_firerate;
 }

@@ -61,16 +61,14 @@ bool startSingle() {
 	}
 
 
-	/* Initialise renderer and camera */
-	Renderer* renderer = new Renderer();
-	Camera* camera = new Camera();
-	renderer->SetActiveCamera(camera);
-
 	/* Create the base 'game' */
 	game = new GameName();
-	game->renderer = renderer;
-	game->camera = camera;
-	game->input = new InputHandler();
+	renderer = new Renderer();
+	camera = new Camera();
+	input = new InputHandler();
+
+	renderer->SetActiveCamera(camera);
+
 	return 1;
 }
 
@@ -89,7 +87,7 @@ int main(int argc, char** argv)
 	{
 		// fixme dirty hack
 		if (game->gametype != "server")
-			quit = game->input->KeyPressed(SDLK_F11);
+			quit = input->KeyPressed(SDLK_F11);
 
 		run();
 	}
