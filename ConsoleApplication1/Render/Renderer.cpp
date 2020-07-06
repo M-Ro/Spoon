@@ -77,13 +77,13 @@ Renderer::Renderer()
 	font = new Font("emulogic", 16, glm::vec2(width, height));
 
 	// Throw in some test lights
-	for (int i = 0; i < 255; i++) {
+	for (int i = 0; i < 16; i++) {
 		Light* l = this->light_manager.NewLight();
 
 		l->SetColor(glm::vec3(1.0f, 1.0f, 1.0f));
-		l->SetPosition(glm::vec3(0, 50, 100 + (-i*2)));
-		l->SetPower(5.0f);
-		l->SetAttenuation(20.0f);
+		l->SetPosition(glm::vec3(0, 50, 100 + (-i*32)));
+		l->SetPower(100.0f);
+		l->SetAttenuation(4.0f);
 	}
 
 	this->light_manager.Update(program_model->GetProgram());
