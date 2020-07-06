@@ -1,4 +1,4 @@
-#ifdef _DEBUG
+#if defined(_DEBUG) && defined(_WIN32)
 #include <stdlib.h>
 #include <crtdbg.h>
 #define _CRTDBG_MAP_ALLOC
@@ -99,10 +99,8 @@ int main(int argc, char** argv)
 	Filesystem::Shutdown();
 	SDL_Quit();
 
-#ifdef _DEBUG
-#ifdef _WIN32
+#if defined(_DEBUG) && defined(_WIN32)
 	_CrtDumpMemoryLeaks();
-#endif
 #endif
 
 	return 0;

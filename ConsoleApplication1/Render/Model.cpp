@@ -1,9 +1,6 @@
-#include <windows.h> // Needed before including GL.h on WIN32
 #include <GL\glew.h>
 
 #include "Model.h"
-
-#include <iostream>
 
 Model::Model()
 {

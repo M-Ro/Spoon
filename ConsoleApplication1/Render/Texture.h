@@ -2,6 +2,10 @@
 
 #include <string>
 
+#ifdef _WIN32
+	#include <windows.h> // Needed before including GL.h on WIN32
+#endif
+
 #include <GL\glew.h>
 
 class Texture

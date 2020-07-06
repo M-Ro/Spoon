@@ -5,7 +5,6 @@
 #include "Font.h"
 #include "../auxiliary/Filehandle.h"
 
-#include <windows.h> // Needed before including GL.h on WIN32
 #include <GL\glu.h>
 
 static FT_Library ft; // Freetype library reference

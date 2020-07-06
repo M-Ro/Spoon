@@ -3,7 +3,6 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include <windows.h> // Needed before including GL.h on WIN32
 
 #include "../auxiliary/Filehandle.h"
 

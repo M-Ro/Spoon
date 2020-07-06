@@ -7,6 +7,10 @@
 #include <vector>
 #include <string>
 
+#ifdef _WIN32
+#include <windows.h> // Needed before including GL.h on WIN32
+#endif
+
 #include <GL\glu.h>
 #include <glm/glm.hpp>
 

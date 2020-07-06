@@ -1,5 +1,3 @@
-#include <windows.h> // why do we need this everywhere?
-
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
