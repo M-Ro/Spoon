@@ -23,6 +23,7 @@ public:
 
 	inline static physx::PxMaterial* GetDefaultMat() { return mMaterial; }
 
+	inline static physx::PxControllerManager* GetControllerManager() { return mCManager; }
 
 protected:
 
@@ -36,4 +37,6 @@ protected:
 	static physx::PxMaterial* mMaterial; // Default material
 	static physx::PxDefaultCpuDispatcher* mDispatcher;
 	static physx::PxScene* mScene;
+
+	static physx::PxControllerManager* mCManager;
 };

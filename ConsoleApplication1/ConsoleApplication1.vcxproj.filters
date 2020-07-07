@@ -140,6 +140,12 @@
     <ClCompile Include="Physics\MapTriMeshCooker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\MovementController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\PMoveController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\AudioObject.h" />
@@ -187,6 +193,8 @@
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\MapTriMeshCooker.h" />
     <ClInclude Include="Game\Globals.h" />
+    <ClInclude Include="Physics\MovementController.h" />
+    <ClInclude Include="Physics\PMoveController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

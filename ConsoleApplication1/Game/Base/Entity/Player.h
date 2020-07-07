@@ -2,6 +2,8 @@
 #include "Entity.h"
 #include "../Weapon/Weapon.h"
 #include "../../../input/InputHandler.h"
+#include "../../../Physics/PMoveController.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -9,6 +11,7 @@ class Player : public Entity
 {
 	friend class GameName;
 	friend class GameClient;
+	friend class PMoveController;
 public:
 	Weapon * weapon;
 	glm::vec3 rotationRecoiled;
@@ -52,4 +55,5 @@ private:
 	glm::vec3 idir; // Intended direction vector from player input
 	long long lastJumpTime; 
 
+	PMoveController* pmove;
 };

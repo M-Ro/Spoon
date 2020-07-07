@@ -19,6 +19,8 @@ physx::PxMaterial* Physics::mMaterial; // Default material
 physx::PxDefaultCpuDispatcher* Physics::mDispatcher;
 physx::PxScene* Physics::mScene;
 
+physx::PxControllerManager* Physics::mCManager;
+
 void Physics::Initialise()
 {
 	mFoundation = nullptr;
@@ -28,6 +30,7 @@ void Physics::Initialise()
 	mMaterial = nullptr;
 	mDispatcher = nullptr;
 	mScene = nullptr;
+	mCManager = nullptr;
 
 	mFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, gDefaultAllocatorCallback, gDefaultErrorCallback);
 
@@ -71,6 +74,9 @@ void Physics::Initialise()
 	sceneDesc.cpuDispatcher = mDispatcher;
 	sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
 	mScene = mPhysics->createScene(sceneDesc);
+
+	mCManager = PxCreateControllerManager(*mScene);
+	mCManager->setTessellation(true, 32.0f);
 
 	physx::PxPvdSceneClient* pvdClient = mScene->getScenePvdClient();
 	if (pvdClient)

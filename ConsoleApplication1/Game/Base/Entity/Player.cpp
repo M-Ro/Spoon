@@ -14,9 +14,9 @@ Player::Player() : Entity()
 	team = Team::Player;
 	moveType = MovementType::Walk;
 
-	position.x = 0.0f;
-	position.y = 90.0f;
-	position.z = 224.0f;
+	position.x = 32.0f;
+	position.y = 100.0f;
+	position.z = 160.0f;
 
 	cam_rot.x = 3.14f;
 	cam_rot.y = -0.3f;
@@ -27,6 +27,7 @@ Player::Player() : Entity()
 	lastJumpTime = 0;
 	attack_finished = Time::GetCurrentTimeMillis();
 	weapon = new SpoonGun(this);
+	pmove = new PMoveController(this);
 }
 
 Player::~Player()
@@ -43,8 +44,16 @@ void Player::Update(float deltaTime)
 {
 	ProjectView();
 	HandlePlayerInput(deltaTime);
+
 	HandlePMove(deltaTime);
 
+	this->pmove->Update(deltaTime, velocity);
+
+	glm::vec3 newPos = this->pmove->GetPosition();
+	glm::vec3 expectedPosition = position + velocity;
+
+	//this->velocity = newPos - expectedPosition;
+	this->position = newPos;
 }
 
 void Player::Touch(Entity *other)
@@ -77,8 +86,8 @@ void Player::ProjectView()
 
 void Player::HandlePlayerInput(float deltaTime)
 {
-	cam_rot.x -= input->GetMouseX() / 300.0f;
-	cam_rot.y -= input->GetMouseY() / 300.0f;
+	cam_rot.x -= input->GetMouseX() / 200.0f;
+	cam_rot.y -= input->GetMouseY() / 200.0f;
 	cam_rot.y = std::fmax(std::fmin(cam_rot.y, 1.4f), -1.4f);
 
 	idir = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -109,7 +118,7 @@ void Player::HandlePlayerInput(float deltaTime)
 		weapon->SecondaryFire();
 	}
 	// :D
-	if(input->KeyDown(SDLK_LALT) && input->KeyPressed(SDLK_F4))
+	if(input->KeyDown(SDLK_LALT) && input->KeyDown(SDLK_F4))
 	{
 		moveType = (moveType == MovementType::Walk ? MovementType::Fly : MovementType::Walk);
 		velocity = glm::vec3(0, 0, 0);
@@ -130,17 +139,18 @@ void Player::HandlePlayerInput(float deltaTime)
 
 void Player::HandlePMove(float deltaTime)
 {
-	const float ACCEL_SPEED = 1800;
-	const float AIR_C = 200;
-	const float MAX_SPEED = 250;
-	const float MAX_AIR_SPEED = 300;
-	const float JUMP_HEIGHT = 80;
-	const float gravity = 180;
-	const float airFriction = 50;
-	const float friction = 1000;
-	const float termVel = 210;
+	const float ACCEL_SPEED = 12.0f;
+	const float AIR_C = 20.0f;
+	const float MAX_SPEED = 1.5f;
+	const float MAX_AIR_SPEED = 1.75f;
+	const float JUMP_HEIGHT = 1.5f;
+	const float gravity = 4;
+	const float airFriction = 10;
+	const float friction = 5;
+	const float termVel = 3;
 
-	onFloor = cmodel.OnFloor(position, arena->GetCModel());
+	//onFloor = cmodel.OnFloor(position, arena->GetCModel());
+	onFloor = this->pmove->OnFloor();
 
 	/* Calculate intended movement direction */
 	glm::vec3 idirxzn = glm::vec3(0, 0, 0);
@@ -170,16 +180,6 @@ void Player::HandlePMove(float deltaTime)
 			// Clamp speed
 			if(glm::length(velocity) > MAX_AIR_SPEED)
 				velocity = glm::normalize(velocity) * MAX_AIR_SPEED; // todo don't hardclamp, just add more friction
-
-			/* Terrible hack to 'pop' the player off floor */
-			if(cmodel.OnFloor(position, arena->GetCModel()))
-			{
-				while(cmodel.OnFloor(position, arena->GetCModel()))
-					position.y += 1;
-
-				position.y -= 1;
-				velocity.y = 0;
-			}
 		}
 		else // On Floor
 		{
@@ -219,5 +219,5 @@ void Player::HandlePMove(float deltaTime)
 	}
 
 	/* Apply velocity to position */
-	position += velocity * deltaTime;
+	//position += velocity * deltaTime;
 }
